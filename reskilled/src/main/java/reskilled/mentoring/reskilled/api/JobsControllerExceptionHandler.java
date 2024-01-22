@@ -16,6 +16,6 @@ public class JobsControllerExceptionHandler extends ResponseEntityExceptionHandl
         HttpStatus status = HttpStatus.NO_CONTENT;
         String message = "Unfortunately, there are no jobs";
         APIError apiError = new APIError(status, message);
-        return new ResponseEntity<>(apiError, status);
+        return new  ResponseEntity<>(apiError, status);
     }
 }
