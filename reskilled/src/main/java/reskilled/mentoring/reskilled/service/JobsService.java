@@ -42,4 +42,8 @@ public class JobsService {
                     .build()
     );
 
+    public void addJob(Job job) {
+        jobsList.add(job);
+    }
+
 }
