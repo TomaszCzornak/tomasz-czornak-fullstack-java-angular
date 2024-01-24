@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/v1")
+@RequestMapping("/v1")
 public class JobsController {
 
     private final JobsService jobsService;
