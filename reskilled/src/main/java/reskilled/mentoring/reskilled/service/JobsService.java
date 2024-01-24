@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class JobsService {
 
-    private final List<Job> jobsList = List.of(
+    private List<Job> jobsList = List.of(
             Job.builder()
                     .title("Software Engineer")
                     .city("Warsaw")
@@ -41,5 +41,9 @@ public class JobsService {
                     .skills(List.of("AWS", "Kubernetes", "Terraform"))
                     .build()
     );
+
+    public void addJob(Job job) {
+        jobsList.add(job);
+    }
 
 }
