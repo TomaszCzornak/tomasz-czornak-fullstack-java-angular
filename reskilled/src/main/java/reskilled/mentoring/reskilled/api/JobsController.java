@@ -1,27 +1,39 @@
 package reskilled.mentoring.reskilled.api;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import reskilled.mentoring.reskilled.model.EmptyJobsListException;
 import reskilled.mentoring.reskilled.model.Job;
 import reskilled.mentoring.reskilled.service.JobsService;
+import org.springframework.ui.Model;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/v1")
 public class JobsController {
 
     private final JobsService jobsService;
 
-    @GetMapping("/jobs")
+    @RequestMapping("/jobs")
     public List<Job> getAllJobs() {
         if (jobsService.getJobsList().isEmpty()) {
             throw new EmptyJobsListException();
         }
         return jobsService.getJobsList();
+    }
+
+    @RequestMapping(value = {"/add-job"}, method = RequestMethod.GET)
+    public String addJobForm(Model model) {
+        model.addAttribute("job", new Job());
+        return "add_job";
+    }
+
+    @RequestMapping(value = "/add-job", method = RequestMethod.POST)
+    public String addJobSubmit(@ModelAttribute Job job) {
+        jobsService.addJob(job);
+        return "redirect:/jobs";
     }
 }
