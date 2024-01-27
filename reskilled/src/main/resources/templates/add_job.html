@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Formularz dodawania oferty pracy</title>
+</head>
+<body>
+
+<form action="#" th:action="@{/v1/add-job}" th:object="${job}" method="post">
+    <p>Tytuł: <input type="text" th:field="*{title}"/></p>
+    <p>Miasto: <input type="text" th:field="*{city}"/></p>
+    <p>Pensja: <input type="number" th:field="*{salary}"/></p>
+    <p>Waluta: <input type="text" th:field="*{currency}"/></p>
+    <p>Umiejętności (po przecinku): <input type="text" th:field="*{skills}"/></p>
+    <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
+</form>
+
+</body>
+</html>
