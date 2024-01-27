@@ -5,13 +5,14 @@ import org.springframework.stereotype.Service;
 import reskilled.mentoring.reskilled.model.Currency;
 import reskilled.mentoring.reskilled.model.Job;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Service
 public class JobsService {
 
-    private List<Job> jobsList = List.of(
+    private List<Job> jobsList = new ArrayList<>(List.of(
             Job.builder()
                     .title("Software Engineer")
                     .city("Warsaw")
@@ -40,7 +41,7 @@ public class JobsService {
                     .currency(Currency.PLN)
                     .skills(List.of("AWS", "Kubernetes", "Terraform"))
                     .build()
-    );
+    ));
 
     public void addJob(Job job) {
         jobsList.add(job);

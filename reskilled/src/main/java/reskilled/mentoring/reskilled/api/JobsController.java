@@ -35,6 +35,6 @@ public class JobsController {
     @PostMapping("/add-job")
     public String addJobSubmit(@ModelAttribute Job job) {
         jobsService.addJob(job);
-        return "redirect:/jobs";
+        return "redirect:/v1/jobs";
     }
 }
