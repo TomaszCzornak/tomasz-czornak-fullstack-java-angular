@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1")
 public class JobsController {
@@ -18,6 +18,7 @@ public class JobsController {
     private final JobsService jobsService;
 
     @RequestMapping("/jobs")
+    @ResponseBody
     public List<Job> getAllJobs() {
         if (jobsService.getJobsList().isEmpty()) {
             throw new EmptyJobsListException();
@@ -25,13 +26,13 @@ public class JobsController {
         return jobsService.getJobsList();
     }
 
-    @RequestMapping(value = {"/add-job"}, method = RequestMethod.GET)
+    @GetMapping("/add-job")
     public String addJobForm(Model model) {
         model.addAttribute("job", new Job());
         return "add_job";
     }
 
-    @RequestMapping(value = "/add-job", method = RequestMethod.POST)
+    @PostMapping("/add-job")
     public String addJobSubmit(@ModelAttribute Job job) {
         jobsService.addJob(job);
         return "redirect:/jobs";
