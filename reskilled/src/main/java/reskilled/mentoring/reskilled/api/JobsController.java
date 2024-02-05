@@ -51,4 +51,21 @@ public class JobsController {
         return job.get();
     }
 
+    @GetMapping("/edit-job/{id}")
+    public String editJob(@PathVariable("id") UUID uuid, Model model) {
+        Optional<Job> job = jobsService.getJobById(uuid);
+        if (job.isEmpty()) {
+            throw new JobNotFoundException();
+        }
+        model.addAttribute("job", job.get());
+
+        return "editJob";
+    }
+
+    @PostMapping("/edit-job")
+    public String updateJob(@ModelAttribute Job job) {
+        jobsService.updateJob(job);
+        return "redirect:/v1/jobs";
+    }
+
 }
