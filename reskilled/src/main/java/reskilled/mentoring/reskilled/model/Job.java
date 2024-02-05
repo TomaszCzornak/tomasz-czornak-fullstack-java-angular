@@ -1,36 +1,22 @@
 package reskilled.mentoring.reskilled.model;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.UUID;
 
 @Data
-@Builder
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Job {
 
-    private static final AtomicLong counter = new AtomicLong();
-    private Long id;
+    @Builder.Default
+    private UUID uuid = UUID.randomUUID();
     private String title;
     private String city;
     private long salary;
     private Currency currency;
     private List<String> skills;
 
-    public Job(Long id,
-               String title,
-               String city,
-               long salary,
-               Currency currency,
-               List<String> skills) {
-        this.id = counter.incrementAndGet();
-        this.title = title;
-        this.city = city;
-        this.salary = salary;
-        this.currency = currency;
-        this.skills = skills;
-    }
 }

@@ -22,7 +22,7 @@ public class JobsControllerExceptionHandler extends ResponseEntityExceptionHandl
 
     @ExceptionHandler(JobNotFoundException.class)
     public ResponseEntity<Object> handleException(JobNotFoundException e, WebRequest request) {
-        HttpStatus status = HttpStatus.NO_CONTENT;
+        HttpStatus status = HttpStatus.NOT_FOUND;
         String message = "There is no such job under given id";
         APIError apiError = new APIError(status, message);
         return new  ResponseEntity<>(apiError, status);

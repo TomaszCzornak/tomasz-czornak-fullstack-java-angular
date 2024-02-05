@@ -7,6 +7,8 @@ import reskilled.mentoring.reskilled.model.Job;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Getter
 @Service
@@ -47,11 +49,10 @@ public class JobsService {
         jobsList.add(job);
     }
 
-    public Job getJobById(Long id) {
+    public Optional<Job> getJobById(UUID id) {
         return jobsList.stream()
-                .filter(job -> job.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+                .filter(job -> job.getUuid().equals(id))
+                .findFirst();
     }
 
 }

@@ -10,6 +10,8 @@ import reskilled.mentoring.reskilled.service.JobsService;
 import org.springframework.ui.Model;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -41,12 +43,12 @@ public class JobsController {
 
     @RequestMapping("/job/{id}")
     @ResponseBody
-    public Job singleJob(@PathVariable("id") Long id) {
-        Job job = jobsService.getJobById(id);
-        if (job == null) {
+    public Job singleJob(@PathVariable("id") UUID id) {
+        Optional<Job> job = jobsService.getJobById(id);
+        if (job.isEmpty()) {
             throw new JobNotFoundException();
         }
-        return job;
+        return job.get();
     }
 
 }
