@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import reskilled.mentoring.reskilled.model.EmptyJobsListException;
 import reskilled.mentoring.reskilled.model.Job;
+import reskilled.mentoring.reskilled.model.JobNotFoundException;
 import reskilled.mentoring.reskilled.service.JobsService;
 import org.springframework.ui.Model;
 
@@ -36,6 +37,16 @@ public class JobsController {
     public String addJobSubmit(@ModelAttribute Job job) {
         jobsService.addJob(job);
         return "redirect:/v1/jobs";
+    }
+
+    @RequestMapping("/job/{id}")
+    @ResponseBody
+    public Job singleJob(@PathVariable("id") Long id) {
+        Job job = jobsService.getJobById(id);
+        if (job == null) {
+            throw new JobNotFoundException();
+        }
+        return job;
     }
 
 }

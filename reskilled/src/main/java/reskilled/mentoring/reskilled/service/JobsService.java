@@ -47,4 +47,11 @@ public class JobsService {
         jobsList.add(job);
     }
 
+    public Job getJobById(Long id) {
+        return jobsList.stream()
+                .filter(job -> job.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
 }
