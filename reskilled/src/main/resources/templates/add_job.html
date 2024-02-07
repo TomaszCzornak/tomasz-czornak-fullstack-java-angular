@@ -6,11 +6,23 @@
 <body>
 
 <form action="#" th:action="@{/v1/add-job}" th:object="${job}" method="post">
-    <p>Tytuł: <input type="text" th:field="*{title}"/></p>
-    <p>Miasto: <input type="text" th:field="*{city}"/></p>
-    <p>Pensja: <input type="number" th:field="*{salary}"/></p>
-    <p>Waluta: <input type="text" th:field="*{currency}"/></p>
-    <p>Umiejętności (po przecinku): <input type="text" th:field="*{skills}"/></p>
+    <p>Title: <input type="text" th:field="*{title}"/></p>
+    <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title error</p>
+    <p>City: <input type="text" th:field="*{city}"/></p>
+    <p th:if="${#fields.hasErrors('city')}" th:errors="*{city}">City error</p>
+        <p>Salary: <input type="number" th:field="*{salary}"/></p>
+    <p th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}">Salary error</p>
+    <div>
+        <label for="currency">Currency:</label>
+        <select id="currency" th:field="*{currency}">
+            <option th:each="currency : ${currencies}" th:value="${currency}" th:text="${currency}">Currency</option>
+        </select>
+        <p th:if="${#fields.hasErrors('currency')}" th:errors="*{currency}">Currency Error</p>
+    </div>
+
+
+    <p>Skills (separated with comma): <input type="text" th:field="*{skills}"/></p>
+    <p th:if="${#fields.hasErrors('skills')}" th:errors="*{skills}">Skills error</p>
     <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
 </form>
 
