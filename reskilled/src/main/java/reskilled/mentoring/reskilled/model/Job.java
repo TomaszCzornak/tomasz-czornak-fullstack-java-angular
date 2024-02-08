@@ -1,19 +1,27 @@
 package reskilled.mentoring.reskilled.model;
 
-import jakarta.validation.constraints.*;
-import lombok.*;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @Builder
+@Entity
 @AllArgsConstructor
 public class Job {
 
-    @Builder.Default
-    private UUID uuid = UUID.randomUUID();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @NotBlank(message = "Title cannot be blank")
     private String title;
     @NotBlank(message = "City cannot be blank")
@@ -21,8 +29,13 @@ public class Job {
     @Positive(message="Salary should be greater than zero")
     private long salary;
     @NotNull(message = "Currency should not be empty")
+    @Enumerated(EnumType.STRING)
     private Currency currency;
     @NotEmpty(message = "list should have at least one element")
-    private List<String> skills;
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JoinTable(name="job_skill",
+            joinColumns = @JoinColumn(name="job_id"),
+            inverseJoinColumns = @JoinColumn(name="skill_id",referencedColumnName = "id"))
+    private List<Skill> skills;
 
 }

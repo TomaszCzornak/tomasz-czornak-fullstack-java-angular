@@ -10,27 +10,26 @@ import reskilled.mentoring.reskilled.model.Currency;
 import reskilled.mentoring.reskilled.model.EmptyJobsListException;
 import reskilled.mentoring.reskilled.model.Job;
 import reskilled.mentoring.reskilled.model.JobNotFoundException;
-import reskilled.mentoring.reskilled.service.JobsService;
+import reskilled.mentoring.reskilled.service.JobService;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/v1")
 public class JobsController {
 
-    private final JobsService jobsService;
+    private final JobService jobService;
 
     @RequestMapping("/jobs")
     @ResponseBody
     public List<Job> getAllJobs() {
-        if (jobsService.getJobsList().isEmpty()) {
+        if (jobService.getAllJobs().isEmpty()) {
             throw new EmptyJobsListException();
         }
-        return jobsService.getJobsList();
+        return jobService.getAllJobs();
     }
 
     @GetMapping("/add-job")
@@ -45,14 +44,14 @@ public class JobsController {
         if (result.hasErrors()) {
             return "add_job";
         }
-        jobsService.addJob(job);
+        jobService.addJob(job);
         return "redirect:/v1/jobs";
     }
 
     @RequestMapping("/job/{id}")
     @ResponseBody
-    public Job singleJob(@PathVariable("id") UUID id) {
-        Optional<Job> job = jobsService.getJobById(id);
+    public Job singleJob(@PathVariable("id") Long id) {
+        Optional<Job> job = jobService.getJobById(id);
         if (job.isEmpty()) {
             throw new JobNotFoundException();
         }
@@ -60,8 +59,8 @@ public class JobsController {
     }
 
     @GetMapping("/edit-job/{id}")
-    public String editJob(@PathVariable("id") UUID uuid, Model model) {
-        Optional<Job> job = jobsService.getJobById(uuid);
+    public String editJob(@PathVariable("id") Long id, Model model) {
+        Optional<Job> job = jobService.getJobById(id);
         if (job.isEmpty()) {
             throw new JobNotFoundException();
         }
@@ -78,7 +77,7 @@ public class JobsController {
             model.addAttribute("currencies", Arrays.asList(Currency.values()));
             return "editJob";
         }
-        jobsService.updateJob(job);
+        jobService.updateJob(job);
         return "redirect:/v1/jobs";
     }
 
