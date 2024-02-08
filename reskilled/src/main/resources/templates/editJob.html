@@ -2,6 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Form to edit job</title>
+    <style>
+        p.validationError {
+            color: darkred;
+        }
+    </style>
 </head>
 <body>
 <h1>Edit Job</h1>
@@ -10,25 +15,25 @@
     <input type="hidden" th:field="*{uuid}">
     <label for="title">Title:</label>
     <input type="text" id="title" th:field="*{title}">
-    <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title error</p>
+    <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="validationError">Title error</p>
     <label for="city">City:</label>
     <input type="text" id="city" th:field="*{city}">
-    <p th:if="${#fields.hasErrors('city')}" th:errors="*{city}">City error</p>
+    <p th:if="${#fields.hasErrors('city')}" th:errors="*{city}" class="validationError">City error</p>
     <label for="salary">Salary:</label>
     <input type="number" id="salary" th:field="*{salary}">
-    <p th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}">Salary error</p>
+    <p th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}" class="validationError">Salary error</p>
     <div>
         <label for="currency">Currency:</label>
         <select id="currency" th:field="*{currency}">
             <option th:each="currency : ${currencies}" th:value="${currency}" th:text="${currency}">Currency</option>
         </select>
-        <p th:if="${#fields.hasErrors('currency')}" th:errors="*{currency}">Currency Error</p>
+        <p th:if="${#fields.hasErrors('currency')}" th:errors="*{currency}" class="validationError">Currency Error</p>
     </div>
     <div th:each="skill, iterStat : *{skills}">
         <label>
-            <input type="text" th:field="*{skills[__${iterStat.index}__]}" th:value="${skill}" />
+            <input type="text" th:field="*{skills[__${iterStat.index}__]}" th:value="${skill}"/>
         </label>
-        <p th:if="${#fields.hasErrors('skills')}" th:errors="*{skills}">Skills error</p>
+        <p th:if="${#fields.hasErrors('skills')}" th:errors="*{skills}" class="validationError">Skills error</p>
     </div>
     <input type="submit" value="Update">
 </form>

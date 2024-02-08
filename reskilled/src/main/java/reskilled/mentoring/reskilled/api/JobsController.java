@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import reskilled.mentoring.reskilled.model.*;
+import reskilled.mentoring.reskilled.model.Currency;
+import reskilled.mentoring.reskilled.model.EmptyJobsListException;
+import reskilled.mentoring.reskilled.model.Job;
+import reskilled.mentoring.reskilled.model.JobNotFoundException;
 import reskilled.mentoring.reskilled.service.JobsService;
 
 import java.util.Arrays;
@@ -70,8 +72,10 @@ public class JobsController {
     }
 
     @PostMapping("/edit-job")
-    public String updateJob(@ModelAttribute @Valid Job job, BindingResult result) {
+    public String updateJob(@ModelAttribute @Valid Job job, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("job", job);
+            model.addAttribute("currencies", Arrays.asList(Currency.values()));
             return "editJob";
         }
         jobsService.updateJob(job);
