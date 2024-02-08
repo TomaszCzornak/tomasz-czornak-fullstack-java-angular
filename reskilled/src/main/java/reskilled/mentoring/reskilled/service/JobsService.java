@@ -49,10 +49,19 @@ public class JobsService {
         jobsList.add(job);
     }
 
-    public Optional<Job> getJobById(UUID id) {
+    public Optional<Job> getJobById(UUID uuid) {
         return jobsList.stream()
-                .filter(job -> job.getUuid().equals(id))
+                .filter(job -> job.getUuid().equals(uuid))
                 .findFirst();
+    }
+
+    public void updateJob(Job updatedJob) {
+        for(int i = 0; i < jobsList.size(); i++) {
+            if(jobsList.get(i).getUuid().equals(updatedJob.getUuid())) {
+                jobsList.set(i, updatedJob);
+                break;
+            }
+        }
     }
 
 }
