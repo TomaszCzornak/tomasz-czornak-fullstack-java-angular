@@ -31,4 +31,8 @@ public class JobService {
         jobServiceJpa.save(job);
     }
 
+    public void deleteJobById(Long id) {
+        jobServiceJpa.deleteById(id);
+    }
+
 }
