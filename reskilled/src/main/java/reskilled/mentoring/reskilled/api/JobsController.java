@@ -6,12 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import reskilled.mentoring.reskilled.model.Currency;
-import reskilled.mentoring.reskilled.model.EmptyJobsListException;
-import reskilled.mentoring.reskilled.model.Job;
-import reskilled.mentoring.reskilled.model.JobNotFoundException;
+import reskilled.mentoring.reskilled.model.*;
 import reskilled.mentoring.reskilled.service.JobService;
+import reskilled.mentoring.reskilled.service.SkillService;
+import reskilled.mentoring.reskilled.service.SkillServiceJpa;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +22,7 @@ import java.util.Optional;
 public class JobsController {
 
     private final JobService jobService;
+    private final SkillService skillService;
 
     @RequestMapping("/jobs")
     @ResponseBody
@@ -40,12 +41,13 @@ public class JobsController {
     }
 
     @PostMapping("/add-job")
-    public String addJobSubmit(@ModelAttribute @Valid Job job, BindingResult result, Model model) {
+    public String addJobSubmit(@ModelAttribute @Valid JobDto jobDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("job", job);
+            model.addAttribute("job", jobDto);
             model.addAttribute("currencies", Arrays.asList(Currency.values()));
             return "add_job";
         }
+        Job job = JobMapper.toJobEntity(jobDto);
         jobService.addJob(job);
         return "redirect:/v1/jobs";
     }

@@ -32,7 +32,7 @@ public class Job {
     @Enumerated(EnumType.STRING)
     private Currency currency;
     @NotEmpty(message = "list should have at least one element")
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name="job_skill",
             joinColumns = @JoinColumn(name="job_id"),
             inverseJoinColumns = @JoinColumn(name="skill_id",referencedColumnName = "id"))

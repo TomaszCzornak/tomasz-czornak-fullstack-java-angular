@@ -5,4 +5,6 @@ import reskilled.mentoring.reskilled.model.Skill;
 
 public interface SkillServiceJpa extends JpaRepository<Skill, Long> {
 
+    Skill findByName(String name);
+
 }

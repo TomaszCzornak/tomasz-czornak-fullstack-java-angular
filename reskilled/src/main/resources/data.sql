@@ -1,14 +1,14 @@
-insert into Job(id, title, city, salary, currency)
-values(1, 'Software Engineer', 'Warsaw', 12000, 'PLN');
+insert into Job(title, city, salary, currency)
+values('Software Engineer', 'Warsaw', 12000, 'PLN');
 
-insert into Job(id,title, city, salary, currency)
-values(2, 'Data Scientist', 'Kraków', 15000, 'PLN');
+insert into Job(title, city, salary, currency)
+values('Data Scientist', 'Kraków', 15000, 'PLN');
 
-insert into Job(id, title, city, salary, currency)
-values (3, 'Front-end Developer', 'Wroclaw', 11000, 'PLN');
+insert into Job(title, city, salary, currency)
+values ('Front-end Developer', 'Wroclaw', 11000, 'PLN');
 
-insert into Job(id,title, city, salary, currency)
-values(4, 'DevOps Engineer', 'Gdansk', 13000, 'PLN');
+insert into Job(title, city, salary, currency)
+values('DevOps Engineer', 'Gdansk', 13000, 'PLN');
 
 
 

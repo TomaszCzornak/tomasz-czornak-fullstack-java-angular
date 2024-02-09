@@ -1,6 +1,6 @@
 CREATE TABLE Job
 (
-    id     INT   NOT NULL PRIMARY KEY,
+    id     INT   NOT NULL PRIMARY KEY AUTO_INCREMENT,
     title    VARCHAR(255) NOT NULL,
     city     VARCHAR(255) NOT NULL,
     salary   BIGINT       NOT NULL CHECK (salary > 0),
