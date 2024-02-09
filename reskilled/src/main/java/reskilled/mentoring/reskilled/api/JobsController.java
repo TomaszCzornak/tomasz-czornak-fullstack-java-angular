@@ -40,8 +40,10 @@ public class JobsController {
     }
 
     @PostMapping("/add-job")
-    public String addJobSubmit(@ModelAttribute @Valid Job job, BindingResult result) {
+    public String addJobSubmit(@ModelAttribute @Valid Job job, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("job", job);
+            model.addAttribute("currencies", Arrays.asList(Currency.values()));
             return "add_job";
         }
         jobService.addJob(job);
