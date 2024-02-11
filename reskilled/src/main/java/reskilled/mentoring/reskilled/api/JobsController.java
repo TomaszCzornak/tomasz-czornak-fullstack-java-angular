@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import reskilled.mentoring.reskilled.model.*;
 import reskilled.mentoring.reskilled.service.JobService;
 import reskilled.mentoring.reskilled.service.SkillService;
-import reskilled.mentoring.reskilled.service.SkillServiceJpa;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -82,6 +80,16 @@ public class JobsController {
             return "editJob";
         }
         jobService.updateJob(job);
+        return "redirect:/v1/jobs";
+    }
+
+    @RequestMapping("/delete-job/{id}")
+    public String deleteJob(@PathVariable("id") Long id) {
+        Optional<Job> job = jobService.getJobById(id);
+        if (job.isEmpty()) {
+            throw new JobNotFoundException();
+        }
+        jobService.deleteJobById(id);
         return "redirect:/v1/jobs";
     }
 
