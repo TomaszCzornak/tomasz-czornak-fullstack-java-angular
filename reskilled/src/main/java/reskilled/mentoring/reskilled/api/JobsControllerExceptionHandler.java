@@ -8,6 +8,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import reskilled.mentoring.reskilled.model.EmptyJobsListException;
 import reskilled.mentoring.reskilled.model.JobNotFoundException;
+import reskilled.mentoring.reskilled.model.UserAlreadyExistsException;
 
 @ControllerAdvice(assignableTypes = JobsController.class)
 public class JobsControllerExceptionHandler extends ResponseEntityExceptionHandler {
@@ -24,6 +25,14 @@ public class JobsControllerExceptionHandler extends ResponseEntityExceptionHandl
     public ResponseEntity<Object> handleException(JobNotFoundException e, WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
         String message = "There is no such job under given id";
+        APIError apiError = new APIError(status, message);
+        return new  ResponseEntity<>(apiError, status);
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<Object> handleException(UserAlreadyExistsException e, WebRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        String message = "User with this email already exists";
         APIError apiError = new APIError(status, message);
         return new  ResponseEntity<>(apiError, status);
     }

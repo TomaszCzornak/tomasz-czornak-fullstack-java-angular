@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+<h2>User Information</h2>
+<p th:text="'First Name: ' + ${userResponse.firstName}"></p>
+<p th:text="'Last Name: ' + ${userResponse.lastName}"></p>
+<p th:text="'Email: ' + ${userResponse.email}"></p>
+<!-- You can add more fields according to your UserResponse object -->
+</body>
+</html>

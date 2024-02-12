@@ -8,7 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import reskilled.mentoring.reskilled.model.*;
 import reskilled.mentoring.reskilled.service.JobService;
-import reskilled.mentoring.reskilled.service.SkillService;
+import reskilled.mentoring.reskilled.service.RegistrationService;
+import reskilled.mentoring.reskilled.service.UsersService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +21,8 @@ import java.util.Optional;
 public class JobsController {
 
     private final JobService jobService;
-    private final SkillService skillService;
+    private final RegistrationService registrationService;
+    private final UsersService usersService;
 
     @RequestMapping("/jobs")
     @ResponseBody
@@ -91,6 +93,31 @@ public class JobsController {
         }
         jobService.deleteJobById(id);
         return "redirect:/v1/jobs";
+    }
+
+    @PostMapping("/register")
+    public String register(@ModelAttribute @Valid RegistrationRequest registrationRequest, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("registrationRequest", registrationRequest);
+            return "register";
+        }
+        User user = UserMapper.toUser(registrationRequest);
+        Optional<User> userToVerify = usersService.getUsersByEmail(user.getEmail());
+        if (userToVerify.isPresent()) {
+            throw new UserAlreadyExistsException();
+        }
+        registrationService.register(user);
+        User registeredUser = usersService.getUsersByEmail(registrationRequest.getEmail()).get();
+        UserResponse userResponse = UserMapper.toUserResponse(registeredUser);
+        model.addAttribute("userResponse", userResponse);
+        return "registered";
+    }
+
+    @RequestMapping("/register")
+    public String registerView(Model model) {
+            RegistrationRequest request = new RegistrationRequest();
+            model.addAttribute("registrationRequest", request);
+            return "register";
     }
 
 }
