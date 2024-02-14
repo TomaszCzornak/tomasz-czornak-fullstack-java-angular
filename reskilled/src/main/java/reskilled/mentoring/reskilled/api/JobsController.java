@@ -6,10 +6,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import reskilled.mentoring.reskilled.model.*;
+import reskilled.mentoring.reskilled.domain.exceptions.EmptyJobsListException;
+import reskilled.mentoring.reskilled.domain.exceptions.JobNotFoundException;
+import reskilled.mentoring.reskilled.domain.logic.UserRegistrationFacade;
+import reskilled.mentoring.reskilled.domain.model.entity.Currency;
+import reskilled.mentoring.reskilled.domain.model.entity.Job;
+import reskilled.mentoring.reskilled.domain.model.dto.JobDto;
+import reskilled.mentoring.reskilled.domain.model.request.RegistrationRequest;
+import reskilled.mentoring.reskilled.domain.model.response.UserResponse;
 import reskilled.mentoring.reskilled.service.JobService;
-import reskilled.mentoring.reskilled.service.RegistrationService;
-import reskilled.mentoring.reskilled.service.UsersService;
+import reskilled.mentoring.reskilled.shared.JobMapper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,8 +27,7 @@ import java.util.Optional;
 public class JobsController {
 
     private final JobService jobService;
-    private final RegistrationService registrationService;
-    private final UsersService usersService;
+    private final UserRegistrationFacade userRegistrationFacade;
 
     @RequestMapping("/jobs")
     @ResponseBody
@@ -101,14 +106,7 @@ public class JobsController {
             model.addAttribute("registrationRequest", registrationRequest);
             return "register";
         }
-        User user = UserMapper.toUser(registrationRequest);
-        Optional<User> userToVerify = usersService.getUsersByEmail(user.getEmail());
-        if (userToVerify.isPresent()) {
-            throw new UserAlreadyExistsException();
-        }
-        registrationService.register(user);
-        User registeredUser = usersService.getUsersByEmail(registrationRequest.getEmail()).get();
-        UserResponse userResponse = UserMapper.toUserResponse(registeredUser);
+        UserResponse userResponse = userRegistrationFacade.registerUser(registrationRequest);
         model.addAttribute("userResponse", userResponse);
         return "registered";
     }

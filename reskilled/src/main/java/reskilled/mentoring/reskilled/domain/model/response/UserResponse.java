@@ -1,4 +1,4 @@
-package reskilled.mentoring.reskilled.api;
+package reskilled.mentoring.reskilled.domain.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +16,4 @@ public class UserResponse {
     private String lastName;
     private String email;
 
-    public UserResponse() {
-    }
 }

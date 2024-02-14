@@ -1,9 +1,10 @@
-package reskilled.mentoring.reskilled.api;
+package reskilled.mentoring.reskilled.shared;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import reskilled.mentoring.reskilled.model.RegistrationRequest;
-import reskilled.mentoring.reskilled.model.User;
+import reskilled.mentoring.reskilled.domain.model.request.RegistrationRequest;
+import reskilled.mentoring.reskilled.domain.model.entity.User;
+import reskilled.mentoring.reskilled.domain.model.response.UserResponse;
 
 import java.sql.Timestamp;
 

@@ -2,7 +2,8 @@ package reskilled.mentoring.reskilled.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import reskilled.mentoring.reskilled.model.User;
+import reskilled.mentoring.reskilled.domain.logic.UserRepository;
+import reskilled.mentoring.reskilled.domain.model.entity.User;
 
 import java.util.Optional;
 
@@ -10,9 +11,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UsersService {
 
-    private final UsersServiceJpa usersServiceJpa;
+    private final UserRepository userRepository;
 
     public Optional<User> getUsersByEmail(String email) {
-        return usersServiceJpa.findUserByEmail(email);
+        return userRepository.findUserByEmail(email);
     }
 }

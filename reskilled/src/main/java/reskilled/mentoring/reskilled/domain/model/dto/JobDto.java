@@ -1,6 +1,7 @@
-package reskilled.mentoring.reskilled.model;
+package reskilled.mentoring.reskilled.domain.model.dto;
 
 import lombok.Data;
+import reskilled.mentoring.reskilled.domain.model.entity.Currency;
 
 import java.util.List;
 

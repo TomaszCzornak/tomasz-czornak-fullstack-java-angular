@@ -1,10 +1,10 @@
-package reskilled.mentoring.reskilled.api;
+package reskilled.mentoring.reskilled.shared;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import reskilled.mentoring.reskilled.model.Job;
-import reskilled.mentoring.reskilled.model.JobDto;
-import reskilled.mentoring.reskilled.model.Skill;
+import reskilled.mentoring.reskilled.domain.model.entity.Job;
+import reskilled.mentoring.reskilled.domain.model.dto.JobDto;
+import reskilled.mentoring.reskilled.domain.model.entity.Skill;
 
 import java.util.List;
 

@@ -2,7 +2,8 @@ package reskilled.mentoring.reskilled.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import reskilled.mentoring.reskilled.model.Skill;
+import reskilled.mentoring.reskilled.domain.logic.SkillRepository;
+import reskilled.mentoring.reskilled.domain.model.entity.Skill;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,27 +12,27 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SkillService {
 
-    private final SkillServiceJpa skillServiceJpa;
+    private final SkillRepository skillRepository;
 
     public List<Skill> getAllSkills() {
-        return skillServiceJpa.findAll();
+        return skillRepository.findAll();
     }
 
     public Optional<Skill> getSkillById(Long id) {
-        return skillServiceJpa.findById(id);
+        return skillRepository.findById(id);
     }
 
 
 
     public void updateSkill(Skill skill) {
-        skillServiceJpa.save(skill);
+        skillRepository.save(skill);
     }
 
     public void addSkill(Skill skill) {
-        skillServiceJpa.save(skill);
+        skillRepository.save(skill);
     }
 
     public Skill findByName(String skillName) {
-        return skillServiceJpa.findByName(skillName);
+        return skillRepository.findByName(skillName);
     }
 }
