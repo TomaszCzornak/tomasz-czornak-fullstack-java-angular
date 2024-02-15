@@ -6,9 +6,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import reskilled.mentoring.reskilled.model.*;
+import reskilled.mentoring.reskilled.domain.exceptions.EmptyJobsListException;
+import reskilled.mentoring.reskilled.domain.exceptions.JobNotFoundException;
+import reskilled.mentoring.reskilled.domain.logic.UserRegistrationFacade;
+import reskilled.mentoring.reskilled.domain.model.entity.Currency;
+import reskilled.mentoring.reskilled.domain.model.entity.Job;
+import reskilled.mentoring.reskilled.domain.model.dto.JobDto;
+import reskilled.mentoring.reskilled.domain.model.request.RegistrationRequest;
+import reskilled.mentoring.reskilled.domain.model.response.UserResponse;
 import reskilled.mentoring.reskilled.service.JobService;
-import reskilled.mentoring.reskilled.service.SkillService;
+import reskilled.mentoring.reskilled.shared.JobMapper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +27,7 @@ import java.util.Optional;
 public class JobsController {
 
     private final JobService jobService;
-    private final SkillService skillService;
+    private final UserRegistrationFacade userRegistrationFacade;
 
     @RequestMapping("/jobs")
     @ResponseBody
@@ -91,6 +98,24 @@ public class JobsController {
         }
         jobService.deleteJobById(id);
         return "redirect:/v1/jobs";
+    }
+
+    @PostMapping("/register")
+    public String register(@ModelAttribute @Valid RegistrationRequest registrationRequest, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("registrationRequest", registrationRequest);
+            return "register";
+        }
+        UserResponse userResponse = userRegistrationFacade.registerUser(registrationRequest);
+        model.addAttribute("userResponse", userResponse);
+        return "registered";
+    }
+
+    @RequestMapping("/register")
+    public String registerView(Model model) {
+            RegistrationRequest request = new RegistrationRequest();
+            model.addAttribute("registrationRequest", request);
+            return "register";
     }
 
 }

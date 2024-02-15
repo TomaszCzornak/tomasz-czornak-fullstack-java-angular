@@ -21,3 +21,14 @@ CREATE TABLE job_skill
     FOREIGN KEY (job_id) REFERENCES Job (id),
     FOREIGN KEY (skill_id) REFERENCES Skill (id)
 );
+
+CREATE TABLE users (
+                       id VARCHAR(255) NOT NULL,
+                       created_at VARCHAR(255) NOT NULL,
+                       updated_at VARCHAR(255),
+                       first_name VARCHAR(255) NOT NULL,
+                       last_name VARCHAR(255) NOT NULL,
+                       email VARCHAR(255) NOT NULL UNIQUE,
+                       password VARCHAR(255) NOT NULL,
+                       PRIMARY KEY (id)
+);

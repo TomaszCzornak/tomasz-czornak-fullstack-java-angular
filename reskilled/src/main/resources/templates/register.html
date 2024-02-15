@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        span.error {
+            color: darkred;
+        }
+    </style>
+</head>
+<body>
+<h1>Register</h1>
+<form th:action="@{/v1/register}" th:object="${registrationRequest}" method="post">
+
+    <div>
+        <label for="firstName">First Name:</label>
+        <input type="text" th:field="*{firstName}" id="firstName"/>
+        <span th:if="${#fields.hasErrors('firstName')}"
+              th:errors="*{firstName}"
+              class="error"></span>
+    </div>
+
+    <div>
+        <label for="lastName">Last Name:</label>
+        <input type="text" th:field="*{lastName}" id="lastName"/>
+        <span th:if="${#fields.hasErrors('lastName')}"
+              th:errors="*{lastName}"
+              class="error"></span>
+    </div>
+
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" th:field="*{email}" id="email"/>
+        <span th:if="${#fields.hasErrors('email')}"
+              th:errors="*{email}"
+              class="error"></span>
+    </div>
+
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" th:field="*{password}" id="password"/>
+        <span th:if="${#fields.hasErrors('password')}"
+              th:errors="*{password}"
+              class="error"></span>
+    </div>
+
+    <div>
+        <label for="passwordRepeat">Repeat Password:</label>
+        <input type="password" th:field="*{passwordRepeat}" id="passwordRepeat"/>
+        <span th:if="${#fields.hasErrors('passwordRepeat')}"
+              th:errors="*{passwordRepeat}"
+              class="error"></span>
+    </div>
+
+    <div>
+        <input type="submit" value="Register"/>
+    </div>
+</form>
+</body>
+</html>

@@ -3,7 +3,8 @@ package reskilled.mentoring.reskilled.service;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import reskilled.mentoring.reskilled.model.Job;
+import reskilled.mentoring.reskilled.domain.logic.JobRepository;
+import reskilled.mentoring.reskilled.domain.model.entity.Job;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,26 +14,26 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JobService {
 
-    private final JobServiceJpa jobServiceJpa;
+    private final JobRepository jobRepository;
 
     public List<Job> getAllJobs() {
-        return jobServiceJpa.findAll();
+        return jobRepository.findAll();
     }
 
     public Optional<Job> getJobById(Long id) {
-        return jobServiceJpa.findById(id);
+        return jobRepository.findById(id);
     }
 
     public void updateJob(Job job) {
-        jobServiceJpa.save(job);
+        jobRepository.save(job);
     }
 
     public void addJob(Job job) {
-        jobServiceJpa.save(job);
+        jobRepository.save(job);
     }
 
     public void deleteJobById(Long id) {
-        jobServiceJpa.deleteById(id);
+        jobRepository.deleteById(id);
     }
 
 }

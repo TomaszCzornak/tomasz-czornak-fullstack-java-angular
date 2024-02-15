@@ -1,4 +1,4 @@
-package reskilled.mentoring.reskilled.model;
+package reskilled.mentoring.reskilled.domain.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
