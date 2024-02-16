@@ -8,11 +8,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import reskilled.mentoring.reskilled.domain.exceptions.EmptyJobsListException;
 import reskilled.mentoring.reskilled.domain.exceptions.JobNotFoundException;
+import reskilled.mentoring.reskilled.domain.logic.UserLoginFacade;
 import reskilled.mentoring.reskilled.domain.logic.UserRegistrationFacade;
+import reskilled.mentoring.reskilled.domain.model.dto.JobDto;
 import reskilled.mentoring.reskilled.domain.model.entity.Currency;
 import reskilled.mentoring.reskilled.domain.model.entity.Job;
-import reskilled.mentoring.reskilled.domain.model.dto.JobDto;
+import reskilled.mentoring.reskilled.domain.model.request.LoginRequest;
 import reskilled.mentoring.reskilled.domain.model.request.RegistrationRequest;
+import reskilled.mentoring.reskilled.domain.model.response.LoginResponse;
 import reskilled.mentoring.reskilled.domain.model.response.UserResponse;
 import reskilled.mentoring.reskilled.service.JobService;
 import reskilled.mentoring.reskilled.shared.JobMapper;
@@ -28,6 +31,7 @@ public class JobsController {
 
     private final JobService jobService;
     private final UserRegistrationFacade userRegistrationFacade;
+    private final UserLoginFacade userLoginFacade;
 
     @RequestMapping("/jobs")
     @ResponseBody
@@ -101,7 +105,7 @@ public class JobsController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute @Valid RegistrationRequest registrationRequest, BindingResult result, Model model) {
+    public String register(@ModelAttribute("registrationRequest") @Valid RegistrationRequest registrationRequest, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("registrationRequest", registrationRequest);
             return "register";
@@ -111,11 +115,29 @@ public class JobsController {
         return "registered";
     }
 
-    @RequestMapping("/register")
+    @GetMapping("/register")
     public String registerView(Model model) {
-            RegistrationRequest request = new RegistrationRequest();
-            model.addAttribute("registrationRequest", request);
-            return "register";
+        RegistrationRequest request = new RegistrationRequest();
+        model.addAttribute("registrationRequest", request);
+        return "register";
     }
 
+    @GetMapping("/login")
+    public String loginView(Model model) {
+        LoginRequest loginRequest = new LoginRequest();
+        model.addAttribute("loginRequest", loginRequest);
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String login(@ModelAttribute @Valid LoginRequest loginRequest, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("loginRequest", loginRequest);
+            return "register";
+        }
+        LoginResponse loginResponse = userLoginFacade.loginUser(loginRequest);
+        model.addAttribute("loginResponse", loginResponse);
+        return "loginResponse";
+
+    }
 }

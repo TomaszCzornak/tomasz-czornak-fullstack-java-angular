@@ -34,4 +34,12 @@ public class JobsControllerExceptionHandler extends ResponseEntityExceptionHandl
         ApiError apiError = new ApiError(status, message);
         return new  ResponseEntity<>(apiError, status);
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Object> handleException(UserNotFoundException e, WebRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        String message = "No such user exists";
+        ApiError apiError = new ApiError(status, message);
+        return new  ResponseEntity<>(apiError, status);
+    }
 }
