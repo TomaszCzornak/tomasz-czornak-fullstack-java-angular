@@ -21,10 +21,10 @@ public class RegistrationRequest {
     @Email(message = "Podaj poprawny adres email")
     private String email;
 
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])", message = "minimum 1 mała i duża litera, 1 cyfra, 1 znak specjalny.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d!\"#$%&'()*+,-./]{4,}$", message = "minimum 1 mała i duża litera, 1 cyfra, 1 znak specjalny.")
     private String password;
 
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])", message = "minimum 1 mała i duża litera, 1 cyfra, 1 znak specjalny.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d!\"#$%&'()*+,-./]{4,}$", message = "minimum 1 mała i duża litera, 1 cyfra, 1 znak specjalny.")
     private String passwordRepeat;
 
 }

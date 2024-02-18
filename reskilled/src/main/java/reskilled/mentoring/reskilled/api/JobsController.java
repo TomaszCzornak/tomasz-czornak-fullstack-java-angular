@@ -105,7 +105,7 @@ public class JobsController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("registrationRequest") @Valid RegistrationRequest registrationRequest, BindingResult result, Model model) {
+    public String register(@ModelAttribute @Valid RegistrationRequest registrationRequest, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("registrationRequest", registrationRequest);
             return "register";
@@ -115,7 +115,7 @@ public class JobsController {
         return "registered";
     }
 
-    @GetMapping("/register")
+    @RequestMapping("/register")
     public String registerView(Model model) {
         RegistrationRequest request = new RegistrationRequest();
         model.addAttribute("registrationRequest", request);
