@@ -3,6 +3,7 @@ package reskilled.mentoring.reskilled.service;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -13,14 +14,11 @@ import java.util.Map;
 @Component
 public class JwtService {
 
-    private final String SECRET;
-
-    private SecretService service;
-
-    public JwtService(SecretService service) {
-        this.service = service;
-        this.SECRET = service.getSecret();
+    public JwtService(@Value("${jwt.secret}") String secret) {
+        SECRET = secret;
     }
+
+    public final String SECRET ;
 
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);

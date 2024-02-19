@@ -10,6 +10,7 @@ import reskilled.mentoring.reskilled.domain.model.response.LoginResponse;
 import reskilled.mentoring.reskilled.service.JwtService;
 import reskilled.mentoring.reskilled.service.UsersService;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class UserLoginFacadeImpl implements UserLoginFacade {
     @Override
     public LoginResponse loginUser(LoginRequest loginRequest) {
         Optional<User> user = userService.getUsersByEmail(loginRequest.getEmail());
-        if (user.isEmpty()) {
+        if (user.isEmpty() || !Objects.equals(user.get().getPassword(), loginRequest.getPassword())) {
             throw new UserNotFoundException();
         } else {
             return LoginResponse.builder()
