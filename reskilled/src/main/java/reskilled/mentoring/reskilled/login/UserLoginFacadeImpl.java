@@ -1,6 +1,7 @@
 package reskilled.mentoring.reskilled.login;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 import reskilled.mentoring.reskilled.user.exceptions.UserNotFoundException;
 import reskilled.mentoring.reskilled.user.model.dto.UserDto;
@@ -10,7 +11,6 @@ import reskilled.mentoring.reskilled.login.model.LoginResponse;
 import reskilled.mentoring.reskilled.security.JwtService;
 import reskilled.mentoring.reskilled.user.service.UsersService;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class UserLoginFacadeImpl implements UserLoginFacade {
     @Override
     public LoginResponse loginUser(LoginRequest loginRequest) {
         Optional<User> user = userService.getUsersByEmail(loginRequest.getEmail());
-        if (user.isEmpty() || !Objects.equals(user.get().getPassword(), loginRequest.getPassword())) {
+        if (user.isEmpty() || !BCrypt.checkpw(loginRequest.getPassword(), user.get().getPassword())) {
             throw new UserNotFoundException();
         } else {
             return LoginResponse.builder()
