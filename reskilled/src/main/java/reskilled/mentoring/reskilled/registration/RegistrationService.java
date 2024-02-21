@@ -15,9 +15,9 @@ public class RegistrationService {
     private final RegistrationRepository registrationRepository;
 
 
-    public void register(User user) {
+    public User register(User user) {
         user.setPassword(hashPassword(user.getPassword()));
-        registrationRepository.save(user);
+        return registrationRepository.save(user);
     }
 
     private String hashPassword(String password) {

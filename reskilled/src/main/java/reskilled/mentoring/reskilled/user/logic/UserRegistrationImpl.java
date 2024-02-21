@@ -28,8 +28,9 @@ public class UserRegistrationImpl implements UserRegistrationFacade {
         }
         User user = UserMapper.toUser(registrationRequest);
 
-        registrationService.register(user);
-        return UserMapper.toUserResponse(user);
+        User userSaved = registrationService.register(user);
+
+        return UserMapper.toUserResponse(userSaved);
 
     }
 }

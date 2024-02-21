@@ -6,6 +6,7 @@ import reskilled.mentoring.reskilled.job.entity.Job;
 import reskilled.mentoring.reskilled.job.dto.JobDto;
 import reskilled.mentoring.reskilled.skills.entity.Skill;
 
+import java.util.Collections;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,6 +24,9 @@ public class JobMapper {
     }
 
     public static List<Skill> toSkillsEntity(List<String> skills) {
+        if (skills==null) {
+            return Collections.emptyList();
+        }
         return skills.stream()
                 .map(JobMapper::toSkillEntity)
                 .toList();

@@ -24,8 +24,9 @@ public class JobService {
         return jobRepository.findById(id);
     }
 
-    public void updateJob(Job job) {
+    public Job updateJob(Job job) {
         jobRepository.save(job);
+        return job;
     }
 
     public void addJob(Job job) {
