@@ -23,7 +23,7 @@ public class UserLoginFacadeImpl implements UserLoginFacade {
     private final JwtService jwtService;
     @Override
     public LoginResponse loginUser(LoginRequest loginRequest) {
-        Optional<User> user = userService.getUsersByEmail(loginRequest.getEmail());
+        Optional<User> user = userService.getActivatedUser(loginRequest.getEmail());
         if (user.isEmpty() || !BCrypt.checkpw(loginRequest.getPassword(), user.get().getPassword())) {
             throw new UserNotFoundException();
         } else {

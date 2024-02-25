@@ -2,6 +2,7 @@ package reskilled.mentoring.reskilled.user.logic;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import reskilled.mentoring.reskilled.email.EmailService;
 import reskilled.mentoring.reskilled.registration.UserRegistrationFacade;
 import reskilled.mentoring.reskilled.registration.RegistrationRequest;
 import reskilled.mentoring.reskilled.user.model.entity.User;
@@ -19,6 +20,7 @@ public class UserRegistrationImpl implements UserRegistrationFacade {
 
     private final UsersService usersService;
     private final RegistrationService registrationService;
+    private final EmailService emailService;
 
     @Override
     public UserResponse registerUser(RegistrationRequest registrationRequest) {
@@ -29,6 +31,7 @@ public class UserRegistrationImpl implements UserRegistrationFacade {
         User user = UserMapper.toUser(registrationRequest);
 
         User userSaved = registrationService.register(user);
+        emailService.sendActivation(user);
 
         return UserMapper.toUserResponse(userSaved);
 

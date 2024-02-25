@@ -16,4 +16,16 @@ public class UsersService {
     public Optional<User> getUsersByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
+    public Optional<User> getUserByUuid(String uuid) {
+        return userRepository.findUserByUuid(uuid);
+    }
+
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
+    public Optional<User> getActivatedUser(String email) {
+        return userRepository.findUserByEmailAndLockAndEnabled(email);
+    }
+
 }
