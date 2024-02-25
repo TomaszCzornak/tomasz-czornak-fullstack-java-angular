@@ -1,4 +1,4 @@
-package reskilled.mentoring.reskilled.login;
+package reskilled.mentoring.reskilled.login.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import reskilled.mentoring.reskilled.login.service.UserLoginFacade;
 import reskilled.mentoring.reskilled.login.model.LoginRequest;
 import reskilled.mentoring.reskilled.login.model.LoginResponse;
 

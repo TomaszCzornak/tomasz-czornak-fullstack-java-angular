@@ -2,7 +2,7 @@ package reskilled.mentoring.reskilled.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import reskilled.mentoring.reskilled.registration.RegistrationRequest;
+import reskilled.mentoring.reskilled.registration.model.request.RegistrationRequest;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 import reskilled.mentoring.reskilled.user.model.response.UserResponse;
 

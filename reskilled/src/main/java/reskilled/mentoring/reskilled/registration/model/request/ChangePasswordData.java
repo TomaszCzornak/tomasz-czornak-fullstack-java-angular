@@ -1,4 +1,4 @@
-package reskilled.mentoring.reskilled.registration;
+package reskilled.mentoring.reskilled.registration.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

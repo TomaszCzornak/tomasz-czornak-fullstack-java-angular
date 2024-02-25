@@ -1,8 +1,9 @@
-package reskilled.mentoring.reskilled.login;
+package reskilled.mentoring.reskilled.login.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
+import reskilled.mentoring.reskilled.login.service.UserLoginFacade;
 import reskilled.mentoring.reskilled.user.exceptions.UserNotFoundException;
 import reskilled.mentoring.reskilled.user.model.dto.UserDto;
 import reskilled.mentoring.reskilled.user.model.entity.User;

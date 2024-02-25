@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import reskilled.mentoring.reskilled.user.logic.UserRepository;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +27,10 @@ public class UsersService {
 
     public Optional<User> getActivatedUser(String email) {
         return userRepository.findUserByEmailAndLockAndEnabled(email);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
 }

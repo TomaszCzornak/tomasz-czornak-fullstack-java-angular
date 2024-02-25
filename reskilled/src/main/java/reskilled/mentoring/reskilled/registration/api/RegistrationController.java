@@ -1,4 +1,4 @@
-package reskilled.mentoring.reskilled.registration;
+package reskilled.mentoring.reskilled.registration.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,6 +11,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reskilled.mentoring.reskilled.registration.service.RegistrationService;
+import reskilled.mentoring.reskilled.registration.model.response.ActivationResponse;
+import reskilled.mentoring.reskilled.registration.model.request.ChangePasswordData;
+import reskilled.mentoring.reskilled.registration.model.request.RegistrationRequest;
+import reskilled.mentoring.reskilled.registration.model.request.ResetPasswordData;
+import reskilled.mentoring.reskilled.registration.service.UserRegistrationFacade;
 import reskilled.mentoring.reskilled.user.exceptions.UserNotFoundException;
 import reskilled.mentoring.reskilled.user.model.response.UserResponse;
 

@@ -1,4 +1,4 @@
-package reskilled.mentoring.reskilled.registration;
+package reskilled.mentoring.reskilled.registration.model.response;
 
 
 import lombok.AllArgsConstructor;

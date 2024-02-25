@@ -1,4 +1,4 @@
-package reskilled.mentoring.reskilled.registration;
+package reskilled.mentoring.reskilled.registration.model.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;

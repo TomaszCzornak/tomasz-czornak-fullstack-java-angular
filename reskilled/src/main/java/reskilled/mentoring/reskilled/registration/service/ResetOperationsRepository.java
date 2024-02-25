@@ -1,9 +1,10 @@
-package reskilled.mentoring.reskilled.registration;
+package reskilled.mentoring.reskilled.registration.service;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import reskilled.mentoring.reskilled.registration.model.entity.ResetOperations;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 
 import java.util.List;

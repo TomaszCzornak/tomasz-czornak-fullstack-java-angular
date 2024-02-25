@@ -1,10 +1,12 @@
-package reskilled.mentoring.reskilled.registration;
+package reskilled.mentoring.reskilled.registration.service;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import reskilled.mentoring.reskilled.email.EmailService;
+import reskilled.mentoring.reskilled.registration.model.entity.ResetOperations;
+import reskilled.mentoring.reskilled.registration.model.request.ChangePasswordData;
 import reskilled.mentoring.reskilled.user.exceptions.UserNotFoundException;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 import reskilled.mentoring.reskilled.user.service.UsersService;

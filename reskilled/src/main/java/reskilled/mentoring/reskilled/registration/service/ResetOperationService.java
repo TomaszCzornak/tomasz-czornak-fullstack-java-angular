@@ -1,4 +1,4 @@
-package reskilled.mentoring.reskilled.registration;
+package reskilled.mentoring.reskilled.registration.service;
 
 
 import jakarta.transaction.Transactional;
@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import reskilled.mentoring.reskilled.registration.model.entity.ResetOperations;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 
 import java.sql.Timestamp;

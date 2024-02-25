@@ -3,12 +3,12 @@ package reskilled.mentoring.reskilled.user.logic;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reskilled.mentoring.reskilled.email.EmailService;
-import reskilled.mentoring.reskilled.registration.UserRegistrationFacade;
-import reskilled.mentoring.reskilled.registration.RegistrationRequest;
+import reskilled.mentoring.reskilled.registration.service.UserRegistrationFacade;
+import reskilled.mentoring.reskilled.registration.model.request.RegistrationRequest;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 import reskilled.mentoring.reskilled.user.exceptions.UserAlreadyExistsException;
 import reskilled.mentoring.reskilled.user.model.response.UserResponse;
-import reskilled.mentoring.reskilled.registration.RegistrationService;
+import reskilled.mentoring.reskilled.registration.service.RegistrationService;
 import reskilled.mentoring.reskilled.user.service.UsersService;
 import reskilled.mentoring.reskilled.utils.UserMapper;
 
