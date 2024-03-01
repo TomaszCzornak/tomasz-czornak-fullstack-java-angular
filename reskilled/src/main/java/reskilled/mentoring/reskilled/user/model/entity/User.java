@@ -1,16 +1,16 @@
 package reskilled.mentoring.reskilled.user.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+
+import java.util.UUID;
 
 @Entity
 @Data
 @Builder
 @Table(name = "users")
-@AllArgsConstructor
 public class User {
 
     @Id
@@ -19,6 +19,7 @@ public class User {
     @Column(name = "id", updatable = false, nullable = false)
     private String id;
 
+    private String uuid;
     @Column(name = "created_at", nullable = false, updatable = false)
     private String createdAt;
 
@@ -37,7 +38,33 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    public User() {
+    @Column(name = "islock")
+    private boolean isLock;
 
+    @Column(name = "isenabled")
+    private boolean isEnabled;
+
+    public User() {
+        generateUuid();
+    }
+
+    public User(String id, String uuid, String createdAt, String updatedAt, String firstName, String lastName, String email, String password, boolean isLock, boolean isEnabled) {
+        this.id = id;
+        this.uuid = uuid;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.isLock = isLock;
+        this.isEnabled = isEnabled;
+        generateUuid();
+    }
+
+    private void generateUuid() {
+        if (uuid==null || uuid.equals("")) {
+            setUuid(UUID.randomUUID().toString());
+        }
     }
 }

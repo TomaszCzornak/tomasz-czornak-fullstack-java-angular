@@ -1,4 +1,4 @@
-package reskilled.mentoring.reskilled.login;
+package reskilled.mentoring.reskilled.login.service;
 
 import reskilled.mentoring.reskilled.login.model.LoginRequest;
 import reskilled.mentoring.reskilled.login.model.LoginResponse;
