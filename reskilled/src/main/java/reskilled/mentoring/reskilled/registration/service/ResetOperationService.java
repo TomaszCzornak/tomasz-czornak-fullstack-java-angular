@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import reskilled.mentoring.reskilled.registration.model.entity.ResetOperations;
+import reskilled.mentoring.reskilled.registration.repository.ResetOperationsRepository;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 
 import java.sql.Timestamp;

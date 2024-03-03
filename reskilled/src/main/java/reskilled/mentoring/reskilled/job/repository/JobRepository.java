@@ -1,4 +1,4 @@
-package reskilled.mentoring.reskilled.job;
+package reskilled.mentoring.reskilled.job.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import reskilled.mentoring.reskilled.job.entity.Job;

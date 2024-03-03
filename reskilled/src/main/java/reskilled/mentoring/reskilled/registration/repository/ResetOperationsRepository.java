@@ -1,4 +1,4 @@
-package reskilled.mentoring.reskilled.registration.service;
+package reskilled.mentoring.reskilled.registration.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

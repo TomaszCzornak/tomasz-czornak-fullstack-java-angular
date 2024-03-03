@@ -1,15 +1,16 @@
 package reskilled.mentoring.reskilled.login.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import reskilled.mentoring.reskilled.login.service.UserLoginFacade;
-import reskilled.mentoring.reskilled.user.exceptions.UserNotFoundException;
-import reskilled.mentoring.reskilled.user.model.dto.UserDto;
-import reskilled.mentoring.reskilled.user.model.entity.User;
 import reskilled.mentoring.reskilled.login.model.LoginRequest;
 import reskilled.mentoring.reskilled.login.model.LoginResponse;
 import reskilled.mentoring.reskilled.security.JwtService;
+import reskilled.mentoring.reskilled.user.exceptions.UserNotFoundException;
+import reskilled.mentoring.reskilled.user.model.dto.UserDto;
+import reskilled.mentoring.reskilled.user.model.entity.User;
 import reskilled.mentoring.reskilled.user.service.UsersService;
 
 import java.util.Optional;
@@ -18,30 +19,35 @@ import java.util.Optional;
 @Component
 public class UserLoginFacadeImpl implements UserLoginFacade {
 
-    private int exp = 1000*60*60*24*3;
+    private int exp = 1000 * 60 * 60 * 24 * 3;
 
     private final UsersService userService;
     private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+
     @Override
     public LoginResponse loginUser(LoginRequest loginRequest) {
         Optional<User> user = userService.getActivatedUser(loginRequest.getEmail());
-        if (user.isEmpty() || !BCrypt.checkpw(loginRequest.getPassword(), user.get().getPassword())) {
-            throw new UserNotFoundException();
-        } else {
-            return LoginResponse.builder()
-                    .accessToken(generateToken(loginRequest.getEmail(), exp))
-                    .userDto(UserDto.builder().id(user.get().getId())
-                            .createdAt(user.get().getCreatedAt())
-                            .updatedAt(user.get().getUpdatedAt())
-                            .firstName(user.get().getFirstName())
-                            .lastName(user.get().getLastName())
-                            .email(user.get().getEmail())
-                            .build())
-                    .build();
+        if (user.isPresent()) {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            if (authentication.isAuthenticated()) {
+                return LoginResponse.builder()
+                        .accessToken(generateToken(loginRequest.getEmail(), exp))
+                        .userDto(UserDto.builder()
+                                        .createdAt(user.get().getCreatedAt())
+                                        .updatedAt(user.get().getUpdatedAt())
+                                        .firstName(user.get().getFirstName())
+                                        .lastName(user.get().getLastName())
+                                        .email(user.get().getEmail())
+                                        .build()
+                        )
+                        .build();
+            }
         }
+        throw new UserNotFoundException();
     }
 
-    private String generateToken(String email,int exp) {
-        return jwtService.generateToken(email,exp);
+    private String generateToken(String email, int exp) {
+        return jwtService.generateToken(email, exp);
     }
 }

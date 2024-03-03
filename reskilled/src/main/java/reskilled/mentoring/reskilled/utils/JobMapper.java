@@ -9,7 +9,7 @@ import reskilled.mentoring.reskilled.skills.entity.Skill;
 import java.util.Collections;
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JobMapper {
 
     public static Job toJobEntity(JobDto jobDto) {

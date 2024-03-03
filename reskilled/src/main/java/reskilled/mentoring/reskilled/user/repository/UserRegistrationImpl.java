@@ -1,4 +1,4 @@
-package reskilled.mentoring.reskilled.user.logic;
+package reskilled.mentoring.reskilled.user.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
