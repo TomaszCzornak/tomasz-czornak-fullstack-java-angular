@@ -9,13 +9,13 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import reskilled.mentoring.reskilled.user.service.UsersService;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -26,17 +26,26 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/v1/register", "/v1/login", "/v1/activate", "/h2-console/**").permitAll()
-                .anyRequest().fullyAuthenticated()
-                .and()
-                .formLogin(withDefaults())
-                .csrf().ignoringRequestMatchers("/**")
-                .and()
-                .headers().frameOptions().sameOrigin()
-                .and()
-                .build();
+        http
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/v1/register", "/v1/login", "/v1/activate", "/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/**"))
+                .cors(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(
+                                "/v1/register",
+                                "/v1/login",
+                                "/v1/activate",
+                                "/h2-console/**",  // Upewnij się, że zezwalasz na wszystko pod h2-console
+                                "/swagger-ui.html", // Standardowa ścieżka do Swagger UI
+                                "/swagger-ui/**",   // Zezwól na wszystkie zasoby Swagger UI
+                                "/v3/api-docs/**",  // Zezwól na dostęp do specyfikacji API Swagger
+                                "/webjars/**"       // Ścieżki do zasobów statycznych Swagger UI
+                        )
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated());
+
+        return http.build();
     }
 
     @Bean

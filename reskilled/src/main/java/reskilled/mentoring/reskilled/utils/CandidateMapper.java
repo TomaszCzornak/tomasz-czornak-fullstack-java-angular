@@ -13,7 +13,7 @@ public class CandidateMapper {
     public static Candidate toCandidateEntity(CandidateRequest candidateRequest, UserDto userDto) {
         return Candidate.builder()
                 .email(candidateRequest.getEmail())
-                .createdby(User.builder()
+                .createdBy(User.builder()
                         .id(userDto.getId())
                         .build())
                 .build();

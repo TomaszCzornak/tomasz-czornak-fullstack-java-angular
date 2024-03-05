@@ -22,5 +22,5 @@ public class Candidate {
     private String email;
     @ManyToOne
     @JoinColumn(name = "users", nullable = false)
-    private User createdby;
+    private User createdBy;
 }
