@@ -35,11 +35,11 @@ public class SecurityConfig {
                                 "/v1/register",
                                 "/v1/login",
                                 "/v1/activate",
-                                "/h2-console/**",  // Upewnij się, że zezwalasz na wszystko pod h2-console
-                                "/swagger-ui.html", // Standardowa ścieżka do Swagger UI
-                                "/swagger-ui/**",   // Zezwól na wszystkie zasoby Swagger UI
-                                "/v3/api-docs/**",  // Zezwól na dostęp do specyfikacji API Swagger
-                                "/webjars/**"       // Ścieżki do zasobów statycznych Swagger UI
+                                "/h2-console/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/webjars/**"
                         )
                         .permitAll()
                         .anyRequest()

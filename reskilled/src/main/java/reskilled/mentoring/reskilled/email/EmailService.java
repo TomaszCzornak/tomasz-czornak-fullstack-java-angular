@@ -1,7 +1,6 @@
 package reskilled.mentoring.reskilled.email;
 
 
-import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 
 @Service
@@ -31,7 +31,7 @@ public class EmailService {
     public void sendActivation(User user) {
         log.info("--START sendActivation");
         try {
-            String html = Files.toString(activeTemplate.getFile(), Charsets.UTF_8);
+            String html = Files.toString(activeTemplate.getFile(), StandardCharsets.UTF_8);
             html = html.replace("https://google.com", frontendUrl + "/v1/activate?uuid=" + user.getUuid());
             emailConfiguration.sendMail(user.getEmail(), html, "Aktywacja konta", true);
         } catch (IOException e) {
@@ -44,7 +44,7 @@ public class EmailService {
     public void sendPasswordRecovery(User user, String uuid) {
         try {
             log.info("--START sendPasswordRecovery");
-            String html = Files.toString(recoveryTemplate.getFile(), Charsets.UTF_8);
+            String html = Files.toString(recoveryTemplate.getFile(), StandardCharsets.UTF_8);
             html = html.replace("https://google.com", frontendUrl + "/v1/reset-password/" + uuid);
             emailConfiguration.sendMail(user.getEmail(), html, "Odzyskanie hasła", true);
         } catch (IOException e) {

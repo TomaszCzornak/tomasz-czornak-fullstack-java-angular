@@ -1,15 +1,16 @@
 package reskilled.mentoring.reskilled.login.api;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import reskilled.mentoring.reskilled.login.service.UserLoginFacade;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reskilled.mentoring.reskilled.login.model.LoginRequest;
 import reskilled.mentoring.reskilled.login.model.LoginResponse;
+import reskilled.mentoring.reskilled.login.service.UserLoginFacade;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,9 +25,7 @@ public class LoginController {
             @ApiResponse(responseCode = "200", description = "User successfully logged in"),
             @ApiResponse(responseCode = "400", description = "Bad request due to validation failure")
     })
-    public LoginResponse login(@RequestBody
-                        @Parameter(description = "The LoginRequest object that is validated for login")
-                        @Valid LoginRequest loginRequest) {
+    public LoginResponse login(@RequestBody LoginRequest loginRequest) {
 
         return userLoginFacade.loginUser(loginRequest);
 

@@ -12,8 +12,7 @@ import reskilled.mentoring.reskilled.user.model.entity.User;
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.*;
 
@@ -82,11 +81,11 @@ class EmailServiceTest {
         doThrow(new IOException("Mock IOException")).when(recoveryTemplate).getFile();
         // then
         Exception exception = assertThrows(RuntimeException.class, ()-> emailService.sendPasswordRecovery(user, user.getUuid()));
-        assertTrue(exception.getCause() instanceof IOException);
+        assertInstanceOf(IOException.class, exception.getCause());
     }
 
     @Test
-    public void shouldThrowRuntimeExceptionWhenSendingActivationEmail() throws IOException {
+    void shouldThrowRuntimeExceptionWhenSendingActivationEmail() throws IOException {
         // given
         User user = new User();
         user.setEmail("test@example.com");
@@ -97,5 +96,5 @@ class EmailServiceTest {
 
         // then
         Exception exception = assertThrows(RuntimeException.class, () -> emailService.sendActivation(user));
-        assertTrue(exception.getCause() instanceof IOException);    }
+        assertInstanceOf(IOException.class, exception.getCause());    }
 }
