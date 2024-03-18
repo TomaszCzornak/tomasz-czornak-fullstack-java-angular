@@ -33,6 +33,7 @@ public class EmailService {
         try {
             String html = Files.toString(activeTemplate.getFile(), StandardCharsets.UTF_8);
             html = html.replace("https://google.com", frontendUrl + "/v1/activate?uuid=" + user.getUuid());
+            log.info("aktywacja użytkownika "+user.getUuid());
             emailConfiguration.sendMail(user.getEmail(), html, "Aktywacja konta", true);
         } catch (IOException e) {
             log.info("Cant send mail");

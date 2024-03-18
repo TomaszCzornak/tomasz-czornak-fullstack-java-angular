@@ -1,20 +1,20 @@
 package reskilled.mentoring.reskilled.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 @Component
 public class JwtService {
@@ -35,15 +35,14 @@ public class JwtService {
     }
 
 
-
-    public final String SECRET ;
+    public final String SECRET;
 
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String   generateToken(String userName, int exp) {
+    public String generateToken(String userName, int exp) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userName, exp);
     }
@@ -58,12 +57,12 @@ public class JwtService {
                 .compact();
     }
 
-    public String refreshToken(final String token, int exp){
+    public String refreshToken(final String token, int exp) {
         String username = getSubject(token);
-        return generateToken(username,exp);
+        return generateToken(username, exp);
     }
 
-    public String getSubject(final String token){
+    public String getSubject(final String token) {
         return Jwts
                 .parser()
                 .setSigningKey(SECRET)
@@ -72,34 +71,54 @@ public class JwtService {
                 .getSubject();
     }
 
-    public void validateToken(HttpServletRequest request) throws ExpiredJwtException, IllegalArgumentException{
-        String token = null;
-        String refresh = null;
-        if (request.getCookies() != null){
-            for (Cookie value : Arrays.stream(request.getCookies()).toList()) {
-                if (value.getName().equals("Authorization")) {
-                    token = value.getValue();
-                } else if (value.getName().equals("refresh")) {
-                    refresh = value.getValue();
-                }
-            }
-        }else {
-            throw new IllegalArgumentException("Token can't be null");
-        }
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        final String username = getUsernameFromToken(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+
+    public boolean validateToken(final String token) {
         try {
-            validateToken(token);
-        }catch (IllegalArgumentException | ExpiredJwtException e){
-            validateToken(refresh);
-            Cookie refreshCokkie = cookieService.generateCookie("refresh", refreshToken(refresh,refreshExp), refreshExp);
-            Cookie cookie = cookieService.generateCookie("Authorization", refreshToken(refresh,exp), exp);
-            httpServletResponse.addCookie(cookie);
-            httpServletResponse.addCookie(refreshCokkie);
+            Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
+            return true;
+        } catch (ExpiredJwtException | IllegalArgumentException e) {
+            return false;
         }
-
     }
 
-    public void validateToken(final String token) throws ExpiredJwtException, IllegalArgumentException {
-        Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
+    private Boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
     }
+
+
+    public Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return claimsResolver.apply(claims);
+    }
+
+
+    public String getUsernameFromToken(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims getAllClaimsFromToken(String token) {
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(getSignKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
 
 }

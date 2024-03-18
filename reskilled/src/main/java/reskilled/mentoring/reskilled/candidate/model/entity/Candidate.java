@@ -20,7 +20,7 @@ public class Candidate {
     private Long id;
     @Column(name = "email", unique = true, nullable = false)
     private String email;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "users", nullable = false)
     private User createdBy;
 }

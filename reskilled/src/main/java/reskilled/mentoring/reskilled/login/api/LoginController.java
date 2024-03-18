@@ -4,10 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.web.bind.annotation.*;
 import reskilled.mentoring.reskilled.login.model.LoginRequest;
 import reskilled.mentoring.reskilled.login.model.LoginResponse;
 import reskilled.mentoring.reskilled.login.service.UserLoginFacade;
@@ -15,6 +14,7 @@ import reskilled.mentoring.reskilled.login.service.UserLoginFacade;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1")
+@Slf4j
 public class LoginController {
 
     private final UserLoginFacade userLoginFacade;
@@ -29,5 +29,11 @@ public class LoginController {
 
         return userLoginFacade.loginUser(loginRequest);
 
+    }
+
+    @GetMapping("/csrf")
+    public CsrfToken csrf(CsrfToken csrfToken) {
+        log.info("to jest csrf tokenizator " + csrfToken.getToken());
+        return csrfToken;
     }
 }
