@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import reskilled.mentoring.reskilled.user.model.entity.User;
+import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
+
+import java.util.Set;
 
 @Entity
 @Data
@@ -21,6 +23,8 @@ public class Candidate {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "users", nullable = false)
-    private User createdBy;
+    @JoinColumn(name = "user_per_candidate", nullable = false)
+    private UserPerCandidate createdBy;
+    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
+    private Set<Recruitment> recruitmentSetl;
 }

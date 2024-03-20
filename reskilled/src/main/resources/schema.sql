@@ -4,7 +4,8 @@ CREATE TABLE Job
     title    VARCHAR(255) NOT NULL,
     city     VARCHAR(255) NOT NULL,
     salary   BIGINT       NOT NULL CHECK (salary > 0),
-    currency VARCHAR(255) NOT NULL
+    currency VARCHAR(255) NOT NULL,
+    primary key (id)
 );
 
 CREATE TABLE Skill
@@ -24,7 +25,7 @@ CREATE TABLE job_skill
 
 CREATE TABLE users
 (
-    id         VARCHAR(255) NOT NULL,
+    id         INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     uuid       VARCHAR,
     created_at VARCHAR(255) NOT NULL,
     updated_at VARCHAR(255),
@@ -38,6 +39,13 @@ CREATE TABLE users
     PRIMARY KEY (id)
 );
 
+create table user_per_candidate
+(
+    id         INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    email      VARCHAR(255) NOT NULL UNIQUE,
+    PRIMARY KEY (id)
+);
+
 create table resetoperations
 (
     id         varchar primary key,
@@ -48,26 +56,29 @@ create table resetoperations
 
 create table Candidate
 (
-    id    int primary key auto_increment,
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     email varchar(255) not null unique,
-    users int          not null,
-    foreign key (users) references users (id)
+    user_per_candidate varchar not null,
+    foreign key (user_per_candidate) references users (id),
+    primary key (id)
 );
 
 CREATE TABLE Recruitment
 (
-    id           BIGINT PRIMARY KEY AUTO_INCREMENT,
-    job_id       BIGINT,
-    candidate_id BIGINT,
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    job_id       INT,
+    candidate_id INT,
     FOREIGN KEY (job_id) REFERENCES Job (id),
-    FOREIGN KEY (candidate_id) REFERENCES Candidate (id)
+    FOREIGN KEY (candidate_id) REFERENCES Candidate (id),
+    primary key (id)
 );
 
 CREATE TABLE job_recruitment
 (
-    job_id         INT NOT NULL,
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    job_id INT NOT NULL,
     recruitment_id INT NOT NULL,
-    PRIMARY KEY (job_id, recruitment_id),
+    PRIMARY KEY (id),
     FOREIGN KEY (job_id) REFERENCES Job (id),
-    FOREIGN KEY (recruitment_id) REFERENCES recruitment (id)
+    FOREIGN KEY (recruitment_id) REFERENCES Recruitment (id)
 );

@@ -1,10 +1,8 @@
 package reskilled.mentoring.reskilled.candidate.api;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import reskilled.mentoring.reskilled.candidate.exceptions.EmptyCandidateListException;
 import reskilled.mentoring.reskilled.candidate.model.dto.CandidateDto;
 import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
+import reskilled.mentoring.reskilled.candidate.model.entity.UserPerCandidate;
 import reskilled.mentoring.reskilled.candidate.model.request.CandidateRequest;
 import reskilled.mentoring.reskilled.candidate.service.CandidateService;
 import reskilled.mentoring.reskilled.security.JwtService;
-import reskilled.mentoring.reskilled.user.model.dto.UserDto;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 import reskilled.mentoring.reskilled.user.service.UsersService;
 import reskilled.mentoring.reskilled.utils.CandidateMapper;
@@ -47,7 +45,7 @@ public class CandidateController {
     @Operation(summary = "Add a Candidate", description = "This endpoint is for adding a new Candidate", responses = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Candidate added successfully"),
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request due to validation failure") })
-    public List<Candidate> createCandidate(@RequestBody CandidateRequest candidateRequest, HttpServletRequest req, Authentication authentication) {
+    public List<Candidate> createCandidate(@RequestBody CandidateRequest candidateRequest) {
 
 
         String username;
@@ -60,9 +58,9 @@ public class CandidateController {
         }
 
         User userLogged = usersService.getUsersByEmail(username).orElseThrow(null);
-        UserDto userDto = CandidateMapper.toUserDto(userLogged);
+        UserPerCandidate userDto = CandidateMapper.toUserPerCandidateEntity(userLogged);
         CandidateDto candidateDto = CandidateMapper.toCandidateDto(candidateRequest, userDto);
-        Candidate candidate = CandidateMapper.toCandidateEntity(candidateDto, userDto);
+        Candidate candidate = CandidateMapper.toCandidateEntity(candidateDto);
         candidateService.addCandidate(candidate);
         return candidateService.getAllCandidates();
     }

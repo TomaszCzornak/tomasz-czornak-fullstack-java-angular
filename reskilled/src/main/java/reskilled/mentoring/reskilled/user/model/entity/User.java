@@ -3,9 +3,7 @@ package reskilled.mentoring.reskilled.user.model.entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
 import reskilled.mentoring.reskilled.security.Role;
-
 
 import java.util.UUID;
 
@@ -16,10 +14,8 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "id", updatable = false, nullable = false)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String uuid;
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -52,7 +48,7 @@ public class User {
         generateUuid();
     }
 
-    public User(String id,
+    public User(Long id,
                 String uuid,
                 String createdAt,
                 String updatedAt,
