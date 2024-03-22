@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
+import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
 import reskilled.mentoring.reskilled.skills.entity.Skill;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class Job {
     @NotBlank(message = "City cannot be blank")
     private String city;
     @Positive(message="Salary should be greater than zero")
-    private long salary;
+    private Long salary;
     @NotNull(message = "Currency should not be empty")
     @Enumerated(EnumType.STRING)
     private Currency currency;
@@ -43,9 +43,6 @@ public class Job {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private List<Skill> skills;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
-    @JoinTable(name="job_recruitment",
-                joinColumns = @JoinColumn(name = "job_id"),
-                inverseJoinColumns = @JoinColumn(name="recruitment_id", referencedColumnName = "id"))
-    private List<Recruitment> recruitments;
+    private List<Candidate> candidates;
 
 }

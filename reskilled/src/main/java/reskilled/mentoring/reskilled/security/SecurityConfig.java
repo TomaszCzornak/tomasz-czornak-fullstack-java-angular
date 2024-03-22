@@ -30,7 +30,7 @@ public class SecurityConfig {
             "/v1/register",
             "/v1/login",
             "/v1/activate",
-            "/h2-console/***",
+            "/h2-console/**",
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/v3/api-docs/**",

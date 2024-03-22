@@ -23,7 +23,7 @@ public class JobMapper {
 
     }
 
-    public static List<Skill> toSkillsEntity(List<String> skills) {
+    public static List<Skill> toSkillsEntity(List<Skill> skills) {
         if (skills==null) {
             return Collections.emptyList();
         }
@@ -32,9 +32,9 @@ public class JobMapper {
                 .toList();
     }
 
-    private static Skill toSkillEntity(String s) {
+    private static Skill toSkillEntity(Skill skill) {
         return Skill.builder()
-                .name(s)
+                .name(skill.getName())
                 .build();
     }
 
