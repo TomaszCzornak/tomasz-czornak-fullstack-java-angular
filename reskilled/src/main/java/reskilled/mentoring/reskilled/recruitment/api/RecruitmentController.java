@@ -32,17 +32,17 @@ public class RecruitmentController {
     @Operation(summary = "add a new recruitment", description = "This endpoint is for adding a new recruitment", responses = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Recruitment added successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request due to validation failure")})
-    public Recruitment addRecruitment(@RequestBody Recruitment recruitment) {
-        return recruitmentService.addRecruitment(recruitment);
+    public void addRecruitment(@RequestBody Recruitment recruitment) {
+        recruitmentService.addRecruitment(recruitment);
     }
 
     @PutMapping("/update-recruitment/{id}")
     @Operation(summary = "update an existing recruitment", description = "This endpoint is for updating an existing recruitment", responses = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Recruitment updated successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request due to validation failure")})
-    public Recruitment updateRecruitment(@PathVariable Long id, @RequestBody Recruitment recruitment) {
+    public void updateRecruitment(@PathVariable Long id, @RequestBody Recruitment recruitment) {
         recruitment.setId(id);
-        return recruitmentService.updateRecruitment(recruitment);
+        recruitmentService.updateRecruitment(recruitment);
     }
 
     @DeleteMapping("/delete-recruitment/{id}")

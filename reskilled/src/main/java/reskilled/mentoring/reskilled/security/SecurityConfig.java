@@ -28,6 +28,8 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private static final String[] WHITE_LIST_URL = {
             "/v1/register",
+            "/v1/reset-password",
+            "/v1/reset-password/***",
             "/v1/login",
             "/v1/activate",
             "/h2-console/**",
@@ -45,28 +47,22 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(WHITE_LIST_URL
-                        ).permitAll()
+                        .requestMatchers(WHITE_LIST_URL)
+                        .permitAll()
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-        http
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .securityContext(securityContextCustomizer -> securityContextCustomizer.requireExplicitSave(false)); // Disable session creation and management
 
         return http.build();
     }
 
-
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {

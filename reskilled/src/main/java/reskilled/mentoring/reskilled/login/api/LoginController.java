@@ -31,9 +31,4 @@ public class LoginController {
 
     }
 
-    @GetMapping("/csrf")
-    public CsrfToken csrf(CsrfToken csrfToken) {
-        log.info("to jest csrf tokenizator " + csrfToken.getToken());
-        return csrfToken;
-    }
 }

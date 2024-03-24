@@ -14,16 +14,17 @@ public class CandidateControllerExceptionHandler extends ResponseEntityException
 
     @ExceptionHandler(EmptyCandidateListException.class)
     public ResponseEntity<Object> handleException(EmptyCandidateListException e, WebRequest request) {
-        HttpStatus status = HttpStatus.NO_CONTENT;
         String message = "No candidates found";
-        ApiError apiError = new ApiError(status, message);
-        return new ResponseEntity<>(apiError, status);
+        return handle(HttpStatus.NO_CONTENT, message);
     }
 
     @ExceptionHandler(CandidateNotFoundException.class)
     public ResponseEntity<Object> handleException(CandidateNotFoundException e, WebRequest request) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
         String message = "No candidate found under given id";
+        return handle(HttpStatus.NOT_FOUND, message);
+    }
+
+    private ResponseEntity<Object> handle(HttpStatus status, String message) {
         ApiError apiError = new ApiError(status, message);
         return new ResponseEntity<>(apiError, status);
     }

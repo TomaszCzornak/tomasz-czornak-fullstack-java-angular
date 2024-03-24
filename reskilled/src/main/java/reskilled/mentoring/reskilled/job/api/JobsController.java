@@ -26,7 +26,6 @@ public class JobsController {
 
 
     @RequestMapping("/jobs")
-    @ResponseBody
     public List<Job> getAllJobs() {
         if (jobService.getAllJobs().isEmpty()) {
             throw new EmptyJobsListException();
@@ -39,15 +38,14 @@ public class JobsController {
     @Operation(summary = "Add a Job", description = "This endpoint is for adding a new Job", responses = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Job added succesfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request due to validation failure") })
-    public List<Job> addJobSubmit(@RequestBody @Valid JobDto jobDto) {
+    public void addJobSubmit(@RequestBody @Valid JobDto jobDto) {
 
         Job job = JobMapper.toJobEntity(jobDto);
         jobService.addJob(job);
-        return jobService.getAllJobs();
+
     }
 
     @RequestMapping("/job/{id}")
-    @ResponseBody
     @Operation(summary = "Get Job by ID", description = "This endpoint is used to fetch a Job with a specific id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the job"),
@@ -82,15 +80,13 @@ public class JobsController {
             @ApiResponse(responseCode = "200", description = "Successfully deleted the job"),
             @ApiResponse(responseCode = "404", description = "Job with provided id not found"),
     })
-    public List<Job> deleteJob(@PathVariable("id")
+    public void deleteJob(@PathVariable("id")
                             @Parameter(description = "ID of the job to be deleted") Long id) {
         Optional<Job> job = jobService.getJobById(id);
         if (job.isEmpty()) {
             throw new JobNotFoundException();
         }
         jobService.deleteJobById(id);
-
-        return jobService.getAllJobs();
     }
 
 }

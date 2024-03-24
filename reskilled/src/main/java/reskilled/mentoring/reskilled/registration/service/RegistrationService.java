@@ -15,6 +15,8 @@ import reskilled.mentoring.reskilled.user.exceptions.UserNotFoundException;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 import reskilled.mentoring.reskilled.user.service.UsersService;
 
+import java.io.IOException;
+
 
 @Service
 @RequiredArgsConstructor
@@ -45,11 +47,11 @@ public class RegistrationService {
         throw new UserNotFoundException();
     }
 
-    public void recoveryPassword(String email) throws UserNotFoundException {
+    public void recoveryPassword(String email) throws UserNotFoundException, IOException {
         User user = usersService.getUsersByEmail(email).orElse(null);
         if (user != null) {
-            ResetOperations resetOperations = resetOperationService.initResetOperation(user);
-            emailService.sendPasswordRecovery(user, resetOperations.getUuid());
+
+            emailService.sendMail(user, false);
             return;
         }
         throw new UserNotFoundException();

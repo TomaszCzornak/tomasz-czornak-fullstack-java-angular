@@ -43,8 +43,7 @@ public class CandidateController {
     @Operation(summary = "Add a Candidate", description = "This endpoint is for adding a new Candidate", responses = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Candidate added successfully"),
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request due to validation failure") })
-    public List<Candidate> createCandidate(@RequestBody CandidateRequest candidateRequest) {
-
+    public void createCandidate(@RequestBody CandidateRequest candidateRequest) {
 
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -59,12 +58,13 @@ public class CandidateController {
         UserPerCandidate userPerCandidate = CandidateMapper.toUserPerCandidateEntity(userLogged);
         CandidateDto candidateDto = CandidateMapper.toCandidateDto(candidateRequest, userPerCandidate);
         Candidate candidate = CandidateMapper.toCandidateEntity(candidateDto);
+
         candidateService.addCandidate(candidate);
-        return candidateService.getAllCandidates();
+
     }
 
     @Operation(summary = "Get Candidate by ID", description = "This endpoint is for retrieving a candidate by ID")
-    @GetMapping("/candidates/{id}")
+    @GetMapping("/candidate/{id}")
     public ResponseEntity<Candidate> getCandidateById(@PathVariable Long id) {
         Optional<Candidate> candidate = candidateService.getCandidateById(id);
         if (candidate.isPresent()) {

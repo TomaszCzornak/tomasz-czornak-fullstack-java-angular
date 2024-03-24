@@ -1,16 +1,22 @@
 package reskilled.mentoring.reskilled.email;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.Resource;
 import org.springframework.test.util.ReflectionTestUtils;
+import reskilled.mentoring.reskilled.registration.model.entity.ResetOperations;
+import reskilled.mentoring.reskilled.registration.repository.ResetOperationsRepository;
+import reskilled.mentoring.reskilled.registration.service.ResetOperationService;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -21,28 +27,49 @@ class EmailServiceTest {
 
     @Mock
     private EmailConfiguration emailConfiguration;
+    @Mock
+    private ResetOperationService resetOperationService;
 
+    @InjectMocks
     private EmailService emailService;
+
+    @Mock
+    private ResetOperationsRepository repository;
 
     @Mock
     private Resource activeTemplate, recoveryTemplate;
 
+    private File activateTempFile;
+    private File recoveryTempFile;
+
+    @BeforeEach
     void setupRecoveryTemplate() throws IOException {
-        File tempFile = File.createTempFile("tempRecoveryTemplate", ".txt");
-        when(recoveryTemplate.getFile()).thenReturn(tempFile);
+        File recoveryTempFile = File.createTempFile("tempRecoveryTemplate", ".txt");
+        when(recoveryTemplate.getFile()).thenReturn(recoveryTempFile);
     }
 
+    @BeforeEach
     void setupActiveTemplate() throws IOException {
-        File tempFile = File.createTempFile("tempActiveTemplate", ".txt");
-        when(activeTemplate.getFile()).thenReturn(tempFile);
+        File activateTempFile = File.createTempFile("tempActiveTemplate", ".txt");
+        when(activeTemplate.getFile()).thenReturn(activateTempFile);
     }
     @BeforeEach
     void setUp() {
-        emailService = new EmailService(emailConfiguration);
+        emailService = new EmailService(resetOperationService, emailConfiguration);
         ReflectionTestUtils.setField(emailService, "activeTemplate", activeTemplate);
         ReflectionTestUtils.setField(emailService, "recoveryTemplate", recoveryTemplate);
         ReflectionTestUtils.setField(emailService, "frontendUrl", "http://localhost:8080");
 
+    }
+
+    @AfterEach
+    void cleanupTempFiles() {
+        if (activeTemplate != null) {
+            activateTempFile.delete();
+        }
+        if (recoveryTemplate != null) {
+            recoveryTempFile.delete();
+        }
     }
 
     @Test
@@ -53,7 +80,7 @@ class EmailServiceTest {
         user.setUuid("123e4567-e89b-12d3-a456-426614174000");
         //when
         setupActiveTemplate();
-        emailService.sendActivation(user);
+        emailService.sendMail(user, true);
         //then
         verify(emailConfiguration, times(1)).sendMail(anyString(), anyString(), anyString(), anyBoolean());
     }
@@ -66,9 +93,25 @@ class EmailServiceTest {
         user.setUuid("123e4567-e89b-12d3-a456-426614174000");
         //when
         setupRecoveryTemplate();
-        emailService.sendPasswordRecovery(user, user.getUuid());
+        emailService.sendMail(user, false);
         //then
         verify(emailConfiguration, times(1)).sendMail(anyString(), anyString(), anyString(), anyBoolean());
+    }
+
+    @Test
+    void shouldVerifyIfMailSent() throws IOException {
+        User user = new User();
+        user.setEmail("test@example.com");
+        user.setUuid("123e4567-e89b-12d3-a456-426614174000");
+
+        // Mock the behavior of resetOperationService
+        when(resetOperationService.initResetOperation(user)).thenReturn(new ResetOperations());
+
+        // Call the method under test
+        emailService.sendMail(user, true);
+
+        verify(emailConfiguration, times(1)).sendMail(anyString(), anyString(), anyString(), anyBoolean());
+
     }
 
     @Test
@@ -80,7 +123,7 @@ class EmailServiceTest {
         // when
         doThrow(new IOException("Mock IOException")).when(recoveryTemplate).getFile();
         // then
-        Exception exception = assertThrows(RuntimeException.class, ()-> emailService.sendPasswordRecovery(user, user.getUuid()));
+        Exception exception = assertThrows(IOException.class, ()-> emailService.sendMail(user, false));
         assertInstanceOf(IOException.class, exception.getCause());
     }
 
@@ -95,6 +138,7 @@ class EmailServiceTest {
         doThrow(new IOException("Mock IOException")).when(activeTemplate).getFile();
 
         // then
-        Exception exception = assertThrows(RuntimeException.class, () -> emailService.sendActivation(user));
-        assertInstanceOf(IOException.class, exception.getCause());    }
+        Exception exception = assertThrows(IOException.class, () -> emailService.sendMail(user, true));
+        assertInstanceOf(IOException.class, exception.getCause());
+    }
 }

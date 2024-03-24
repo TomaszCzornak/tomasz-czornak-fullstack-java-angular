@@ -12,6 +12,7 @@ import reskilled.mentoring.reskilled.registration.service.RegistrationService;
 import reskilled.mentoring.reskilled.user.service.UsersService;
 import reskilled.mentoring.reskilled.utils.UserMapper;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Component
@@ -23,7 +24,7 @@ public class UserRegistrationImpl implements UserRegistrationFacade {
     private final EmailService emailService;
 
     @Override
-    public UserResponse registerUser(RegistrationRequest registrationRequest) {
+    public UserResponse registerUser(RegistrationRequest registrationRequest) throws IOException {
         Optional<User> existingUser = usersService.getUsersByEmail(registrationRequest.getEmail());
         if (existingUser.isPresent()) {
             throw new UserAlreadyExistsException();
@@ -31,7 +32,7 @@ public class UserRegistrationImpl implements UserRegistrationFacade {
         User user = UserMapper.toUser(registrationRequest);
 
         User userSaved = registrationService.register(user);
-        emailService.sendActivation(user);
+        emailService.sendMail(user, true);
 
         return UserMapper.toUserResponse(userSaved);
 
