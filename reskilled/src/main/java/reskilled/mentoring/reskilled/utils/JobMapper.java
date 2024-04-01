@@ -23,6 +23,16 @@ public class JobMapper {
 
     }
 
+    public static JobDto toJobDto(Job job) {
+        return JobDto.builder()
+                .city(job.getCity())
+                .title(job.getTitle())
+                .salary(job.getSalary())
+                .currency(job.getCurrency())
+                .skills(job.getSkills())
+                .build();
+    }
+
     public static List<Skill> toSkillsEntity(List<Skill> skills) {
         if (skills==null) {
             return Collections.emptyList();
@@ -38,5 +48,16 @@ public class JobMapper {
                 .build();
     }
 
+    public static List<Job> toJobList(List<JobDto> jobDtoList) {
+        return jobDtoList.stream()
+                .map(JobMapper::toJobEntity)
+                .toList();
+    }
+
+    public static List<JobDto> toJobDtoList(List<Job> jobList) {
+        return jobList.stream()
+                .map(JobMapper::toJobDto)
+                .toList();
+    }
 
 }

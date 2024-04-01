@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
-import reskilled.mentoring.reskilled.job.entity.Job;
-import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
+import reskilled.mentoring.reskilled.candidate.model.dto.CandidateDto;
+import reskilled.mentoring.reskilled.job.dto.JobDto;
+import reskilled.mentoring.reskilled.recruitment.dto.RecruitmentDto;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class CandidateRequest {
     @Email(message = "Please provide a valid email address")
     @NotBlank(message = "Email cannot be empty")
     private String email;
-    private Recruitment recruitment;
-    private List<Job> jobList;
-    private Candidate candidate;
+    private RecruitmentDto recruitmentDto;
+    private List<JobDto> jobDtoList;
+    private CandidateDto candidateDto;
 }

@@ -1,0 +1,17 @@
+package reskilled.mentoring.reskilled.candidate.model.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class UserPerCandidateDto {
+
+    private String email;
+    private Long id;
+
+}

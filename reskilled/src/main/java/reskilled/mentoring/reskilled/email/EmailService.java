@@ -2,6 +2,7 @@ package reskilled.mentoring.reskilled.email;
 
 import com.google.common.io.Files;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -16,11 +17,12 @@ import java.nio.charset.StandardCharsets;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Setter
 public class EmailService {
 
     public static final String ACTIVATION_URL = "/v1/activate?uuid=";
     public static final String RESET_PASSWORD = "/v1/reset-password/{uuid}";
-    public static final String googleUrl = "https://google.com";
+    public static final String GOOGLE_URL = "https://google.com";
 
     private final ResetOperationService resetOperationService;
 
@@ -49,7 +51,7 @@ public class EmailService {
 
             String link = frontendUrl + actionPath;
             String html = Files.toString(template.getFile(), StandardCharsets.UTF_8);
-            html = html.replace(googleUrl, link);
+            html = html.replace(GOOGLE_URL, link);
 
             emailConfiguration.sendMail(user.getEmail(), html, subject, true);
             log.info(subject + " for user " + user.getUuid());

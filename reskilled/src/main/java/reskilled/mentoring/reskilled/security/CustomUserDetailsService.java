@@ -1,6 +1,7 @@
 package reskilled.mentoring.reskilled.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@Primary
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UsersService usersService;

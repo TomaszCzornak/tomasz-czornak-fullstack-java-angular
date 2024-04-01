@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import reskilled.mentoring.reskilled.registration.model.request.RegistrationRequest;
 import reskilled.mentoring.reskilled.security.Role;
+import reskilled.mentoring.reskilled.user.model.dto.UserDto;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 import reskilled.mentoring.reskilled.user.model.response.UserResponse;
 
@@ -32,6 +33,16 @@ public class UserMapper {
                 .email(registrationRequest.getEmail())
                 .password(registrationRequest.getPassword())
                 .role(Role.USER)
+                .build();
+    }
+
+    public static UserDto toUserDto(User user) {
+        return UserDto.builder()
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 }
