@@ -19,8 +19,8 @@ public interface ResetOperationsRepository extends JpaRepository<ResetOperations
 
     Optional<ResetOperations> findByUuid(String uid);
 
-//    @Query(nativeQuery = true, value = "SELECT * FROM resetoperations WHERE createdate <= DATEADD('MINUTE', -15, CURRENT_TIMESTAMP)")
-    @Query(nativeQuery = true, value = "SELECT * FROM resetoperations where CAST(createdate AS timestamp) <= current_timestamp - INTERVAL '15 minutes'")
+    @Query(nativeQuery = true, value = "SELECT * FROM resetoperations WHERE createdate <= DATEADD('MINUTE', -15, CURRENT_TIMESTAMP)")
+//    @Query(nativeQuery = true, value = "SELECT * FROM resetoperations where CAST(createdate AS timestamp) <= current_timestamp - INTERVAL '15 minutes'")
     List<ResetOperations> findExpiredOperations();
 
 

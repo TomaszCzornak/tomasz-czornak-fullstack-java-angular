@@ -2,8 +2,6 @@ package reskilled.mentoring.reskilled.registration.service;
 
 
 import jakarta.transaction.Transactional;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -52,7 +50,7 @@ public class ResetOperationService {
     protected void deleteExpireOperation(){
       List<ResetOperations> resetOperations = resetOperationsRepository.findExpiredOperations();
       log.info("Find {} expired operations to delete",resetOperations.size());
-      if (resetOperations != null && !resetOperations.isEmpty()){
+      if (!resetOperations.isEmpty()){
           resetOperationsRepository.deleteAll(resetOperations);
       }
     }

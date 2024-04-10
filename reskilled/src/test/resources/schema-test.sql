@@ -1,11 +1,11 @@
 
-CREATE TABLE  IF NOT EXISTS user_per_candidate (
+CREATE TABLE IF NOT EXISTS user_per_candidate (
                                     id           bigint       NOT NULL AUTO_INCREMENT,
                                     email        varchar(255),
                                     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS  candidate (
+CREATE TABLE IF NOT EXISTS candidate (
                            id BIGINT AUTO_INCREMENT,
                            email VARCHAR(255) NOT NULL UNIQUE,
                            user_per_candidate BIGINT NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS  candidate (
 );
 
 
-CREATE TABLE IF NOT EXISTS  job (
+CREATE TABLE IF NOT EXISTS job (
                      id             bigint       NOT NULL AUTO_INCREMENT,
                      salary         bigint,
                      city           varchar(255),
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS  job (
                      PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS  candidates_jobs (
+CREATE TABLE IF NOT EXISTS candidates_jobs (
                                  candidate_id BIGINT,
                                  job_id BIGINT,
                                  PRIMARY KEY (candidate_id, job_id),

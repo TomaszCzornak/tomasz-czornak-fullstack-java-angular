@@ -8,10 +8,6 @@ import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
 import reskilled.mentoring.reskilled.candidate.model.entity.UserPerCandidate;
 import reskilled.mentoring.reskilled.candidate.model.request.CandidateRequest;
 import reskilled.mentoring.reskilled.candidate.model.response.CandidateResponse;
-import reskilled.mentoring.reskilled.job.dto.JobDto;
-import reskilled.mentoring.reskilled.job.entity.Job;
-import reskilled.mentoring.reskilled.recruitment.dto.RecruitmentDto;
-import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
 import reskilled.mentoring.reskilled.user.model.dto.UserDto;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 
@@ -22,30 +18,23 @@ import java.util.List;
 public class CandidateMapper {
 
     public static CandidateDto toCandidateDto(CandidateRequest candidateRequest, UserPerCandidate userPerCandidate) {
-        return CandidateDto.builder()
-                .email(candidateRequest.getEmail())
-                .jobDtoList(candidateRequest.getJobDtoList())
-                .createdBy(UserPerCandidate.builder()
-                        .email(userPerCandidate.getEmail())
-                        .build())
-                .recruitmentDto(RecruitmentDto.builder()
-                        .jobDto(JobDto.builder()
-                                .title(candidateRequest.getRecruitmentDto().getJobDto().getTitle())
-                                .city(candidateRequest.getRecruitmentDto().getJobDto().getCity())
-                                .salary(candidateRequest.getRecruitmentDto().getJobDto().getSalary())
-                                .currency(candidateRequest.getRecruitmentDto().getJobDto().getCurrency())
-                                .skills(candidateRequest.getRecruitmentDto().getJobDto().getSkills())
-                                .candidates(candidateRequest.getRecruitmentDto().getJobDto().getCandidates())
-                                .build())
-                        .build())
-                .build();
+        if(candidateRequest.getCandidateDto() != null) {
+            return CandidateDto.builder()
+                    .jobDtoList(candidateRequest.getJobDtoList())
+                    .createdBy(UserPerCandidate.builder()
+                            .email(userPerCandidate.getEmail())
+                            .build())
+                    .email(candidateRequest.getCandidateDto().getEmail())
+                    .build();
+        } else {
+            return null;
+        }
     }
     
     public static CandidateDto toCandidateDto(CandidateRequest candidateRequest) {
         return CandidateDto.builder()
-                .email(candidateRequest.getEmail())
+                .email(candidateRequest.getCandidateDto().getEmail())
                 .jobDtoList(candidateRequest.getJobDtoList())
-                .recruitmentDto(candidateRequest.getRecruitmentDto())
                 .build();
     }
 
@@ -56,24 +45,7 @@ public class CandidateMapper {
                 .createdBy(UserPerCandidate.builder()
                         .email(candidateDto.getCreatedBy().getEmail())
                         .build())
-                .recruitment(Recruitment.builder()
-                        .job(Job.builder()
-                                .title(candidateDto.getRecruitmentDto().getJobDto().getTitle())
-                                .city(candidateDto.getRecruitmentDto().getJobDto().getCity())
-                                .salary(candidateDto.getRecruitmentDto().getJobDto().getSalary())
-                                .currency(candidateDto.getRecruitmentDto().getJobDto().getCurrency())
-                                .skills(candidateDto.getRecruitmentDto().getJobDto().getSkills())
-                                .candidates(CandidateMapper.toCandidateList(candidateDto.getRecruitmentDto().getJobDto().getCandidates()))
-                                .build())
-
-                        .build())
                 .build();
-    }
-
-    private static List<Candidate> toCandidateList(List<CandidateDto> candidates) {
-        return candidates.stream()
-                .map(CandidateMapper::toCandidateEntity)
-                .toList();
     }
 
     public static User toUserEntity(UserDto userDto) {
@@ -94,15 +66,6 @@ public class CandidateMapper {
                 .email(candidate.getEmail())
                 .jobDtoList(JobMapper.toJobDtoList(candidate.getJobList()))
                 .userPerCandidateDto(CandidateMapper.toUserPerCandidateDto(candidate.getCreatedBy()))
-                .recruitmentDto(RecruitmentDto.builder()
-                        .jobDto(JobDto.builder()
-                                .title(candidate.getRecruitment().getJob().getTitle())
-                                .city(candidate.getRecruitment().getJob().getCity())
-                                .salary(candidate.getRecruitment().getJob().getSalary())
-                                .currency(candidate.getRecruitment().getJob().getCurrency())
-                                .skills(candidate.getRecruitment().getJob().getSkills())
-                                .build())
-                        .build())
                 .build();
     }
 
@@ -122,8 +85,8 @@ public class CandidateMapper {
     public static Candidate toCandidateEntity(CandidateRequest candidateRequest) {
         return Candidate.builder()
                 .jobList(JobMapper.toJobList(candidateRequest.getJobDtoList()))
-                .email(candidateRequest.getEmail())
-                .recruitment(RecruitmentMapper.toRecruitmentEntity(candidateRequest.getRecruitmentDto()))
+                .email(candidateRequest.getCandidateDto().getEmail())
+                .createdBy(candidateRequest.getCandidateDto().getCreatedBy())
                 .build();
     }
 }

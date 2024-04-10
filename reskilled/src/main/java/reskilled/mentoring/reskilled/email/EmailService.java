@@ -54,7 +54,7 @@ public class EmailService {
             html = html.replace(GOOGLE_URL, link);
 
             emailConfiguration.sendMail(user.getEmail(), html, subject, true);
-            log.info(subject + " for user " + user.getUuid());
+            log.info("{} for user {}", subject, user.getUuid());
 
         } catch (IOException e) {
             log.info("Cant send mail");

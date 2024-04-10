@@ -13,22 +13,20 @@ import reskilled.mentoring.reskilled.candidate.repository.CandidateRepository;
 import reskilled.mentoring.reskilled.job.dto.JobDto;
 import reskilled.mentoring.reskilled.job.entity.Job;
 import reskilled.mentoring.reskilled.job.repository.JobRepository;
-import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
-import reskilled.mentoring.reskilled.recruitment.repository.RecruitmentRepository;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 import reskilled.mentoring.reskilled.user.service.UsersService;
 import reskilled.mentoring.reskilled.utils.CandidateMapper;
 import reskilled.mentoring.reskilled.utils.JobMapper;
 
+import javax.ws.rs.NotFoundException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class CandidateService {
 
     private final CandidateRepository candidateRepository;
-    private final RecruitmentRepository recruitmentRepository;
     private final JobRepository jobRepository;
     private final UsersService usersService;
 
@@ -37,23 +35,22 @@ public class CandidateService {
     }
 
     public CandidateResponse getCandidateById(Long id) {
-        return CandidateMapper.toCandidateResponse(Objects.requireNonNull(candidateRepository.findById(id).orElse(null)));
+        Candidate candidate = candidateRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Candidate not found with id = " + id));
+        return CandidateMapper.toCandidateResponse(candidate);
     }
 
     public CandidateResponse addCandidate(CandidateRequest candidateRequest) {
         String username;
-        Candidate candidate = CandidateMapper.toCandidateEntity(CandidateMapper.toCandidateDto(candidateRequest));
-        Recruitment recruitment = Recruitment.builder().candidate(candidate).build();
-        JobDto jobDto = JobMapper.toJobDto(recruitment.getJob());
-        if (recruitment.getId() == null && jobDto.getId() == null) {
-            jobDto.setCandidates(List.of(CandidateMapper.toCandidateDto(candidateRequest)));
-            Job job = JobMapper.toJobEntity(jobDto);
-            job = jobRepository.save(job);
-            recruitment.setJob(job);
-            recruitment = recruitmentRepository.save(recruitment);
-            candidate.setRecruitment(recruitment);
-
+        List<Job> jobList = new ArrayList<>();
+        Job job = null;
+        for (JobDto dto : candidateRequest.getJobDtoList()) {
+            job = JobMapper.toJobEntity(dto);
+            jobList.add(job);
         }
+        assert job != null;
+        jobRepository.saveAll(jobList);
+
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof UserDetails userDetails) {
@@ -63,8 +60,12 @@ public class CandidateService {
         }
         User userLogged = usersService.getUsersByEmail(username).orElseThrow(null);
         UserPerCandidate userPerCandidate = CandidateMapper.toUserPerCandidateEntity(userLogged);
+
         CandidateDto candidateDto = CandidateMapper.toCandidateDto(candidateRequest, userPerCandidate);
+        assert candidateDto != null;
         Candidate candidate1 = CandidateMapper.toCandidateEntity(candidateDto);
+        candidate1.setJobList(jobList);
+
         return CandidateMapper.toCandidateResponse(candidateRepository.save(candidate1));
     }
 
@@ -84,7 +85,6 @@ public class CandidateService {
         if (candidateFound != null) {
             candidateFound.setEmail(candidate.getEmail());
             candidateFound.setCreatedBy(UserPerCandidate.builder().email(userLogged.getEmail()).build());
-            candidateFound.setRecruitment(candidate.getRecruitment());
             candidateFound.setJobList(candidateFound.getJobList());
 
         }

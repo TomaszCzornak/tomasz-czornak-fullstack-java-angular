@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import reskilled.mentoring.reskilled.job.entity.Job;
-import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
 import java.util.List;
 
 @Entity
@@ -25,9 +24,12 @@ public class Candidate {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_per_candidate", nullable = false)
     private UserPerCandidate createdBy;
-    @OneToOne(cascade = CascadeType.PERSIST)
-    private Recruitment recruitment;
     @ManyToMany
+    @JoinTable(
+            name = "candidates_jobs",
+            joinColumns = @JoinColumn(name = "candidate_id"),
+            inverseJoinColumns = @JoinColumn(name = "job_id")
+    )
     private List<Job> jobList;
 
 

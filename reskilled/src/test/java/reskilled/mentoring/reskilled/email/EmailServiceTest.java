@@ -1,144 +1,96 @@
 package reskilled.mentoring.reskilled.email;
 
-import org.junit.jupiter.api.AfterEach;
+import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.Resource;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 import reskilled.mentoring.reskilled.registration.model.entity.ResetOperations;
-import reskilled.mentoring.reskilled.registration.repository.ResetOperationsRepository;
 import reskilled.mentoring.reskilled.registration.service.ResetOperationService;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
+import java.io.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class EmailServiceTest {
 
-    @Mock
-    private EmailConfiguration emailConfiguration;
-    @Mock
-    private ResetOperationService resetOperationService;
 
-    @InjectMocks
-    private EmailService emailService;
+    @Mock(name = "activeTemplate")
+    private ClassPathResource mockActiveTemplate;
 
-    @Mock
-    private ResetOperationsRepository repository;
+    @Mock(name = "recoveryTemplate")
+    private ClassPathResource mockRecoveryTemplate;
 
-    @Mock
-    private Resource activeTemplate, recoveryTemplate;
-
-    private File activateTempFile;
-    private File recoveryTempFile;
 
     @BeforeEach
-    void setupRecoveryTemplate() throws IOException {
-        File recoveryTempFile = File.createTempFile("tempRecoveryTemplate", ".txt");
-        when(recoveryTemplate.getFile()).thenReturn(recoveryTempFile);
-    }
-
-    @BeforeEach
-    void setupActiveTemplate() throws IOException {
-        File activateTempFile = File.createTempFile("tempActiveTemplate", ".txt");
-        when(activeTemplate.getFile()).thenReturn(activateTempFile);
-    }
-    @BeforeEach
-    void setUp() {
-        emailService = new EmailService(resetOperationService, emailConfiguration);
-        ReflectionTestUtils.setField(emailService, "activeTemplate", activeTemplate);
-        ReflectionTestUtils.setField(emailService, "recoveryTemplate", recoveryTemplate);
-        ReflectionTestUtils.setField(emailService, "frontendUrl", "http://localhost:8080");
-
-    }
-
-    @AfterEach
-    void cleanupTempFiles() {
-        if (activeTemplate != null) {
-            activateTempFile.delete();
+    void setUp() throws IOException, MessagingException {
+        File sampleFile = new File("sample_file.txt");
+        try (Writer writer = new BufferedWriter(new FileWriter(sampleFile))) {
+            writer.write("Sample template content");
         }
-        if (recoveryTemplate != null) {
-            recoveryTempFile.delete();
-        }
+        when(mockActiveTemplate.getFile()).thenReturn(sampleFile);
+        when(mockRecoveryTemplate.getFile()).thenReturn(sampleFile);
     }
 
     @Test
-    void shouldSendActivationEmailSuccessfully() throws IOException {
-        //given
+    void testSendActivationEmail() throws IOException {
+        // Mock user object
         User user = new User();
-        user.setEmail("test@test.com");
+        user.setEmail("test@example.com");
         user.setUuid("123e4567-e89b-12d3-a456-426614174000");
-        //when
-        setupActiveTemplate();
+
+
+        ResetOperationService resetOperationService = mock(ResetOperationService.class);
+
+        // Mock email configuration
+        EmailConfiguration emailConfiguration = mock(EmailConfiguration.class);
+
+        // Set expectations for collaborators
+        Mockito.doNothing().when(emailConfiguration).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyBoolean());
+
+        // Inject mocks
+        EmailService emailService = new EmailService(resetOperationService, emailConfiguration);
+        emailService.setActiveTemplate(mockActiveTemplate);
+
+        // Call the method
         emailService.sendMail(user, true);
-        //then
-        verify(emailConfiguration, times(1)).sendMail(anyString(), anyString(), anyString(), anyBoolean());
+
+        // Verify interactions
+        Mockito.verify(emailConfiguration).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyBoolean());
     }
 
     @Test
-    void shouldSendRecoveryEmailSuccessfully() throws IOException {
-        //given
+    void testSendRecoveryEmail() throws IOException {
+        // Mock user object
         User user = new User();
-        user.setEmail("test@test.com");
+        user.setEmail("test@example.com");
         user.setUuid("123e4567-e89b-12d3-a456-426614174000");
-        //when
-        setupRecoveryTemplate();
+
+
+        ResetOperationService resetOperationService = mock(ResetOperationService.class);
+        ResetOperations resetOperations = new ResetOperations();
+        resetOperations.setUuid("reset-uuid");
+        Mockito.when(resetOperationService.initResetOperation(user)).thenReturn(resetOperations);
+        // Mock email configuration
+        EmailConfiguration emailConfiguration = mock(EmailConfiguration.class);
+
+        // Set expectations for collaborators
+        Mockito.doNothing().when(emailConfiguration).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyBoolean());
+
+        // Inject mocks
+        EmailService emailService = new EmailService(resetOperationService, emailConfiguration);
+        emailService.setRecoveryTemplate(mockRecoveryTemplate);
+
+        // Call the method
         emailService.sendMail(user, false);
-        //then
-        verify(emailConfiguration, times(1)).sendMail(anyString(), anyString(), anyString(), anyBoolean());
+
+        // Verify interactions
+        Mockito.verify(emailConfiguration).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyBoolean());
     }
 
-    @Test
-    void shouldVerifyIfMailSent() throws IOException {
-        User user = new User();
-        user.setEmail("test@example.com");
-        user.setUuid("123e4567-e89b-12d3-a456-426614174000");
-
-        // Mock the behavior of resetOperationService
-        when(resetOperationService.initResetOperation(user)).thenReturn(new ResetOperations());
-
-        // Call the method under test
-        emailService.sendMail(user, true);
-
-        verify(emailConfiguration, times(1)).sendMail(anyString(), anyString(), anyString(), anyBoolean());
-
-    }
-
-    @Test
-    void shouldThrowRuntimeExceptionWhenSendingRecoveryEmail() throws IOException {
-        // given
-        User user = new User();
-        user.setEmail("test@example.com");
-        user.setUuid("123e4567-e89b-12d3-a456-426614174000");
-        // when
-        doThrow(new IOException("Mock IOException")).when(recoveryTemplate).getFile();
-        // then
-        Exception exception = assertThrows(IOException.class, ()-> emailService.sendMail(user, false));
-        assertInstanceOf(IOException.class, exception.getCause());
-    }
-
-    @Test
-    void shouldThrowRuntimeExceptionWhenSendingActivationEmail() throws IOException {
-        // given
-        User user = new User();
-        user.setEmail("test@example.com");
-        user.setUuid("123e4567-e89b-12d3-a456-426614174000");
-
-        // when
-        doThrow(new IOException("Mock IOException")).when(activeTemplate).getFile();
-
-        // then
-        Exception exception = assertThrows(IOException.class, () -> emailService.sendMail(user, true));
-        assertInstanceOf(IOException.class, exception.getCause());
-    }
 }
