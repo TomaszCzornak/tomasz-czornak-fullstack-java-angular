@@ -1,14 +1,15 @@
 package reskilled.mentoring.reskilled.candidate.model.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import reskilled.mentoring.reskilled.candidate.model.entity.UserPerCandidate;
-import reskilled.mentoring.reskilled.job.dto.JobDto;
+import lombok.*;
+import reskilled.mentoring.reskilled.recruitment.dto.RecruitmentDto;
+import reskilled.mentoring.reskilled.user.model.dto.UserDto;
 
 import java.util.List;
 
-@Getter
+@Data
 @Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class CandidateDto {
 
 
@@ -16,6 +17,6 @@ public class CandidateDto {
 
     private String email;
 
-    private UserPerCandidate createdBy;
-    private List<JobDto> jobDtoList;
+    private UserDto createdBy;
+    private List<RecruitmentDto> recruitmentDtos;
 }

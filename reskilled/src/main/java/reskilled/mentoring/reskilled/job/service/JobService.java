@@ -37,4 +37,8 @@ public class JobService {
         jobRepository.deleteById(id);
     }
 
+    public Optional<Job> getJobByTitle(String title) {
+    return jobRepository.findByTitle(title);
+    }
+
 }

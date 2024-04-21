@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import reskilled.mentoring.reskilled.job.entity.Job;
+import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
+import reskilled.mentoring.reskilled.user.model.entity.User;
+
 import java.util.List;
 
 @Entity
@@ -21,17 +23,10 @@ public class Candidate {
     private Long id;
     @Column(name = "email", unique = true, nullable = false)
     private String email;
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "user_per_candidate", nullable = false)
-    private UserPerCandidate createdBy;
-    @ManyToMany
-    @JoinTable(
-            name = "candidates_jobs",
-            joinColumns = @JoinColumn(name = "candidate_id"),
-            inverseJoinColumns = @JoinColumn(name = "job_id")
-    )
-    private List<Job> jobList;
-
-
+    @ManyToOne(fetch = FetchType.LAZY,  cascade=CascadeType.MERGE)
+    @JoinColumn(name = "users", nullable = false)
+    private User createdBy;
+    @OneToMany(mappedBy = "candidate",cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Recruitment> recruitmentList;
 }
 

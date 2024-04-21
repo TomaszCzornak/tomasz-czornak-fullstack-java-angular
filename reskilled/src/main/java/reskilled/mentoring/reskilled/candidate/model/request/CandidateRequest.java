@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import reskilled.mentoring.reskilled.candidate.model.dto.CandidateDto;
-import reskilled.mentoring.reskilled.job.dto.JobDto;
-
-import java.util.List;
+import reskilled.mentoring.reskilled.user.model.entity.User;
 
 @Data
 @Builder
@@ -15,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CandidateRequest {
 
-
-    private List<JobDto> jobDtoList;
-    private CandidateDto candidateDto;
+    private String email;
+    private User createdBy;
 }

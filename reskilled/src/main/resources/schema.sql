@@ -1,69 +1,71 @@
-
-CREATE TABLE  IF NOT EXISTS user_per_candidate (
-                                    id           bigint       NOT NULL AUTO_INCREMENT,
-                                    email        varchar(255),
-                                    PRIMARY KEY (id)
+-- User Table
+CREATE TABLE if not exists users (
+                       id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                       uuid VARCHAR(255) NOT NULL,
+                       created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                       updated_at DATETIME DEFAULT NULL,
+                       first_name VARCHAR(255) NOT NULL,
+                       last_name VARCHAR(255) NOT NULL,
+                       email VARCHAR(255) NOT NULL UNIQUE,
+                       password VARCHAR(255) NOT NULL,
+                       islock BOOLEAN DEFAULT FALSE,
+                       isenabled BOOLEAN DEFAULT TRUE,
+                       role VARCHAR(255) -- Replace ... with your actual role options
 );
 
-CREATE TABLE IF NOT EXISTS  candidate (
-                           id BIGINT AUTO_INCREMENT,
+
+-- Candidate Table
+CREATE TABLE if not exists candidate (
+                           id BIGINT PRIMARY KEY AUTO_INCREMENT,
                            email VARCHAR(255) NOT NULL UNIQUE,
-                           user_per_candidate BIGINT NOT NULL,
-                           PRIMARY KEY (id),
-                           CONSTRAINT fk_user_per_candidate FOREIGN KEY (user_per_candidate) REFERENCES user_per_candidate(id)
+                           users BIGINT NOT NULL,
+                           FOREIGN KEY (users) REFERENCES users(id),
+                           CONSTRAINT fk_candidate_user FOREIGN KEY (users) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 
-CREATE TABLE IF NOT EXISTS  job (
-                     id             bigint       NOT NULL AUTO_INCREMENT,
-                     salary         bigint,
-                     city           varchar(255),
-                     currency       varchar(255) NOT NULL CHECK (currency IN ('EUR', 'PLN', 'USD', 'PLN')),
-                     title          varchar(255),
-                     PRIMARY KEY (id)
+-- Job Table
+CREATE TABLE if not exists job (
+                     id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                     title VARCHAR(255) NOT NULL,
+                     city VARCHAR(255) NOT NULL,
+                     salary BIGINT NOT NULL,
+                     currency ENUM('USD', 'EUR', 'PLN')
+                                        NOT NULL,
+                     CONSTRAINT check_salary CHECK (salary > 0)
 );
 
-CREATE TABLE IF NOT EXISTS  candidates_jobs (
-                                 candidate_id BIGINT,
-                                 job_id BIGINT,
-                                 PRIMARY KEY (candidate_id, job_id),
-                                 CONSTRAINT fk_candidate FOREIGN KEY (candidate_id) REFERENCES candidate(id),
-                                 CONSTRAINT fk_job FOREIGN KEY (job_id) REFERENCES job(id)
-);
-
-CREATE TABLE IF NOT EXISTS  job_skill (
-                           job_id     bigint NOT NULL,
-                           skill_id   bigint NOT NULL
+-- Skill Table
+CREATE TABLE if not exists skill (
+                       id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                       name VARCHAR(255) NOT NULL
 );
 
 
-
-CREATE TABLE IF NOT EXISTS  resetoperations (
-                                 users        bigint,
-                                 id           uuid         NOT NULL,
-                                 createdate   timestamp DEFAULT current_timestamp,
-                                 uuid         varchar(255),
-                                 PRIMARY KEY (id)
+-- Job-Skill Relationship Table
+CREATE TABLE IF NOT EXISTS job_skill (
+                                         job_id BIGINT,
+                                         skill_id BIGINT,
+                                         PRIMARY KEY (job_id, skill_id),
+                                         FOREIGN KEY (job_id) REFERENCES job(id),
+                                         FOREIGN KEY (skill_id) REFERENCES skill(id)
 );
 
-CREATE TABLE IF NOT EXISTS  skill (
-                       id        bigint       NOT NULL AUTO_INCREMENT,
-                       name      varchar(255),
-                       PRIMARY KEY (id)
+-- ResetOperations Table
+CREATE TABLE IF NOT EXISTS resetoperations (
+                                  id UUID PRIMARY KEY,
+                                  users BIGINT,
+                                  createdate DATETIME,
+                                  uuid VARCHAR(255),
+                                  FOREIGN KEY (users) REFERENCES users(id)
 );
 
-
-CREATE TABLE IF NOT EXISTS  users (
-                       isenabled      boolean,
-                       islock         boolean,
-                       id             bigint       NOT NULL AUTO_INCREMENT,
-                       created_at     varchar(255) NOT NULL,
-                       email          varchar(255) NOT NULL UNIQUE,
-                       first_name     varchar(255) NOT NULL,
-                       last_name      varchar(255) NOT NULL,
-                       password       varchar(255) NOT NULL,
-                       role           varchar(255) CHECK (role IN ('USER', 'ADMIN')),
-                       updated_at     varchar(255),
-                       uuid           varchar(255),
-                       PRIMARY KEY (id)
+-- Recruitment Table
+CREATE TABLE IF NOT EXISTS recruitment (
+                             id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                             job_id BIGINT NOT NULL,
+                             candidate_id BIGINT NOT NULL,
+                             FOREIGN KEY (job_id) REFERENCES job(id) ON DELETE CASCADE,
+                             FOREIGN KEY (candidate_id) REFERENCES candidate(id) ON DELETE CASCADE
 );
+

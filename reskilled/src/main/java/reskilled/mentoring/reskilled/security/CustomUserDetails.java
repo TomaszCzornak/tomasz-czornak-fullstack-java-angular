@@ -10,9 +10,9 @@ import java.util.Collection;
 import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
-    private String email;
-    private String password;
-    private Role role;
+    private final String email;
+    private final String password;
+    private final Role role;
 
     public CustomUserDetails(User user) {
         this.email = user.getEmail();

@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
+import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
 import reskilled.mentoring.reskilled.skills.entity.Skill;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class Job {
             inverseJoinColumns = @JoinColumn(name="skill_id",referencedColumnName = "id"))
     @OnDelete(action= OnDeleteAction.CASCADE)
     private List<Skill> skills;
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
-    private List<Candidate> candidates;
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY, mappedBy = "job")
+    private List<Recruitment> recruitmentList;
 
 }

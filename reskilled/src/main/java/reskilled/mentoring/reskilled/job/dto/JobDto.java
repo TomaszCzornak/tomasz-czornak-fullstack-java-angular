@@ -1,7 +1,9 @@
 package reskilled.mentoring.reskilled.job.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import reskilled.mentoring.reskilled.candidate.model.dto.CandidateDto;
 import reskilled.mentoring.reskilled.job.entity.Currency;
 import reskilled.mentoring.reskilled.skills.entity.Skill;
@@ -10,6 +12,8 @@ import java.util.List;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class JobDto {
 
     private Long id;
