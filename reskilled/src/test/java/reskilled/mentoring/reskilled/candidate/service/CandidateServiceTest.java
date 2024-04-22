@@ -1,77 +1,61 @@
 package reskilled.mentoring.reskilled.candidate.service;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-import reskilled.mentoring.reskilled.Utils.CandidateTestUtility;
-import reskilled.mentoring.reskilled.candidate.model.dto.CandidateDto;
+import org.mockito.junit.jupiter.MockitoExtension;
+import reskilled.mentoring.reskilled.Utils.CandidateRepositoryStub;
 import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
-import reskilled.mentoring.reskilled.candidate.model.entity.UserPerCandidate;
 import reskilled.mentoring.reskilled.candidate.model.request.CandidateRequest;
 import reskilled.mentoring.reskilled.candidate.model.response.CandidateResponse;
 import reskilled.mentoring.reskilled.candidate.repository.CandidateRepository;
+import reskilled.mentoring.reskilled.user.model.entity.User;
+import reskilled.mentoring.reskilled.user.service.UsersService;
 import reskilled.mentoring.reskilled.utils.CandidateMapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 
-@SpringBootTest
-@TestPropertySource("/application-test.properties")
-@ActiveProfiles("tests")
+
+@ExtendWith(MockitoExtension.class)
 class CandidateServiceTest {
 
     @Mock
-    CandidateRepository candidateRepository;
-
+    CandidateRepository candidateRepositoryMock;
     @Mock
+    UsersService userService;
+
+    @InjectMocks
     private CandidateService candidateService;
 
-    @BeforeEach
-    void setUp() {
-
-    }
-    @AfterEach
-    void tearDown() {
-        Mockito.reset(candidateRepository);
-        Mockito.reset(candidateService);
-    }
 
 
     @Test
-    void getAllCandidates_shouldReturnListOfCandidateResponses() {
+    void getAllCandidates_shouldReturnListOfCandidateResponse() {
         // Given
-        List<Candidate> candidates = CandidateTestUtility.createListOfCandidates();
+        List<Candidate> candidates = CandidateRepositoryStub.createCandidates();
 
-        List<CandidateResponse> candidatesToSave = CandidateMapper.toCandidateResponeList(candidates); // Assuming conversion logic exists
-        Mockito.when(candidateService.getAllCandidates()).thenReturn(candidatesToSave); // Replace with actual method
+         // Assuming conversion logic exists
+        given(candidateRepositoryMock.findAll()).willReturn(candidates);
 
-       // When
-        List<CandidateResponse> candidatesRetrieved = null;
-        try {
-            candidatesRetrieved = candidateService.getAllCandidates();
-        } catch (Exception e) {
-            System.err.println("Exception in candidateService.getAllCandidates(): " + e.getMessage());
-        }
+        // When
+        List<CandidateResponse> candidatesRetrieved = candidateService.getAllCandidates();
 
         // Then
-        assertEquals(candidatesToSave.size(), candidatesRetrieved != null ? candidatesRetrieved.size() : 0);
-
+        assertEquals(candidates.size(), candidatesRetrieved.size());
     }
 
     @Test
-    void getCandidateById_shouldReturnCandidateResponse() {
+    void getCandidateById_shouldReturnCandidateWithThisId() {
         //given
         final Long id = 1L;
-        final Candidate candidateToSave = CandidateTestUtility.createCandidate();
-        CandidateResponse candidateResponse = CandidateMapper.toCandidateResponse(candidateToSave);
-        Mockito.when(candidateService.getCandidateById(id)).thenReturn(candidateResponse);
+        final Candidate candidateToSave = CandidateRepositoryStub.createCandidate();
+        given(candidateRepositoryMock.findById(id)).willReturn(Optional.of(candidateToSave));
         //when
         CandidateResponse candidateRetrieved = candidateService.getCandidateById(id);
         //then
@@ -80,60 +64,71 @@ class CandidateServiceTest {
     }
 
     @Test
-    void addCandidate_shouldAddNewCandidateToDb() {
+    void addCandidate_shouldAddNewCandidate() {
         //Given
-        CandidateRequest candidateRequest = CandidateTestUtility.createCandidateRequest();
+        User loggedUser = User.builder().email("logged.user@mail.com").build();
+        CandidateRequest candidateRequest = CandidateRepositoryStub.createCandidateRequest();
         Candidate candidateToSave = CandidateMapper.toCandidateEntity(candidateRequest);
-        CandidateResponse candidateResponse = CandidateMapper.toCandidateResponse(candidateToSave);
-        Mockito.when(candidateService.addCandidate(candidateRequest)).thenReturn(candidateResponse);
+        given(userService.getLoggedUser()).willReturn(loggedUser);
+        given(candidateRepositoryMock.save(any(Candidate.class))).willReturn(candidateToSave);
 
-        CandidateResponse candidateAdded = null;
-        try {
-            candidateAdded = candidateService.addCandidate(candidateRequest);
-        } catch (Exception e) {
-            System.err.println("Exception in candidateService.addCandidate(): " + e.getMessage());
-        }
+        //when
+        CandidateResponse candidateAdded = candidateService.addCandidate(candidateRequest);
 
         assertNotNull(candidateAdded);
         assertEquals(candidateToSave.getId(), candidateAdded.getId());
     }
 
     @Test
-    void updateCandidate_shouldUpdateCandidateToDb() {
+    void updateCandidate_shouldUpdateCandidate() {
         //given
         final Long id = 1L;
-        CandidateRequest candidateRequest = CandidateTestUtility.createCandidateRequest();
-        candidateRequest.setCandidateDto(CandidateDto.builder().createdBy(UserPerCandidate.builder().email("initialUser@mail.com").build()).build());
-        Candidate candidateToUpdate = CandidateMapper.toCandidateEntity(candidateRequest);
-        candidateToUpdate.setCreatedBy(UserPerCandidate.builder().email("updatedUser@mail.com").build());
-        CandidateResponse candidateResponse = CandidateMapper.toCandidateResponse(candidateToUpdate);
-        Mockito.when(candidateService.updateCandidate(id, candidateRequest)).thenReturn(candidateResponse);
+        CandidateRequest candidateRequest = CandidateRepositoryStub.createCandidateRequest();
+        Candidate candidateToSave = CandidateMapper.toCandidateEntity(candidateRequest);
+        candidateToSave.setEmail("oldEmail@mail.com");
+        Candidate candidateUpdated = CandidateMapper.toCandidateEntity(candidateRequest);
+        candidateUpdated.setEmail("newEmail@mail.com");
+
+        given(userService.getLoggedUser()).willReturn(User.builder().email("logged.user@mail.com").createdAt(String.valueOf(LocalDateTime.now())).build());
+        given(candidateRepositoryMock.findById(id)).willReturn(Optional.of(candidateToSave));
+        given(candidateRepositoryMock.save(any(Candidate.class))).willReturn(candidateUpdated);
 
         //when
-        CandidateResponse candidateUpdated = null;
-        try {
-            candidateUpdated = candidateService.updateCandidate(id, candidateRequest);
-        } catch (Exception e) {
-            System.err.println("Exception in candidateService.updateCandidate(): " + e.getMessage());
-        }
-        //then
-        assertNotNull(candidateUpdated);
-        assertEquals(candidateUpdated.getUserPerCandidateDto().getEmail(), candidateToUpdate.getCreatedBy().getEmail());
+        CandidateResponse updatedCandidateResponse = candidateService.updateCandidate(id, candidateRequest);
 
+        //then
+        assertNotNull(updatedCandidateResponse);
+        assertEquals("newEmail@mail.com", updatedCandidateResponse.getEmail());
 
     }
 
     @Test
-    void deleteCandidate_shouldDeleteCandidateFromDb() {
-        Long idToDelete = 1L;
-       when(candidateService.getCandidateById(idToDelete))
-                .thenReturn(CandidateMapper.toCandidateResponse(CandidateTestUtility.createCandidate()));
-        candidateService.deleteCandidate(idToDelete);
+    void deleteCandidate_shouldDeleteCandidate() {
+        // Given
+        final Long id = 1L;
+        doNothing().when(candidateRepositoryMock).deleteById(id);
 
-        verify(candidateService, times(1)).deleteCandidate(idToDelete);
+        // When
+        candidateService.deleteCandidate(id);
 
-        when(candidateService.getCandidateById(idToDelete))
-                .thenReturn(null);
-        assertNull(candidateService.getCandidateById(idToDelete));
+        // Then
+        verify(candidateRepositoryMock, times(1)).deleteById(id);
+    }
+
+    @Test
+    void getCandidateByEmail_ShouldReturnCandidate() {
+        // Given
+        final String email = "test@email.com";
+        Candidate expectedCandidate = new Candidate();
+        expectedCandidate.setEmail(email);
+        when(candidateRepositoryMock.findCandidateByEmail(email)).thenReturn(expectedCandidate);
+
+        // When
+        Candidate actualCandidate = candidateService.getCandidateByEmail(email);
+
+        // Then
+        assertNotNull(actualCandidate);
+        assertEquals(expectedCandidate, actualCandidate);
+        assertEquals(email, actualCandidate.getEmail());
     }
 }

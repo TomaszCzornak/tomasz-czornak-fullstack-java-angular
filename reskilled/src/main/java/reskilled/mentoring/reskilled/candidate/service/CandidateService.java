@@ -2,6 +2,7 @@ package reskilled.mentoring.reskilled.candidate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reskilled.mentoring.reskilled.candidate.exceptions.CandidateNotFoundException;
 import reskilled.mentoring.reskilled.candidate.model.dto.CandidateDto;
 import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
 import reskilled.mentoring.reskilled.candidate.model.request.CandidateRequest;
@@ -47,7 +48,7 @@ public class CandidateService {
         Candidate candidate = CandidateMapper.toCandidateEntity(candidateRequest);
 
         User userLogged = usersService.getLoggedUser();
-        Candidate candidateFound = candidateRepository.findById(id).orElse(null);
+        Candidate candidateFound = candidateRepository.findById(id).orElseThrow(CandidateNotFoundException::new);
         if (candidateFound != null) {
             candidateFound.setEmail(candidate.getEmail());
             candidateFound.setCreatedBy(User.builder().email(userLogged.getEmail()).createdAt(userLogged.getCreatedAt()).build());
