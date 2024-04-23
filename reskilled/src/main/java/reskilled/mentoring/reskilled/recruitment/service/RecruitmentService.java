@@ -7,15 +7,16 @@ import reskilled.mentoring.reskilled.candidate.service.CandidateService;
 import reskilled.mentoring.reskilled.job.entity.Job;
 import reskilled.mentoring.reskilled.job.exceptions.JobNotFoundException;
 import reskilled.mentoring.reskilled.job.service.JobService;
+import reskilled.mentoring.reskilled.recruitment.dto.RecruitmentDto;
 import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
 import reskilled.mentoring.reskilled.recruitment.model.request.RecruitmentRequest;
 import reskilled.mentoring.reskilled.recruitment.repository.RecruitmentRepository;
-import reskilled.mentoring.reskilled.recruitment.response.RecruitmentsResponse;
+import reskilled.mentoring.reskilled.recruitment.response.RecruitmentResponse;
 import reskilled.mentoring.reskilled.user.exceptions.UserNotFoundException;
-import reskilled.mentoring.reskilled.utils.CandidateMapper;
-import reskilled.mentoring.reskilled.utils.JobMapper;
+import reskilled.mentoring.reskilled.utils.RecruitmentMapper;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -26,17 +27,14 @@ public class RecruitmentService {
     private final CandidateService candidateService;
     private final JobService jobService;
 
-    public RecruitmentsResponse getAllRecruitments() {
+    public List<RecruitmentDto> getAllRecruitments() {
         List<Recruitment> recruitments = recruitmentRepository.findAll();
-        return RecruitmentsResponse.builder()
-                .candidateDtoList(CandidateMapper.toCandidateDtoList(recruitments.stream().map(Recruitment::getCandidate).toList()))
-                .jobDtoList(JobMapper.toJobDtoList(recruitments.stream().map(Recruitment::getJob).toList()))
-                .build();
+        return RecruitmentMapper.toRecruitmentDtoList(recruitments);
 
     }
 
-    public Recruitment getRecruitmentById(Long id) {
-        return recruitmentRepository.findById(id).orElse(null);
+    public RecruitmentResponse getRecruitmentById(Long id) {
+        return RecruitmentMapper.toRecruitmentResponse(Objects.requireNonNull(recruitmentRepository.findById(id).orElse(null)));
     }
 
     public void updateRecruitment(Recruitment recruitment) {

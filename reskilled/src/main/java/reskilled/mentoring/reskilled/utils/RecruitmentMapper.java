@@ -3,6 +3,7 @@ package reskilled.mentoring.reskilled.utils;
 import reskilled.mentoring.reskilled.recruitment.dto.RecruitmentDto;
 import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
 import reskilled.mentoring.reskilled.recruitment.model.request.RecruitmentRequest;
+import reskilled.mentoring.reskilled.recruitment.response.RecruitmentResponse;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class RecruitmentMapper {
         return Recruitment.builder()
                 .id(recruitmentRequest.getCandidateDto().getId())
                 .job(JobMapper.toJobEntity(recruitmentRequest.getJobDto()))
-                .candidate(CandidateMapper.toCandidateEntityRecruitment(recruitmentRequest.getCandidateDto()))
+                .candidate(CandidateMapper.toCandidateEntity(recruitmentRequest.getCandidateDto()))
                 .build();
     }
 
@@ -41,6 +42,14 @@ public class RecruitmentMapper {
     static RecruitmentDto toRecruitmentDto(Recruitment recruitment) {
         return RecruitmentDto.builder()
                 .jobDto(JobMapper.toJobDto(recruitment.getJob()))
+                .candidateDto(CandidateMapper.toCandidateDto(recruitment.getCandidate()))
+                .build();
+    }
+
+    public static RecruitmentResponse toRecruitmentResponse(Recruitment recruitment) {
+        return RecruitmentResponse.builder()
+                .jobDto(JobMapper.toJobDto(recruitment.getJob()))
+                .candidateDto(CandidateMapper.toCandidateDto(recruitment.getCandidate()))
                 .build();
     }
 }

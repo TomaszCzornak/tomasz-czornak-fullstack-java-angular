@@ -37,11 +37,13 @@ public class CandidateService {
         User userLogged = usersService.getLoggedUser();
 
         CandidateDto candidateDto = CandidateMapper.toCandidateDto(candidateRequest, userLogged);
-        assert candidateDto != null;
-        Candidate candidate1 = CandidateMapper.toCandidateEntity(candidateDto);
-        candidate1.setCreatedBy(userLogged);
-
-        return CandidateMapper.toCandidateResponse(candidateRepository.save(candidate1));
+        if (candidateDto != null) {
+            Candidate candidate = CandidateMapper.toCandidateEntity(candidateDto);
+            candidate.setCreatedBy(userLogged);
+            return CandidateMapper.toCandidateResponse(candidateRepository.save(candidate));
+        } else {
+            throw new IllegalStateException("Candidate not added");
+        }
     }
 
     public CandidateResponse updateCandidate(Long id, CandidateRequest candidateRequest) {
