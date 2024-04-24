@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CandidateRepositoryStub {
+public class CandidateStub {
 
 
     public static List<CandidateResponse> createListOfCandidates() {

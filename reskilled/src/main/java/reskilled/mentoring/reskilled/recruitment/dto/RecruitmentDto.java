@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import reskilled.mentoring.reskilled.candidate.model.dto.CandidateDto;
-import reskilled.mentoring.reskilled.job.dto.JobDto;
+import reskilled.mentoring.reskilled.job.model.dto.JobDto;
 
 @Builder
 @Data

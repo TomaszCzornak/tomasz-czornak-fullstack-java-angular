@@ -60,7 +60,4 @@ public class CandidateMapper {
                 .build();
     }
 
-    public static List<CandidateDto> toCandidateDtoList(List<Candidate> candidates) {
-        return candidates.stream().map(CandidateMapper::toCandidateDto).toList();
-    }
 }

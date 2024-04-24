@@ -57,6 +57,8 @@ public class UserMapper {
     public static UserDto toUserDtoRecruitment(User user) {
         return UserDto.builder()
                 .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
                 .createdAt(String.valueOf(new Timestamp(System.currentTimeMillis())))
                 .build();
     }

@@ -1,11 +1,10 @@
-package reskilled.mentoring.reskilled.job.dto;
+package reskilled.mentoring.reskilled.job.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import reskilled.mentoring.reskilled.candidate.model.dto.CandidateDto;
-import reskilled.mentoring.reskilled.job.entity.Currency;
+import reskilled.mentoring.reskilled.job.model.entity.Currency;
 import reskilled.mentoring.reskilled.skills.entity.Skill;
 
 import java.util.List;
@@ -14,14 +13,13 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobDto {
+public class JobRequest {
 
-    private Long id;
     private String title;
     private String city;
-    private long salary;
+    private Long salary;
     private Currency currency;
     private List<Skill> skills;
-    private List<CandidateDto> candidates;
+
 
 }

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reskilled.mentoring.reskilled.job.repository.JobRepository;
-import reskilled.mentoring.reskilled.job.entity.Job;
+import reskilled.mentoring.reskilled.job.model.entity.Job;
 
 import java.util.List;
 import java.util.Optional;

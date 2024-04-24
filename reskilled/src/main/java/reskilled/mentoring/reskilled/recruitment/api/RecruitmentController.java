@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import reskilled.mentoring.reskilled.recruitment.dto.RecruitmentDto;
-import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
 import reskilled.mentoring.reskilled.recruitment.model.request.RecruitmentRequest;
 import reskilled.mentoring.reskilled.recruitment.response.RecruitmentResponse;
 import reskilled.mentoring.reskilled.recruitment.service.RecruitmentService;
@@ -43,9 +42,8 @@ public class RecruitmentController {
     @Operation(summary = "update an existing recruitment", description = "This endpoint is for updating an existing recruitment", responses = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Recruitment updated successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request due to validation failure")})
-    public void updateRecruitment(@PathVariable Long id, @RequestBody Recruitment recruitment) {
-        recruitment.setId(id);
-        recruitmentService.updateRecruitment(recruitment);
+    public void updateRecruitment(@PathVariable Long id, @RequestBody RecruitmentRequest recruitmentRequest) {
+        recruitmentService.updateRecruitment(recruitmentRequest);
     }
 
     @DeleteMapping("/recruitments/{id}")

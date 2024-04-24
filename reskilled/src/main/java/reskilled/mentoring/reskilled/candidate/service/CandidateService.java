@@ -56,10 +56,10 @@ public class CandidateService {
             candidateFound.setCreatedBy(User.builder().email(userLogged.getEmail()).createdAt(userLogged.getCreatedAt()).build());
             candidateFound.setRecruitmentList(candidateFound.getRecruitmentList());
 
+            return CandidateMapper.toCandidateResponse(candidateRepository.save(candidateFound));
+        } else {
+            throw new CandidateNotFoundException();
         }
-        assert candidateFound != null;
-        return CandidateMapper.toCandidateResponse(candidateRepository.save(candidateFound));
-
     }
 
     public void deleteCandidate(Long id) {

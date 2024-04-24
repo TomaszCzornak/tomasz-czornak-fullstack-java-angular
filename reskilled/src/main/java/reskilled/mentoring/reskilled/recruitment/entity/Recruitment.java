@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
-import reskilled.mentoring.reskilled.job.entity.Job;
+import reskilled.mentoring.reskilled.job.model.entity.Job;
 
 
 @Entity

@@ -1,4 +1,4 @@
-package reskilled.mentoring.reskilled.job.entity;
+package reskilled.mentoring.reskilled.job.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

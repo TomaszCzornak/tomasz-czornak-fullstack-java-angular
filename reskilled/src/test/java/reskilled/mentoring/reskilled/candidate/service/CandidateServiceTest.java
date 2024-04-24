@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import reskilled.mentoring.reskilled.Utils.CandidateRepositoryStub;
+import reskilled.mentoring.reskilled.Utils.CandidateStub;
 import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
 import reskilled.mentoring.reskilled.candidate.model.request.CandidateRequest;
 import reskilled.mentoring.reskilled.candidate.model.response.CandidateResponse;
@@ -38,9 +38,7 @@ class CandidateServiceTest {
     @Test
     void getAllCandidates_shouldReturnListOfCandidateResponse() {
         // Given
-        List<Candidate> candidates = CandidateRepositoryStub.createCandidates();
-
-         // Assuming conversion logic exists
+        List<Candidate> candidates = CandidateStub.createCandidates();
         given(candidateRepositoryMock.findAll()).willReturn(candidates);
 
         // When
@@ -54,7 +52,7 @@ class CandidateServiceTest {
     void getCandidateById_shouldReturnCandidateWithThisId() {
         //given
         final Long id = 1L;
-        final Candidate candidateToSave = CandidateRepositoryStub.createCandidate();
+        final Candidate candidateToSave = CandidateStub.createCandidate();
         given(candidateRepositoryMock.findById(id)).willReturn(Optional.of(candidateToSave));
         //when
         CandidateResponse candidateRetrieved = candidateService.getCandidateById(id);
@@ -67,7 +65,7 @@ class CandidateServiceTest {
     void addCandidate_shouldAddNewCandidate() {
         //Given
         User loggedUser = User.builder().email("logged.user@mail.com").build();
-        CandidateRequest candidateRequest = CandidateRepositoryStub.createCandidateRequest();
+        CandidateRequest candidateRequest = CandidateStub.createCandidateRequest();
         Candidate candidateToSave = CandidateMapper.toCandidateEntity(candidateRequest);
         given(userService.getLoggedUser()).willReturn(loggedUser);
         given(candidateRepositoryMock.save(any(Candidate.class))).willReturn(candidateToSave);
@@ -83,7 +81,7 @@ class CandidateServiceTest {
     void updateCandidate_shouldUpdateCandidate() {
         //given
         final Long id = 1L;
-        CandidateRequest candidateRequest = CandidateRepositoryStub.createCandidateRequest();
+        CandidateRequest candidateRequest = CandidateStub.createCandidateRequest();
         Candidate candidateToSave = CandidateMapper.toCandidateEntity(candidateRequest);
         candidateToSave.setEmail("oldEmail@mail.com");
         Candidate candidateUpdated = CandidateMapper.toCandidateEntity(candidateRequest);
