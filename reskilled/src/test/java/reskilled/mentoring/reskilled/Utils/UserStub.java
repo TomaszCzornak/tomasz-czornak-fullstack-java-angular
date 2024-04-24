@@ -33,4 +33,20 @@ public class UserStub {
                 .role(Role.USER)
                 .build();
     }
+
+    public static User createUserBeforeRegistration() {
+        return User.builder()
+                .id(1L)
+                .uuid(UUID.randomUUID().toString())
+                .createdAt("2022-01-01")
+                .updatedAt("2022-01-01")
+                .firstName("John")
+                .lastName("Doe")
+                .email("john.doe@mail.com")
+                .password("Passwording85!")
+                .isLock(true)
+                .isEnabled(false)
+                .role(Role.USER)
+                .build();
+    }
 }

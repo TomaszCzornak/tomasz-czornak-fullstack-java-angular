@@ -63,7 +63,7 @@ class RegistrationServiceTest {
 
     @Test
     void activateUser_ShouldSetLockAndEnabledAndRole() {
-        User user = UserStub.createUser();
+        User user = UserStub.createUserBeforeRegistration();
         String uid = "123456";
         given(usersService.getUserByUuid(uid)).willReturn(Optional.of(user));
         //when
