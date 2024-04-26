@@ -28,11 +28,11 @@ class CandidateMapperTest {
         //given
         CandidateRequest candidateRequest = CandidateMapperStub.createCandidateRequest();
         User userPerCandidate = candidateRequest.getCreatedBy();
-        CandidateDto candidateDto = CandidateMapperStub.createCandidateDto();
+        CandidateDto expectedCandidateDto = CandidateMapperStub.createCandidateDto();
         //when
-        CandidateDto expectedDto = candidateMapper.toCandidateDto(candidateRequest, userPerCandidate);
+        CandidateDto mappedCandidateDto = candidateMapper.toCandidateDto(candidateRequest, userPerCandidate);
         //then
-        assertEquals(expectedDto.getCreatedBy().getEmail(), candidateDto.getCreatedBy().getEmail());
+        assertEquals(mappedCandidateDto.getCreatedBy().getEmail(), expectedCandidateDto.getCreatedBy().getEmail());
 
 
     }
@@ -41,60 +41,60 @@ class CandidateMapperTest {
     void toCandidateEntity_shouldMapFromCandidateDtoToEntity() {
         //given
         CandidateDto candidateDto = CandidateMapperStub.createCandidateDto();
-        Candidate candidate = CandidateMapperStub.createCandidate();
+        Candidate candidateExpected = CandidateMapperStub.createCandidate();
         //when
-        Candidate expectedEntity = candidateMapper.toCandidateEntity(candidateDto);
-        expectedEntity.getCreatedBy().setUuid(candidate.getCreatedBy().getUuid());
+        Candidate mappedCandidateEntity = candidateMapper.toCandidateEntity(candidateDto);
+        mappedCandidateEntity.getCreatedBy().setUuid(candidateExpected.getCreatedBy().getUuid());
         //then
-        assertEquals(expectedEntity.getCreatedBy().getEmail(), candidate.getCreatedBy().getEmail());
+        assertEquals(mappedCandidateEntity.getCreatedBy().getEmail(), candidateExpected.getCreatedBy().getEmail());
     }
 
     @Test
     void toCandidateResponse_shouldMapFromCandidatEntityToResponse() {
         //given
         Candidate candidate = CandidateMapperStub.createCandidate();
-        CandidateResponse candidateResponse= CandidateMapperStub.createCandidateResponse();
+        CandidateResponse expectedCandidateResponse= CandidateMapperStub.createCandidateResponse();
 
         //when
-        CandidateResponse expectedResponse = candidateMapper.toCandidateResponse(candidate);
+        CandidateResponse mappedCandidateResponse = candidateMapper.toCandidateResponse(candidate);
         //then
-        assertEquals(expectedResponse.getCreatedBy().getFirstName(), candidateResponse.getCreatedBy().getFirstName());
-        assertEquals(expectedResponse.getEmail(), candidateResponse.getEmail());
+        assertEquals(mappedCandidateResponse.getCreatedBy().getFirstName(), expectedCandidateResponse.getCreatedBy().getFirstName());
+        assertEquals(mappedCandidateResponse.getEmail(), expectedCandidateResponse.getEmail());
     }
 
     @Test
     void toCandidateResponseList_shouldMapFromCandidateEntityToResponseList() {
         //given
-        List<Candidate> candidateList = CandidateMapperStub.createCandidateList();
+        List<Candidate> expectedCandidateList = CandidateMapperStub.createCandidateList();
         //when
-        List<CandidateResponse> expectedResponseList = candidateMapper.toCandidateResponeList(candidateList);
+        List<CandidateResponse> mappedCandidateResponseList = candidateMapper.toCandidateResponeList(expectedCandidateList);
         //then
-        assertEquals(expectedResponseList.size(), candidateList.size());
+        assertEquals(mappedCandidateResponseList.size(), expectedCandidateList.size());
     }
 
     @Test
     void testToCandidateEntity_shouldMapFromCandidateRequestToEntity() {
         //given
         CandidateRequest candidateRequest = CandidateMapperStub.createCandidateRequest();
-        Candidate candidate = CandidateMapperStub.createCandidate();
+        Candidate expectedCandidate = CandidateMapperStub.createCandidate();
         User userPerCandidate = candidateRequest.getCreatedBy();
         //when
-        Candidate expectedEntity = candidateMapper.toCandidateEntity(candidateRequest);
-        expectedEntity.getCreatedBy().setUuid(candidate.getCreatedBy().getUuid());
-        expectedEntity.setCreatedBy(userPerCandidate);
+        Candidate mappedCandidateEntity = candidateMapper.toCandidateEntity(candidateRequest);
+        mappedCandidateEntity.getCreatedBy().setUuid(expectedCandidate.getCreatedBy().getUuid());
+        mappedCandidateEntity.setCreatedBy(userPerCandidate);
         //then
-        assertEquals(expectedEntity.getCreatedBy().getEmail(), candidate.getCreatedBy().getEmail());
+        assertEquals(mappedCandidateEntity.getCreatedBy().getEmail(), expectedCandidate.getCreatedBy().getEmail());
     }
 
     @Test
     void testToCandidateDto_shouldMapFromCandidateEntityToDto() {
         //given
         Candidate candidate = CandidateMapperStub.createCandidate();
-        CandidateDto candidateDto = CandidateMapperStub.createCandidateDto();
+        CandidateDto expectedCandidateDto = CandidateMapperStub.createCandidateDto();
         //when
-        CandidateDto expectedDto = candidateMapper.toCandidateDto(candidate);
+        CandidateDto mappedCandidateDto = candidateMapper.toCandidateDto(candidate);
         //then
-        assertEquals(expectedDto.getCreatedBy().getEmail(), candidateDto.getCreatedBy().getEmail());
+        assertEquals(mappedCandidateDto.getCreatedBy().getEmail(), expectedCandidateDto.getCreatedBy().getEmail());
     }
 
 }
