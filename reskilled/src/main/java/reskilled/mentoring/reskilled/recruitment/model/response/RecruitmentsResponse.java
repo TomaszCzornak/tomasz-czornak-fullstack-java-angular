@@ -1,4 +1,4 @@
-package reskilled.mentoring.reskilled.recruitment.response;
+package reskilled.mentoring.reskilled.recruitment.model.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,11 +6,14 @@ import lombok.extern.jackson.Jacksonized;
 import reskilled.mentoring.reskilled.candidate.model.dto.CandidateDto;
 import reskilled.mentoring.reskilled.job.model.dto.JobDto;
 
+import java.util.List;
+
 @Builder
 @Jacksonized
 @Getter
-public class RecruitmentResponse {
+public class RecruitmentsResponse {
 
-    private JobDto jobDto;
-    private CandidateDto candidateDto;
+    private List<JobDto> jobDtoList;
+    private List<CandidateDto> candidateDtoList;
+    
 }

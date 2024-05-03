@@ -9,6 +9,7 @@ import reskilled.mentoring.reskilled.user.model.entity.User;
 import reskilled.mentoring.reskilled.user.model.response.UserResponse;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserMapper {
@@ -47,13 +48,6 @@ public class UserMapper {
                 .build();
     }
 
-    public static User toUser(UserDto userDto) {
-        return User.builder()
-                .createdAt(userDto.getCreatedAt())
-                .build();
-    }
-
-
     public static UserDto toUserDtoRecruitment(User user) {
         return UserDto.builder()
                 .email(user.getEmail())
@@ -63,4 +57,9 @@ public class UserMapper {
                 .build();
     }
 
+    public static List<UserResponse> toUserResponses(List<User> userList) {
+        return userList.stream()
+                .map(UserMapper::toUserResponse)
+                .toList();
+    }
 }

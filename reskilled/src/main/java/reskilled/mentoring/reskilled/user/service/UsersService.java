@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import reskilled.mentoring.reskilled.user.model.response.UserResponse;
 import reskilled.mentoring.reskilled.user.repository.UserRepository;
 import reskilled.mentoring.reskilled.user.model.entity.User;
+import reskilled.mentoring.reskilled.utils.UserMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,8 +37,8 @@ public class UsersService {
         return userRepository.findUserByEmailAndLockAndEnabled(email);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        return UserMapper.toUserResponses(userRepository.findAll());
     }
 
     public User getLoggedUser() {

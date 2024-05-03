@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reskilled.mentoring.reskilled.Utils.JobStub;
 import reskilled.mentoring.reskilled.job.model.entity.Job;
 import reskilled.mentoring.reskilled.job.model.request.JobRequest;
+import reskilled.mentoring.reskilled.job.model.response.JobResponse;
 import reskilled.mentoring.reskilled.job.repository.JobRepository;
 import reskilled.mentoring.reskilled.utils.JobMapper;
 
@@ -40,9 +41,9 @@ class JobServiceTest {
     void getJobById_shouldReturnJobWithThisId() {
         Long jobId = 1L;
         Job job = JobStub.createJob();
-        given(jobRepositoryMock.findById(jobId)).willReturn(Optional.of(job));
-        Optional<Job> result = jobService.getJobById(jobId);
-        assertEquals(job, result.get());
+        given(jobRepositoryMock.findById(jobId)).willReturn(Optional.ofNullable(job));
+        JobResponse result = jobService.getJobById(jobId);
+        assertEquals(JobMapper.toJobResponse(job), result);
     }
 
     @Test

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reskilled.mentoring.reskilled.login.model.LoginRequest;
 import reskilled.mentoring.reskilled.login.service.UserLoginFacade;
+import reskilled.mentoring.reskilled.user.model.entity.User;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +28,7 @@ public class LoginController {
             @ApiResponse(responseCode = "200", description = "User successfully logged in"),
             @ApiResponse(responseCode = "400", description = "Bad request due to validation failure")
     })
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<User> login(@RequestBody LoginRequest loginRequest) {
 
         return userLoginFacade.loginUser(loginRequest);
 

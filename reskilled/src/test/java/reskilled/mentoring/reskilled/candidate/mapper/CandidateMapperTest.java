@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CandidateMapperTest {
 
     @InjectMocks
-    CandidateMapper candidateMapper;
+    private CandidateMapper candidateMapper;
 
 
     @Test
@@ -92,7 +92,7 @@ class CandidateMapperTest {
         Candidate candidate = CandidateMapperStub.createCandidate();
         CandidateDto expectedCandidateDto = CandidateMapperStub.createCandidateDto();
         //when
-        CandidateDto mappedCandidateDto = candidateMapper.toCandidateDto(candidate);
+        CandidateDto mappedCandidateDto = CandidateMapper.toCandidateDto(candidate);
         //then
         assertEquals(mappedCandidateDto.getCreatedBy().getEmail(), expectedCandidateDto.getCreatedBy().getEmail());
     }

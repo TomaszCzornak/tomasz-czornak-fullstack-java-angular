@@ -28,7 +28,7 @@ public class UserLoginFacadeImpl implements UserLoginFacade {
     public static final String BEARER = "Bearer ";
 
     @Override
-    public ResponseEntity<?> loginUser(LoginRequest loginRequest) {
+    public ResponseEntity<User> loginUser(LoginRequest loginRequest) {
         Optional<User> user = userService.getActivatedUser(loginRequest.getEmail());
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
         if (user.isPresent() && authentication.isAuthenticated()) {
@@ -36,7 +36,7 @@ public class UserLoginFacadeImpl implements UserLoginFacade {
             String token = generateToken(user.get().getEmail(), exp);
             HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
             httpHeaders.add("Authorization", BEARER + token);
-            return new ResponseEntity<>(user, httpHeaders, HttpStatus.OK);
+            return new ResponseEntity<>(user.get(), httpHeaders, HttpStatus.OK);
            }
 
        throw new UserNotFoundException();

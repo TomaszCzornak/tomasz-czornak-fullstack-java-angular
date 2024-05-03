@@ -2,9 +2,10 @@ package reskilled.mentoring.reskilled.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import reskilled.mentoring.reskilled.job.model.entity.Job;
 import reskilled.mentoring.reskilled.job.model.dto.JobDto;
+import reskilled.mentoring.reskilled.job.model.entity.Job;
 import reskilled.mentoring.reskilled.job.model.request.JobRequest;
+import reskilled.mentoring.reskilled.job.model.response.JobResponse;
 import reskilled.mentoring.reskilled.skills.entity.Skill;
 
 import java.util.Collections;
@@ -69,6 +70,24 @@ public class JobMapper {
                 .currency(jobRequest.getCurrency())
                 .skills(toSkillsEntity(jobRequest.getSkills()))
                 .build();
+    }
+
+    public static JobResponse toJobResponse(Job job) {
+        return JobResponse.builder()
+                .id(job.getId())
+                .title(job.getTitle())
+                .city(job.getCity())
+                .currency(job.getCurrency())
+                .salary(job.getSalary())
+                .skills(job.getSkills())
+                .recruitmentList(job.getRecruitmentList())
+                .build();
+    }
+
+    public static List<JobResponse> toJobResponseList(List<Job> jobList) {
+        return jobList.stream()
+                .map(JobMapper::toJobResponse)
+                .toList();
     }
 
 }

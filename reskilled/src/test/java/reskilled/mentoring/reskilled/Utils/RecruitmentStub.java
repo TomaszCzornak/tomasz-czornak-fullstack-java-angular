@@ -1,16 +1,17 @@
 package reskilled.mentoring.reskilled.Utils;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import reskilled.mentoring.reskilled.candidate.model.dto.CandidateDto;
 import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
 import reskilled.mentoring.reskilled.recruitment.model.request.RecruitmentRequest;
+import reskilled.mentoring.reskilled.recruitment.model.response.RecruitmentResponse;
 import reskilled.mentoring.reskilled.utils.JobMapper;
+import reskilled.mentoring.reskilled.utils.RecruitmentMapper;
 import reskilled.mentoring.reskilled.utils.UserMapper;
 
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class RecruitmentStub {
 
     public static Recruitment createRecruitment() {
@@ -30,5 +31,13 @@ public class RecruitmentStub {
                         .createdBy(UserMapper.toUserDto(UserStub.createUser())).build())
                 .jobDto(JobMapper.toJobDto(JobStub.createJob()))
                 .build();
+    }
+
+    public static List<RecruitmentResponse> createRecruitmentResponseList() {
+        return RecruitmentMapper.toRecruitmentsResponses(createRecruitmentList());
+    }
+
+    public static RecruitmentResponse createRecruitmentResponse() {
+        return RecruitmentMapper.toRecruitmentResponse(createRecruitment());
     }
 }

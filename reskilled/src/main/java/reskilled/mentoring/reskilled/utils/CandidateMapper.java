@@ -32,6 +32,7 @@ public class CandidateMapper {
 
     public static CandidateResponse toCandidateResponse(Candidate candidate) {
         return CandidateResponse.builder()
+                .id(candidate.getId())
                 .createdBy(UserMapper.toUserDtoRecruitment(candidate.getCreatedBy()))
                 .email(candidate.getEmail())
                 .build();

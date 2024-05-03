@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
 import reskilled.mentoring.reskilled.candidate.service.CandidateService;
-import reskilled.mentoring.reskilled.job.model.entity.Job;
 import reskilled.mentoring.reskilled.job.exceptions.JobNotFoundException;
+import reskilled.mentoring.reskilled.job.model.entity.Job;
 import reskilled.mentoring.reskilled.job.service.JobService;
-import reskilled.mentoring.reskilled.recruitment.dto.RecruitmentDto;
 import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
 import reskilled.mentoring.reskilled.recruitment.model.request.RecruitmentRequest;
+import reskilled.mentoring.reskilled.recruitment.model.response.RecruitmentResponse;
 import reskilled.mentoring.reskilled.recruitment.repository.RecruitmentRepository;
-import reskilled.mentoring.reskilled.recruitment.response.RecruitmentResponse;
 import reskilled.mentoring.reskilled.user.exceptions.UserNotFoundException;
 import reskilled.mentoring.reskilled.utils.RecruitmentMapper;
 
@@ -27,9 +26,9 @@ public class RecruitmentService {
     private final CandidateService candidateService;
     private final JobService jobService;
 
-    public List<RecruitmentDto> getAllRecruitments() {
+    public List<RecruitmentResponse> getAllRecruitments() {
         List<Recruitment> recruitments = recruitmentRepository.findAll();
-        return RecruitmentMapper.toRecruitmentDtoList(recruitments);
+        return RecruitmentMapper.toRecruitmentsResponses(recruitments);
 
     }
 

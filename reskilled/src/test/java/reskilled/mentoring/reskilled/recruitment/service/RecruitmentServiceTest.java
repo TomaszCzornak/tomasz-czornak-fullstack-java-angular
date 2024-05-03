@@ -12,11 +12,10 @@ import reskilled.mentoring.reskilled.candidate.service.CandidateService;
 import reskilled.mentoring.reskilled.job.model.dto.JobDto;
 import reskilled.mentoring.reskilled.job.model.entity.Job;
 import reskilled.mentoring.reskilled.job.service.JobService;
-import reskilled.mentoring.reskilled.recruitment.dto.RecruitmentDto;
 import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
 import reskilled.mentoring.reskilled.recruitment.model.request.RecruitmentRequest;
+import reskilled.mentoring.reskilled.recruitment.model.response.RecruitmentResponse;
 import reskilled.mentoring.reskilled.recruitment.repository.RecruitmentRepository;
-import reskilled.mentoring.reskilled.recruitment.response.RecruitmentResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +47,7 @@ class RecruitmentServiceTest {
         List<Recruitment> recruitments = RecruitmentStub.createRecruitmentList();
         given(recruitmentRepositoryMock.findAll()).willReturn(recruitments);
         //when
-        List<RecruitmentDto> result = recruitmentService.getAllRecruitments();
+        List<RecruitmentResponse> result = recruitmentService.getAllRecruitments();
 
         //then
         assertEquals(recruitments.size(), result.size());
@@ -114,7 +113,7 @@ class RecruitmentServiceTest {
         given(jobServiceMock.getJobByTitle(recruitmentRequest.getJobDto().getTitle())).willReturn(Optional.ofNullable(recruitment.getJob()));
         //when
         recruitmentService.addRecruitment(recruitmentRequest);
-        List<RecruitmentDto> all = recruitmentService.getAllRecruitments();
+        List<RecruitmentResponse> all = recruitmentService.getAllRecruitments();
         //then
         verify(recruitmentRepositoryMock).save(any(Recruitment.class));
         assertEquals(recruitment.getJob().getTitle(), all.get(0).getJobDto().getTitle());

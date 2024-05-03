@@ -29,7 +29,6 @@ class CandidateServiceTest {
     CandidateRepository candidateRepositoryMock;
     @Mock
     UsersService userService;
-
     @InjectMocks
     private CandidateService candidateService;
 
@@ -40,10 +39,8 @@ class CandidateServiceTest {
         // Given
         List<Candidate> candidates = CandidateStub.createCandidates();
         given(candidateRepositoryMock.findAll()).willReturn(candidates);
-
         // When
         List<CandidateResponse> candidatesRetrieved = candidateService.getAllCandidates();
-
         // Then
         assertEquals(candidates.size(), candidatesRetrieved.size());
     }
@@ -53,6 +50,7 @@ class CandidateServiceTest {
         //given
         final Long id = 1L;
         final Candidate candidateToSave = CandidateStub.createCandidate();
+        candidateToSave.setId(id);
         given(candidateRepositoryMock.findById(id)).willReturn(Optional.of(candidateToSave));
         //when
         CandidateResponse candidateRetrieved = candidateService.getCandidateById(id);
@@ -69,10 +67,8 @@ class CandidateServiceTest {
         Candidate candidateToSave = CandidateMapper.toCandidateEntity(candidateRequest);
         given(userService.getLoggedUser()).willReturn(loggedUser);
         given(candidateRepositoryMock.save(any(Candidate.class))).willReturn(candidateToSave);
-
         //when
         CandidateResponse candidateAdded = candidateService.addCandidate(candidateRequest);
-
         assertNotNull(candidateAdded);
         assertEquals(candidateToSave.getId(), candidateAdded.getId());
     }
@@ -90,10 +86,8 @@ class CandidateServiceTest {
         given(userService.getLoggedUser()).willReturn(User.builder().email("logged.user@mail.com").createdAt(String.valueOf(LocalDateTime.now())).build());
         given(candidateRepositoryMock.findById(id)).willReturn(Optional.of(candidateToSave));
         given(candidateRepositoryMock.save(any(Candidate.class))).willReturn(candidateUpdated);
-
         //when
         CandidateResponse updatedCandidateResponse = candidateService.updateCandidate(id, candidateRequest);
-
         //then
         assertNotNull(updatedCandidateResponse);
         assertEquals("newEmail@mail.com", updatedCandidateResponse.getEmail());
@@ -105,10 +99,8 @@ class CandidateServiceTest {
         // Given
         final Long id = 1L;
         doNothing().when(candidateRepositoryMock).deleteById(id);
-
         // When
         candidateService.deleteCandidate(id);
-
         // Then
         verify(candidateRepositoryMock, times(1)).deleteById(id);
     }
@@ -120,10 +112,8 @@ class CandidateServiceTest {
         Candidate expectedCandidate = new Candidate();
         expectedCandidate.setEmail(email);
         when(candidateRepositoryMock.findCandidateByEmail(email)).thenReturn(expectedCandidate);
-
         // When
         Candidate actualCandidate = candidateService.getCandidateByEmail(email);
-
         // Then
         assertNotNull(actualCandidate);
         assertEquals(expectedCandidate, actualCandidate);

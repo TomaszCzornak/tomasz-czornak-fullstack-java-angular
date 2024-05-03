@@ -7,15 +7,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import reskilled.mentoring.reskilled.job.model.dto.JobDto;
-import reskilled.mentoring.reskilled.job.model.entity.Job;
 import reskilled.mentoring.reskilled.job.exceptions.EmptyJobsListException;
-import reskilled.mentoring.reskilled.job.exceptions.JobNotFoundException;
+import reskilled.mentoring.reskilled.job.model.entity.Job;
+import reskilled.mentoring.reskilled.job.model.request.JobRequest;
+import reskilled.mentoring.reskilled.job.model.response.JobResponse;
 import reskilled.mentoring.reskilled.job.service.JobService;
 import reskilled.mentoring.reskilled.utils.JobMapper;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,22 +25,21 @@ public class JobsController {
 
 
     @RequestMapping("/jobs")
-    public List<Job> getAllJobs() {
+    public List<JobResponse> getAllJobs() {
         if (jobService.getAllJobs().isEmpty()) {
             throw new EmptyJobsListException();
         }
-        return jobService.getAllJobs();
+        return JobMapper.toJobResponseList(jobService.getAllJobs());
     }
 
 
     @PostMapping("/add-job")
     @Operation(summary = "Add a Job", description = "This endpoint is for adding a new Job", responses = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Job added succesfully"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request due to validation failure") })
-    public void addJobSubmit(@RequestBody @Valid JobDto jobDto) {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request due to validation failure")})
+    public void addJobSubmit(@RequestBody @Valid JobRequest jobRequest) {
 
-        Job job = JobMapper.toJobEntity(jobDto);
-        jobService.addJob(job);
+        jobService.addJob(JobMapper.toJobEntity(jobRequest));
 
     }
 
@@ -51,12 +49,8 @@ public class JobsController {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the job"),
             @ApiResponse(responseCode = "404", description = "Job with provided id not found")
     })
-    public Job singleJob(@PathVariable("id") @Parameter(description = "ID of the job to be fetched") Long id) {
-        Optional<Job> job = jobService.getJobById(id);
-        if (job.isEmpty()) {
-            throw new JobNotFoundException();
-        }
-        return job.get();
+    public JobResponse getSingleJob(@PathVariable("id") @Parameter(description = "ID of the job to be fetched") Long id) {
+        return jobService.getJobById(id);
     }
 
 
@@ -67,8 +61,8 @@ public class JobsController {
             @ApiResponse(responseCode = "400", description = "Bad request due to validation failure")
     })
     public Job updateJob(@RequestBody
-                            @Parameter(description = "The Job to be updated. Validated with standard job validations.")
-                            @Valid Job job) {
+                         @Parameter(description = "The Job to be updated. Validated with standard job validations.")
+                         @Valid Job job) {
 
         return jobService.updateJob(job);
 
@@ -81,11 +75,7 @@ public class JobsController {
             @ApiResponse(responseCode = "404", description = "Job with provided id not found"),
     })
     public void deleteJob(@PathVariable("id")
-                            @Parameter(description = "ID of the job to be deleted") Long id) {
-        Optional<Job> job = jobService.getJobById(id);
-        if (job.isEmpty()) {
-            throw new JobNotFoundException();
-        }
+                          @Parameter(description = "ID of the job to be deleted") Long id) {
         jobService.deleteJobById(id);
     }
 

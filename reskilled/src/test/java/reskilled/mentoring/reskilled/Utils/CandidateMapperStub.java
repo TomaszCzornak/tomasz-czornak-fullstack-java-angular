@@ -1,7 +1,6 @@
 package reskilled.mentoring.reskilled.Utils;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import reskilled.mentoring.reskilled.candidate.model.dto.CandidateDto;
 import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
 import reskilled.mentoring.reskilled.candidate.model.request.CandidateRequest;
@@ -12,7 +11,7 @@ import reskilled.mentoring.reskilled.user.model.entity.User;
 import java.sql.Timestamp;
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class CandidateMapperStub {
 
 

@@ -3,8 +3,11 @@ package reskilled.mentoring.reskilled.job.service;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reskilled.mentoring.reskilled.job.exceptions.JobNotFoundException;
+import reskilled.mentoring.reskilled.job.model.response.JobResponse;
 import reskilled.mentoring.reskilled.job.repository.JobRepository;
 import reskilled.mentoring.reskilled.job.model.entity.Job;
+import reskilled.mentoring.reskilled.utils.JobMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +23,14 @@ public class JobService {
         return jobRepository.findAll();
     }
 
-    public Optional<Job> getJobById(Long id) {
-        return jobRepository.findById(id);
+    public JobResponse getJobById(Long id) {
+        Optional<Job> jobOptional = jobRepository.findById(id);
+        if (jobOptional.isPresent()) {
+            Job job = jobOptional.get();
+            return JobMapper.toJobResponse(job);
+        } else {
+            throw new JobNotFoundException();
+        }
     }
 
     public Job updateJob(Job job) {
