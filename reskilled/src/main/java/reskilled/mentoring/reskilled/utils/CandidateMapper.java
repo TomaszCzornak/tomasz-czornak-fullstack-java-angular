@@ -39,7 +39,7 @@ public class CandidateMapper {
     }
 
 
-    public static List<CandidateResponse> toCandidateResponeList(List<Candidate> candidateList) {
+    public static List<CandidateResponse> toCandidateResponseList(List<Candidate> candidateList) {
         return candidateList.stream()
                 .map(CandidateMapper::toCandidateResponse)
                 .toList();

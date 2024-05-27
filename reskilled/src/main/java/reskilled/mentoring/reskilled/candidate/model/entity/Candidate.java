@@ -1,14 +1,12 @@
 package reskilled.mentoring.reskilled.candidate.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -16,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Setter
 public class Candidate {
 
     @Id

@@ -33,18 +33,19 @@ public class RecruitmentService {
     }
 
     public RecruitmentResponse getRecruitmentById(Long id) {
-        return RecruitmentMapper.toRecruitmentResponse(Objects.requireNonNull(recruitmentRepository.findById(id).orElse(null)));
+        return RecruitmentMapper.toRecruitmentResponse(recruitmentRepository.findById(id).orElseThrow(IllegalStateException::new));
     }
 
-    public void updateRecruitment(RecruitmentRequest recruitmentRequest) {
-        recruitmentRepository.save(RecruitmentMapper.toRecruitmentEntity(recruitmentRequest));
+    public RecruitmentResponse updateRecruitment(RecruitmentRequest recruitmentRequest) {
+        return RecruitmentMapper.toRecruitmentResponse(
+                recruitmentRepository.save(RecruitmentMapper.toRecruitmentEntity(recruitmentRequest)));
     }
 
     public void deleteRecruitment(Long id) {
         recruitmentRepository.deleteById(id);
     }
 
-    public void addRecruitment(RecruitmentRequest recruitmentRequest) {
+    public RecruitmentResponse addRecruitment(RecruitmentRequest recruitmentRequest) {
         Candidate candidate = candidateService.getCandidateByEmail(recruitmentRequest.getCandidateDto().getEmail());
         if (candidate == null || candidate.getCreatedBy() == null) {
             throw new UserNotFoundException();
@@ -58,5 +59,6 @@ public class RecruitmentService {
                 .job(job.get())
                 .build();
         recruitmentRepository.save(recruitment);
+        return RecruitmentMapper.toRecruitmentResponse(recruitment);
     }
 }

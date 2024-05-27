@@ -64,14 +64,14 @@ class JobServiceTest {
     @Test
     void addJob_shouldAddNewJob() {
         //given
-        Job job = JobStub.createJob();
-        given(jobRepositoryMock.save(job)).willReturn(job);
-        given(jobRepositoryMock.findByTitle(job.getTitle())).willReturn(Optional.of(job));
+        JobRequest jobRequest = JobStub.createJobRequest();
+        given(jobRepositoryMock.save(JobMapper.toJobEntity(jobRequest))).willReturn(JobMapper.toJobEntity(jobRequest));
+        given(jobRepositoryMock.findByTitle(jobRequest.getTitle())).willReturn(Optional.of(JobMapper.toJobEntity(jobRequest)));
         //when
-        jobService.addJob(job);
-        verify(jobRepositoryMock, times(1)).save(job);
+        jobService.addJob(jobRequest);
+        verify(jobRepositoryMock, times(1)).save(JobMapper.toJobEntity(jobRequest));
         //then
-        assertNotNull(jobRepositoryMock.findByTitle(job.getTitle()));
+        assertNotNull(jobRepositoryMock.findByTitle(jobRequest.getTitle()));
     }
 
     @Test

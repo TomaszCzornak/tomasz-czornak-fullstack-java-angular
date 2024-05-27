@@ -2,6 +2,7 @@ package reskilled.mentoring.reskilled.registration.service;
 
 
 import jakarta.transaction.Transactional;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Service
 @EnableScheduling
 @Slf4j
+@NoArgsConstructor
 public class ResetOperationService {
 
 
@@ -25,9 +27,6 @@ public class ResetOperationService {
     @Autowired
     public ResetOperationService(ResetOperationsRepository resetOperationsRepository) {
         this.resetOperationsRepository = resetOperationsRepository;
-    }
-
-    public ResetOperationService() {
     }
 
     @Transactional

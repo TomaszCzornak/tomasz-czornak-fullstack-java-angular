@@ -67,7 +67,7 @@ class CandidateMapperTest {
         //given
         List<Candidate> expectedCandidateList = CandidateMapperStub.createCandidateList();
         //when
-        List<CandidateResponse> mappedCandidateResponseList = candidateMapper.toCandidateResponeList(expectedCandidateList);
+        List<CandidateResponse> mappedCandidateResponseList = candidateMapper.toCandidateResponseList(expectedCandidateList);
         //then
         assertEquals(mappedCandidateResponseList.size(), expectedCandidateList.size());
     }

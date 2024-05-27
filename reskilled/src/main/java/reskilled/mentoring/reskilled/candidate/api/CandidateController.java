@@ -25,10 +25,11 @@ public class CandidateController {
     @Operation(summary = "Returns All Candidates", description = "This endpoint is for displaying all candidates")
     @GetMapping()
     public List<CandidateResponse> getAll() {
-        if (candidateService.getAllCandidates().isEmpty()) {
+        List<CandidateResponse> candidates = candidateService.getAllCandidates();
+        if (candidates.isEmpty()) {
             throw new EmptyCandidateListException();
         }
-        return candidateService.getAllCandidates();
+        return candidates;
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
@@ -36,9 +37,7 @@ public class CandidateController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Candidate added successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request due to validation failure")})
     public CandidateResponse createCandidate(@RequestBody CandidateRequest candidateRequest) {
-
         return candidateService.addCandidate(candidateRequest);
-
     }
 
     @Operation(summary = "Get Candidate by ID", description = "This endpoint is for retrieving a candidate by ID")

@@ -3,8 +3,10 @@ package reskilled.mentoring.reskilled.user.model.entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
 import reskilled.mentoring.reskilled.security.Role;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Entity

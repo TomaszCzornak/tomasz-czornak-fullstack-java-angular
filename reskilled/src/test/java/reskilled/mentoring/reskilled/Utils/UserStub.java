@@ -22,7 +22,6 @@ public class UserStub {
     public static User createUser() {
         return User.builder()
                 .id(1L)
-//                .uuid(UUID.randomUUID().toString())
                 .createdAt("2022-01-01")
                 .updatedAt("2022-01-01")
                 .firstName("John")

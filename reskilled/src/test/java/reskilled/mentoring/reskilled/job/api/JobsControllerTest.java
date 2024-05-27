@@ -39,12 +39,11 @@ class JobsControllerTest {
     @Test
     void addJobSubmit() {
         JobRequest jobRequest = JobStub.createJobRequest();
-        Job job = JobStub.createJob();
-        lenient().doNothing().when(jobService).addJob(job);
+        lenient().doNothing().when(jobService).addJob(jobRequest);
         //when
         jobsController.addJobSubmit(jobRequest);
         //then
-        verify(jobService, times(1)).addJob(job);
+        verify(jobService, times(1)).addJob(jobRequest);
     }
 
     @Test

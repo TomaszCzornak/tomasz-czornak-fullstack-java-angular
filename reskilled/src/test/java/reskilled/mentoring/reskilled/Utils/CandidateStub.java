@@ -41,6 +41,17 @@ public class CandidateStub {
                 .email("kandydat@candidaterequest.com")
                         .build();
     }
+
+    public static List<CandidateResponse> createCandidateResponseList() {
+        return List.of(CandidateResponse.builder()
+                .email("test@email.com")
+                .createdBy(UserDto.builder().email("loggedUserEmail1@test.com").build())
+                .build(),
+                CandidateResponse.builder()
+                        .email("test@email.com")
+                        .createdBy(UserDto.builder().email("loggedUserEmail2@test.com").build())
+                        .build());
+    }
 }
 
 

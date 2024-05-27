@@ -23,7 +23,7 @@ public class CandidateService {
     private final UsersService usersService;
 
     public List<CandidateResponse> getAllCandidates() {
-        return CandidateMapper.toCandidateResponeList(candidateRepository.findAll());
+        return CandidateMapper.toCandidateResponseList(candidateRepository.findAll());
     }
 
     public CandidateResponse getCandidateById(Long id) {
@@ -50,16 +50,14 @@ public class CandidateService {
         Candidate candidate = CandidateMapper.toCandidateEntity(candidateRequest);
 
         User userLogged = usersService.getLoggedUser();
-        Candidate candidateFound = candidateRepository.findById(id).orElseThrow(CandidateNotFoundException::new);
-        if (candidateFound != null) {
-            candidateFound.setEmail(candidate.getEmail());
-            candidateFound.setCreatedBy(User.builder().email(userLogged.getEmail()).createdAt(userLogged.getCreatedAt()).build());
-            candidateFound.setRecruitmentList(candidateFound.getRecruitmentList());
-
-            return CandidateMapper.toCandidateResponse(candidateRepository.save(candidateFound));
-        } else {
-            throw new CandidateNotFoundException();
-        }
+        return candidateRepository.findById(id).map(candidateFound -> {
+                    candidateFound.setEmail(candidate.getEmail());
+                    candidateFound.setCreatedBy(User.builder().email(userLogged.getEmail())
+                                    .createdAt(userLogged.getCreatedAt()).build());
+                    candidateFound.setRecruitmentList(candidateFound.getRecruitmentList());
+                    return CandidateMapper.toCandidateResponse(candidateRepository.save(candidateFound));
+                })
+                .orElseThrow(CandidateNotFoundException::new);
     }
 
     public void deleteCandidate(Long id) {
