@@ -15,7 +15,6 @@ import reskilled.mentoring.reskilled.user.exceptions.UserNotFoundException;
 import reskilled.mentoring.reskilled.utils.RecruitmentMapper;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service

@@ -18,6 +18,7 @@ public class JobStub {
 
     public static Job createJob() {
         return Job.builder()
+                .id(1L)
                 .title("Java Developer")
                 .city("Kraków")
                 .salary(20000L)
@@ -38,6 +39,7 @@ public class JobStub {
 
     public static JobResponse createJobResponse() {
         return JobResponse.builder()
+                .id(1L)
                 .title("Java Developer")
                 .city("Kraków")
                 .salary(20000L)

@@ -6,7 +6,6 @@ import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data

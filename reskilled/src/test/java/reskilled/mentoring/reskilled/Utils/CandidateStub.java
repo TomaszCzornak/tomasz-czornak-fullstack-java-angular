@@ -6,7 +6,7 @@ import reskilled.mentoring.reskilled.candidate.model.request.CandidateRequest;
 import reskilled.mentoring.reskilled.candidate.model.response.CandidateResponse;
 import reskilled.mentoring.reskilled.user.model.dto.UserDto;
 import reskilled.mentoring.reskilled.user.model.entity.User;
-import reskilled.mentoring.reskilled.utils.CandidateMapper;
+import reskilled.mentoring.reskilled.utils.UserMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +30,16 @@ public class CandidateStub {
 
     public static CandidateResponse createCandidateResponse() {
         return CandidateResponse.builder()
+                .id(1L)
                 .email("test@email.com")
-                .createdBy(UserDto.builder().email("loggedUserEmail@test.com").build())
+                .createdBy(UserMapper.toUserDto(UserStub.createUser()))
                                 .build();
     }
 
     public static CandidateRequest createCandidateRequest() {
         return CandidateRequest.builder()
-                .createdBy(User.builder().email("test@candidaterequest.com").build())
                 .email("kandydat@candidaterequest.com")
+                .createdBy(UserStub.createUser())
                         .build();
     }
 
