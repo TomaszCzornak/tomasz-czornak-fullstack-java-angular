@@ -2,11 +2,9 @@ package reskilled.mentoring.reskilled.Utils;
 
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 
 @Component

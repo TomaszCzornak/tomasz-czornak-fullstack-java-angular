@@ -17,8 +17,8 @@ public class RegistrationStub {
                 .email("registration@mail.com")
                 .firstName("Testowy")
                 .lastName("Ziomek")
-                .password("!CiężkieHasło444")
-                .passwordRepeat("!CiężkieHasło444")
+                .password("Dupsko37!")
+                .passwordRepeat("Dupsko37!")
                 .build();
     }
 

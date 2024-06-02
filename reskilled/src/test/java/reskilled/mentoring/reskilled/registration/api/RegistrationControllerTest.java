@@ -58,11 +58,16 @@ class RegistrationControllerTest {
     void register_ShouldReturnUserResponseOfRegisteredUser() throws Exception {
         RegistrationRequest registrationRequest = RegistrationStub.createRegistrationRequest();
         UserResponse userResponse = UserStub.createUserResponse();
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonRequest = mapper.writeValueAsString(registrationRequest);
+
         //when
         given(userRegistrationFacade.registerUser(registrationRequest)).will(invocation -> userResponse);
 
         //then
-        mockMvc.perform(MockMvcRequestBuilders.post("/v1/register"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequest))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.createdAt", Matchers.equalTo(userResponse.getCreatedAt())))
