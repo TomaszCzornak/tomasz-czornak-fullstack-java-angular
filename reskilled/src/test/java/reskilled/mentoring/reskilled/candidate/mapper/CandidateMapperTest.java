@@ -32,7 +32,7 @@ class CandidateMapperTest {
         //when
         CandidateDto mappedCandidateDto = candidateMapper.toCandidateDto(candidateRequest, userPerCandidate);
         //then
-        assertEquals(mappedCandidateDto.getCreatedBy().getEmail(), expectedCandidateDto.getCreatedBy().getEmail());
+        assertEquals(expectedCandidateDto.getCreatedBy().getEmail(), mappedCandidateDto.getCreatedBy().getEmail());
 
 
     }
@@ -46,7 +46,7 @@ class CandidateMapperTest {
         Candidate mappedCandidateEntity = candidateMapper.toCandidateEntity(candidateDto);
         mappedCandidateEntity.getCreatedBy().setUuid(candidateExpected.getCreatedBy().getUuid());
         //then
-        assertEquals(mappedCandidateEntity.getCreatedBy().getEmail(), candidateExpected.getCreatedBy().getEmail());
+        assertEquals(candidateExpected.getCreatedBy().getEmail(), mappedCandidateEntity.getCreatedBy().getEmail());
     }
 
     @Test
@@ -58,8 +58,8 @@ class CandidateMapperTest {
         //when
         CandidateResponse mappedCandidateResponse = candidateMapper.toCandidateResponse(candidate);
         //then
-        assertEquals(mappedCandidateResponse.getCreatedBy().getFirstName(), expectedCandidateResponse.getCreatedBy().getFirstName());
-        assertEquals(mappedCandidateResponse.getEmail(), expectedCandidateResponse.getEmail());
+        assertEquals(expectedCandidateResponse.getCreatedBy().getFirstName(), mappedCandidateResponse.getCreatedBy().getFirstName());
+        assertEquals(expectedCandidateResponse.getEmail(), mappedCandidateResponse.getEmail());
     }
 
     @Test
@@ -69,7 +69,7 @@ class CandidateMapperTest {
         //when
         List<CandidateResponse> mappedCandidateResponseList = candidateMapper.toCandidateResponseList(expectedCandidateList);
         //then
-        assertEquals(mappedCandidateResponseList.size(), expectedCandidateList.size());
+        assertEquals(expectedCandidateList.size(), mappedCandidateResponseList.size());
     }
 
     @Test
@@ -83,7 +83,7 @@ class CandidateMapperTest {
         mappedCandidateEntity.getCreatedBy().setUuid(expectedCandidate.getCreatedBy().getUuid());
         mappedCandidateEntity.setCreatedBy(userPerCandidate);
         //then
-        assertEquals(mappedCandidateEntity.getCreatedBy().getEmail(), expectedCandidate.getCreatedBy().getEmail());
+        assertEquals(expectedCandidate.getCreatedBy().getEmail(), mappedCandidateEntity.getCreatedBy().getEmail());
     }
 
     @Test
@@ -94,7 +94,7 @@ class CandidateMapperTest {
         //when
         CandidateDto mappedCandidateDto = CandidateMapper.toCandidateDto(candidate);
         //then
-        assertEquals(mappedCandidateDto.getCreatedBy().getEmail(), expectedCandidateDto.getCreatedBy().getEmail());
+        assertEquals(expectedCandidateDto.getCreatedBy().getEmail(), mappedCandidateDto.getCreatedBy().getEmail());
     }
 
 }

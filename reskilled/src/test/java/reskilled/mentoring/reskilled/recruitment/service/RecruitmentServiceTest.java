@@ -88,7 +88,7 @@ class RecruitmentServiceTest {
         recruitmentService.updateRecruitment(recruitmentRequest);
         recruitmentRepositoryMock.save(recruitmentBefore);
         //then
-        assertEquals(recruitmentAfter.getJob().getTitle(), recruitmentRequest.getJobDto().getTitle());
+        assertEquals(recruitmentRequest.getJobDto().getTitle(), recruitmentAfter.getJob().getTitle());
     }
 
     @Test
