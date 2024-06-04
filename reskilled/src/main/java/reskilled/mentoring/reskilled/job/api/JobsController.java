@@ -15,21 +15,26 @@ import reskilled.mentoring.reskilled.job.service.JobService;
 import reskilled.mentoring.reskilled.utils.JobMapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1")
+@RequestMapping("/v1/jobs")
 public class JobsController {
 
     private final JobService jobService;
 
 
-    @RequestMapping("/jobs")
+    @RequestMapping()
     public List<JobResponse> getAllJobs() {
-        if (jobService.getAllJobs().isEmpty()) {
-            throw new EmptyJobsListException();
-        }
-        return JobMapper.toJobResponseList(jobService.getAllJobs());
+        List<JobResponse> jobResponses = jobService.getAllJobs()
+                .stream()
+                .map(JobMapper::toJobResponse)
+                .toList();
+
+        return Optional.of(jobResponses)
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(EmptyJobsListException::new);
     }
 
 
@@ -41,7 +46,7 @@ public class JobsController {
         jobService.addJob(jobRequest);
     }
 
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     @Operation(summary = "Get Job by ID", description = "This endpoint is used to fetch a Job with a specific id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the job"),

@@ -72,7 +72,7 @@ class JobsControllerTest {
         //when
         doNothing().when(jobService).addJob(jobRequest);
         //then
-        mockMvc.perform(MockMvcRequestBuilders.post("/v1")
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/jobs")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isOk())
@@ -87,7 +87,7 @@ class JobsControllerTest {
         //when
         given(jobService.getJobById(id)).willReturn(jobResponse);
         //then
-        mockMvc.perform(MockMvcRequestBuilders.get("/v1/" + id))
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/jobs/" + id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(jobResponse.getId().intValue())) // Assuming id is Long
                 .andExpect(jsonPath("$.city").value(jobResponse.getCity()))
@@ -106,7 +106,7 @@ class JobsControllerTest {
         String jsonRequest = mapper.writeValueAsString(job);
         given(jobService.updateJob(job)).willReturn(job);
         // then
-        mockMvc.perform(MockMvcRequestBuilders.put("/v1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/jobs")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isOk())
@@ -124,7 +124,7 @@ class JobsControllerTest {
         doNothing().when(jobService).deleteJobById(id);
 
         //then
-        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/" + id))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/jobs/" + id))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

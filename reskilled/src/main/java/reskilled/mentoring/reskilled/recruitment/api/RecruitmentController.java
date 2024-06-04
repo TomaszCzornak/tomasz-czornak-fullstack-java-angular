@@ -16,7 +16,7 @@ public class RecruitmentController {
 
     private final RecruitmentService recruitmentService;
 
-    @GetMapping("")
+    @GetMapping()
     public List<RecruitmentResponse> getAllRecruitments() {
         return recruitmentService.getAllRecruitments();
     }

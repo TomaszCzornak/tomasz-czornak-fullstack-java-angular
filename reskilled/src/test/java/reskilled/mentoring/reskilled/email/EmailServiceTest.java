@@ -1,12 +1,14 @@
 package reskilled.mentoring.reskilled.email;
 
-import jakarta.mail.MessagingException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.test.context.ActiveProfiles;
 import reskilled.mentoring.reskilled.registration.model.entity.ResetOperations;
 import reskilled.mentoring.reskilled.registration.service.ResetOperationService;
 import reskilled.mentoring.reskilled.user.model.entity.User;
@@ -16,7 +18,9 @@ import java.io.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
+@ActiveProfiles("test")
+@MockitoSettings(strictness = Strictness.STRICT_STUBS)
 class EmailServiceTest {
 
 
@@ -27,22 +31,17 @@ class EmailServiceTest {
     private ClassPathResource mockRecoveryTemplate;
 
 
-    @BeforeEach
-    void setUp() throws IOException, MessagingException {
-        File sampleFile = new File("sample_file.txt");
-        try (Writer writer = new BufferedWriter(new FileWriter(sampleFile))) {
-            writer.write("Sample template content");
-        }
-        when(mockActiveTemplate.getFile()).thenReturn(sampleFile);
-        when(mockRecoveryTemplate.getFile()).thenReturn(sampleFile);
-    }
-
     @Test
     void testSendActivationEmail() throws IOException {
         // Mock user object
         User user = new User();
         user.setEmail("test@example.com");
         user.setUuid("123e4567-e89b-12d3-a456-426614174000");
+        File sampleFile = new File("sample_file.txt");
+        try (Writer writer = new BufferedWriter(new FileWriter(sampleFile))) {
+            writer.write("Sample template content");
+        }
+        when(mockActiveTemplate.getFile()).thenReturn(sampleFile);
 
 
         ResetOperationService resetOperationService = mock(ResetOperationService.class);
@@ -70,6 +69,11 @@ class EmailServiceTest {
         User user = new User();
         user.setEmail("test@example.com");
         user.setUuid("123e4567-e89b-12d3-a456-426614174000");
+        File sampleFile = new File("sample_file.txt");
+        try (Writer writer = new BufferedWriter(new FileWriter(sampleFile))) {
+            writer.write("Sample template content");
+        }
+        when(mockRecoveryTemplate.getFile()).thenReturn(sampleFile);
 
 
         ResetOperationService resetOperationService = mock(ResetOperationService.class);
