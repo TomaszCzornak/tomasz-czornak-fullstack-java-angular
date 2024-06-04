@@ -3,7 +3,7 @@ package reskilled.mentoring.reskilled.user.model.entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
+import reskilled.mentoring.reskilled.security.Role;
 
 import java.util.UUID;
 
@@ -14,10 +14,8 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "id", updatable = false, nullable = false)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String uuid;
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -43,12 +41,24 @@ public class User {
 
     @Column(name = "isenabled")
     private boolean isEnabled;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public User() {
         generateUuid();
     }
 
-    public User(String id, String uuid, String createdAt, String updatedAt, String firstName, String lastName, String email, String password, boolean isLock, boolean isEnabled) {
+    public User(Long id,
+                String uuid,
+                String createdAt,
+                String updatedAt,
+                String firstName,
+                String lastName,
+                String email,
+                String password,
+                boolean isLock,
+                boolean isEnabled,
+                Role role) {
         this.id = id;
         this.uuid = uuid;
         this.createdAt = createdAt;
@@ -59,11 +69,12 @@ public class User {
         this.password = password;
         this.isLock = isLock;
         this.isEnabled = isEnabled;
+        this.role = role;
         generateUuid();
     }
 
     private void generateUuid() {
-        if (uuid==null || uuid.equals("")) {
+        if (uuid == null || uuid.isEmpty()) {
             setUuid(UUID.randomUUID().toString());
         }
     }

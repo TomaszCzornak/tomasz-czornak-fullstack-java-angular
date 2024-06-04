@@ -3,10 +3,13 @@ package reskilled.mentoring.reskilled.utils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import reskilled.mentoring.reskilled.registration.model.request.RegistrationRequest;
+import reskilled.mentoring.reskilled.security.Role;
+import reskilled.mentoring.reskilled.user.model.dto.UserDto;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 import reskilled.mentoring.reskilled.user.model.response.UserResponse;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserMapper {
@@ -30,6 +33,33 @@ public class UserMapper {
                 .lastName(registrationRequest.getLastName())
                 .email(registrationRequest.getEmail())
                 .password(registrationRequest.getPassword())
+                .role(Role.USER)
                 .build();
+    }
+
+    public static UserDto toUserDto(User user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .build();
+    }
+
+    public static UserDto toUserDtoRecruitment(User user) {
+        return UserDto.builder()
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .createdAt(String.valueOf(new Timestamp(System.currentTimeMillis())))
+                .build();
+    }
+
+    public static List<UserResponse> toUserResponses(List<User> userList) {
+        return userList.stream()
+                .map(UserMapper::toUserResponse)
+                .toList();
     }
 }

@@ -1,0 +1,40 @@
+package reskilled.mentoring.reskilled.user.repository;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import reskilled.mentoring.reskilled.email.EmailService;
+import reskilled.mentoring.reskilled.registration.service.UserRegistrationFacade;
+import reskilled.mentoring.reskilled.registration.model.request.RegistrationRequest;
+import reskilled.mentoring.reskilled.user.model.entity.User;
+import reskilled.mentoring.reskilled.user.exceptions.UserAlreadyExistsException;
+import reskilled.mentoring.reskilled.user.model.response.UserResponse;
+import reskilled.mentoring.reskilled.registration.service.RegistrationService;
+import reskilled.mentoring.reskilled.user.service.UsersService;
+import reskilled.mentoring.reskilled.utils.UserMapper;
+
+import java.io.IOException;
+import java.util.Optional;
+
+@Component
+@RequiredArgsConstructor
+public class UserRegistrationImpl implements UserRegistrationFacade {
+
+    private final UsersService usersService;
+    private final RegistrationService registrationService;
+    private final EmailService emailService;
+
+    @Override
+    public UserResponse registerUser(RegistrationRequest registrationRequest) throws IOException {
+        Optional<User> existingUser = usersService.getUsersByEmail(registrationRequest.getEmail());
+        if (existingUser.isPresent()) {
+            throw new UserAlreadyExistsException();
+        }
+        User user = UserMapper.toUser(registrationRequest);
+
+        User userSaved = registrationService.register(user);
+        emailService.sendMail(user, true);
+
+        return UserMapper.toUserResponse(userSaved);
+
+    }
+}

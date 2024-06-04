@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserResponse {
 
-    private String id;
+    private Long id;
     private String createdAt;
     private String updatedAt;
     private String firstName;

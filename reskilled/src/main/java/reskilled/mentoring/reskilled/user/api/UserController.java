@@ -2,10 +2,9 @@ package reskilled.mentoring.reskilled.user.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import reskilled.mentoring.reskilled.user.exceptions.EmptyUserListException;
-import reskilled.mentoring.reskilled.user.model.entity.User;
+import reskilled.mentoring.reskilled.user.model.response.UserResponse;
 import reskilled.mentoring.reskilled.user.service.UsersService;
 
 import java.util.List;
@@ -18,8 +17,7 @@ public class UserController {
     private final UsersService usersService;
 
     @RequestMapping("/users")
-    @ResponseBody
-    public List<User> getUsersList() {
+    public List<UserResponse> getUsersList() {
         if (usersService.getAllUsers().isEmpty()) {
             throw new EmptyUserListException();
         }

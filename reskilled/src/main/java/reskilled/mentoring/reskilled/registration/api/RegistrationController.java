@@ -20,6 +20,7 @@ import reskilled.mentoring.reskilled.registration.service.UserRegistrationFacade
 import reskilled.mentoring.reskilled.user.exceptions.UserNotFoundException;
 import reskilled.mentoring.reskilled.user.model.response.UserResponse;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 
 @RestController
@@ -39,7 +40,7 @@ public class RegistrationController {
     })
     public UserResponse register(@RequestBody
                                  @Parameter(description = "The RegistrationRequest object that is validated for registration")
-                                 @Valid RegistrationRequest registrationRequest) {
+                                 @Valid RegistrationRequest registrationRequest) throws IOException {
 
         return userRegistrationFacade.registerUser(registrationRequest);
     }
@@ -73,6 +74,8 @@ public class RegistrationController {
         } catch (UserNotFoundException e) {
             String errorMessage = e.getMessage();
             return ResponseEntity.status(400).body(new ActivationResponse(errorMessage));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

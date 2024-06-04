@@ -40,6 +40,7 @@ public class EmailConfiguration {
         properties.put("mail.smtp.port", smtpPort);
 
         this.auth = new Authenticator() {
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(email, password);
             }

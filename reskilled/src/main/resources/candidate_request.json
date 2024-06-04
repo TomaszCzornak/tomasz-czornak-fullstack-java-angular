@@ -1,0 +1,29 @@
+{
+  "jobDtoList": [
+    {
+      "title": "Software Engineer",
+      "salary": 12000,
+      "currency": "PLN",
+      "city":"Kraków",
+      "skills": [
+        {
+          "name": "Java Developer"
+        }
+      ]
+    },
+    {
+      "title": "Software Engineer",
+      "salary": 12000,
+      "currency": "PLN",
+      "city":"Kraków",
+      "skills": [
+        {
+          "name": "Angular Developer"
+        }
+      ]
+    }
+  ],
+  "candidateDto": {
+    "email": "kandydat@outlook.com"
+  }
+}

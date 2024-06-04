@@ -1,9 +1,13 @@
 package reskilled.mentoring.reskilled.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import reskilled.mentoring.reskilled.user.logic.UserRepository;
+import reskilled.mentoring.reskilled.user.model.response.UserResponse;
+import reskilled.mentoring.reskilled.user.repository.UserRepository;
 import reskilled.mentoring.reskilled.user.model.entity.User;
+import reskilled.mentoring.reskilled.utils.UserMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +25,10 @@ public class UsersService {
         return userRepository.findUserByUuid(uuid);
     }
 
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findUserById(id);
+    }
+
     public void saveUser(User user) {
         userRepository.save(user);
     }
@@ -29,8 +37,20 @@ public class UsersService {
         return userRepository.findUserByEmailAndLockAndEnabled(email);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        return UserMapper.toUserResponses(userRepository.findAll());
+    }
+
+    public User getLoggedUser() {
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails userDetails) {
+            username = userDetails.getUsername();
+        } else {
+            username = principal.toString();
+        }
+        return getUsersByEmail(username).orElseThrow(null);
     }
 
 }

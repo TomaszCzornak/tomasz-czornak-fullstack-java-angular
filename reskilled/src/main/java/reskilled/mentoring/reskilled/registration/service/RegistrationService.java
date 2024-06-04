@@ -2,14 +2,20 @@ package reskilled.mentoring.reskilled.registration.service;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.crypto.bcrypt.BCrypt;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reskilled.mentoring.reskilled.email.EmailService;
 import reskilled.mentoring.reskilled.registration.model.entity.ResetOperations;
 import reskilled.mentoring.reskilled.registration.model.request.ChangePasswordData;
+import reskilled.mentoring.reskilled.registration.repository.RegistrationRepository;
+import reskilled.mentoring.reskilled.registration.repository.ResetOperationsRepository;
+import reskilled.mentoring.reskilled.security.Role;
 import reskilled.mentoring.reskilled.user.exceptions.UserNotFoundException;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 import reskilled.mentoring.reskilled.user.service.UsersService;
+
+import java.io.IOException;
 
 
 @Service
@@ -22,14 +28,11 @@ public class RegistrationService {
     private final ResetOperationService resetOperationService;
     private final EmailService emailService;
     private final ResetOperationsRepository resetOperationsRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public User register(User user) {
-        user.setPassword(hashPassword(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return registrationRepository.save(user);
-    }
-
-    private String hashPassword(String password) {
-        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
     public void activateUser(String uid) throws UserNotFoundException {
@@ -37,17 +40,18 @@ public class RegistrationService {
         if (user != null) {
             user.setLock(false);
             user.setEnabled(true);
+            user.setRole(Role.USER);
             usersService.saveUser(user);
             return;
         }
         throw new UserNotFoundException();
     }
 
-    public void recoveryPassword(String email) throws UserNotFoundException {
+    public void recoveryPassword(String email) throws UserNotFoundException, IOException {
         User user = usersService.getUsersByEmail(email).orElse(null);
         if (user != null) {
-            ResetOperations resetOperations = resetOperationService.initResetOperation(user);
-            emailService.sendPasswordRecovery(user, resetOperations.getUuid());
+
+            emailService.sendMail(user, false);
             return;
         }
         throw new UserNotFoundException();
