@@ -27,7 +27,6 @@ import java.sql.Timestamp;
 @RequiredArgsConstructor
 @RequestMapping("/v1")
 @Slf4j
-@CrossOrigin(allowedHeaders = "Content-type")
 public class RegistrationController {
 
     private final UserRegistrationFacade userRegistrationFacade;
@@ -39,7 +38,6 @@ public class RegistrationController {
             @ApiResponse(responseCode = "200", description = "User successfully registered"),
             @ApiResponse(responseCode = "400", description = "Bad request due to validation failure")
     })
-    @CrossOrigin(origins = "http://localhost:4200")
     public UserResponse register(@RequestBody
                                  @Parameter(description = "The RegistrationRequest object that is validated for registration")
                                  @Valid RegistrationRequest registrationRequest) throws IOException {
