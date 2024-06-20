@@ -50,6 +50,11 @@
           </button>
         </div>
       </form>
+    <br>
+    <br>
+    <div *ngIf="errorMessage" class="mat-error">
+      <mat-error>{{errorMessage}}</mat-error>
+    </div>
 
   </mat-card>
 </div>

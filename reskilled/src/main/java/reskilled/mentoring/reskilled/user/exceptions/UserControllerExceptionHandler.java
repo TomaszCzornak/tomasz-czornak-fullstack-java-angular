@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import reskilled.mentoring.reskilled.user.api.UserController;
@@ -21,6 +22,7 @@ public class UserControllerExceptionHandler extends ResponseEntityExceptionHandl
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<Object> handleException(UserAlreadyExistsException e, WebRequest request) {
         HttpStatus status = HttpStatus.CONFLICT;
         String message = "User with this email already exists";
