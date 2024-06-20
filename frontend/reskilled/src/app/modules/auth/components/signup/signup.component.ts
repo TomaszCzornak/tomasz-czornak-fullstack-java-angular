@@ -1,11 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Title} from "@angular/platform-browser";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {RegistrationRequest, UserResponse} from "../../../core/models/registration";
+import {RegistrationOptionalRequest, UserOptionalResponse} from "../../../core/models/registration";
 import {RegistrationService} from "../../../core/service/registration.service";
 import {Router} from "@angular/router";
-import {validateRegisterValidation} from "../../../core/validations/register-validations";
+import {registerValidation} from "../../../core/validations/register-validations";
 import {merge, Subscription} from "rxjs";
+import {getErrorMessage} from "../../../core/validations/validation-messenger";
 
 @Component({
   selector: 'app-signup',
@@ -28,7 +29,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       this.registerForm.controls['password'].valueChanges,
       this.registerForm.controls['repeatPassword'].valueChanges
     ).subscribe(() => {
-      validateRegisterValidation(this.registerForm)})
+      registerValidation(this.registerForm)})
   }
 
   ngOnDestroy(): void {
@@ -44,7 +45,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   })
 
   onSubmitRegisterForm() {
-    const RegistrationRequestBody: RegistrationRequest = {
+    const RegistrationRequestBody: RegistrationOptionalRequest = {
       firstName: this.registerForm.controls['firstName'].value as string,
       lastName: this.registerForm.controls['lastName'].value as string,
       email: this.registerForm.controls['email'].value as string,
@@ -52,7 +53,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     this.registrationService.postRegistration(RegistrationRequestBody).subscribe(
-      (response: UserResponse) => {
+      (response: UserOptionalResponse) => {
         this.router.navigate(['signin']);
       },
       (error: any) => {
@@ -60,24 +61,10 @@ export class SignupComponent implements OnInit, OnDestroy {
       }
     );
   }
-  getErrorMessage(control: FormControl) {
-    if (control.hasError('required')) {
-      return 'Value in this field is required';
-    }
-    if (control.hasError('minlength')) {
-      return 'Value should be longer';
-    }
-    if (control.hasError('maxlength')) {
-      return 'Value should be shorter';
-    }
-    if (control.hasError('incorrect')) {
-      return control.errors?.['message'];
-    }
-    return control.hasError('email') ? 'This is not email' : '';
-
-  }
 
   get controls() {
     return this.registerForm.controls;
   }
+
+  protected readonly getErrorMessage = getErrorMessage;
 }
