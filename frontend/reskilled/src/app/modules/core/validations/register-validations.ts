@@ -1,6 +1,6 @@
 import {FormGroup} from "@angular/forms";
 
-export function validateRegisterValidation(registerForm: FormGroup) {
+export function registerValidation(registerForm: FormGroup) {
   const password = registerForm.controls['password'].value;
   const repeatPassword = registerForm.controls['repeatPassword'].value
 
