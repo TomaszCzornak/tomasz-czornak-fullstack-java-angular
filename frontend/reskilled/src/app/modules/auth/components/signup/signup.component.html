@@ -2,54 +2,61 @@
   <mat-card class="example-card">
     <mat-card-header class="header">
       <mat-card-title class="title-text"><h1>SIGN-UP</h1></mat-card-title>
-      </mat-card-header>
-      <form class="form" (ngSubmit)="onSubmitRegisterForm()" [formGroup]="registerForm">
-        <div class="input-group">
-          <span class="input-group-text"></span>
-          <input type="text" class="form-control" formControlName="firstName"
-                 placeholder="First Name" aria-label="FirstName">
-          <mat-error
-            *ngIf="controls.firstName.invalid  && (controls.firstName.touched)">{{getErrorMessage(controls.firstName)}}</mat-error>
-        </div>
+    </mat-card-header>
+    <form class="form" (ngSubmit)="onSubmitRegisterForm()" [formGroup]="registerForm">
+      <div class="input-group">
+        <span class="input-group-text"></span>
+        <input type="text" class="form-control" formControlName="firstName"
+               placeholder="First Name" aria-label="FirstName">
+        <mat-error
+          *ngIf="controls.firstName.invalid  && (controls.firstName.touched)">{{ getErrorMessage(controls.firstName) }}
+        </mat-error>
+      </div>
 
-        <div class="input-group">
-          <span class="input-group-email"></span>
-          <input type="text" class="form-control" formControlName="lastName"
-                 placeholder="Last Name" aria-label="LastName">
-          <mat-error
-            *ngIf="controls.lastName.invalid  && (controls.lastName.touched)">{{getErrorMessage(controls.lastName)}}</mat-error>
-        </div>
+      <div class="input-group">
+        <span class="input-group-email"></span>
+        <input type="text" class="form-control" formControlName="lastName"
+               placeholder="Last Name" aria-label="LastName">
+        <mat-error
+          *ngIf="controls.lastName.invalid  && (controls.lastName.touched)">{{ getErrorMessage(controls.lastName) }}
+        </mat-error>
+      </div>
 
-        <div class="input-group">
-          <span class="input-group-email"></span>
-          <input type="text" class="form-control" formControlName="email"
-                 placeholder="email" aria-label="Email">
-          <mat-error
-            *ngIf="controls.email.invalid  && (controls.email.touched)">{{getErrorMessage(controls.email)}}</mat-error>
-        </div>
+      <div class="input-group">
+        <span class="input-group-email"></span>
+        <input type="text" class="form-control" formControlName="email"
+               placeholder="email" aria-label="Email">
+        <mat-error
+          *ngIf="controls.email.invalid  && (controls.email.touched)">{{ getErrorMessage(controls.email) }}
+        </mat-error>
+      </div>
 
-        <div class="input-group">
-          <span class="input-group-text"></span>
-          <input type="password" class="form-control" formControlName="password"
-                 placeholder="password" aria-label="password">
-          <mat-error
-            *ngIf="controls.password.invalid  && (controls.password.touched)">{{getErrorMessage(controls.password)}}</mat-error>
-        </div>
+      <div class="input-group">
+        <span class="input-group-text"></span>
+        <input type="password" class="form-control" formControlName="password"
+               placeholder="password" aria-label="password">
+        <mat-error
+          *ngIf="controls.password.invalid  && (controls.password.touched)">{{ getErrorMessage(controls.password) }}
+        </mat-error>
+      </div>
 
-        <div class="input-group">
-          <span class="input-group-text"></span>
-          <input type="password" class="form-control" formControlName="repeatPassword"
-                 placeholder="repeat password" aria-label="repeatPassword">
-          <mat-error
-            *ngIf="controls.repeatPassword.invalid  && (controls.repeatPassword.touched)">{{getErrorMessage(controls.repeatPassword)}}</mat-error>
+      <div class="input-group">
+        <span class="input-group-text"></span>
+        <input type="password" class="form-control" formControlName="repeatPassword"
+               placeholder="repeat password" aria-label="repeatPassword">
+        <mat-error
+          *ngIf="controls.repeatPassword.invalid  && (controls.repeatPassword.touched)">{{ getErrorMessage(controls.repeatPassword) }}
+        </mat-error>
 
-        </div>
-        <div>
-          <button [disabled]="registerForm.invalid" color="primary" mat-raised-button type="submit"
-                  [ngStyle]="{'position':'relative', 'left':'2'}">Send
-          </button>
-        </div>
-      </form>
+      </div>
+      <div>
+        <button [disabled]="registerForm.invalid" color="primary" mat-raised-button type="submit"
+                [ngStyle]="{'position':'relative', 'left':'2'}">SIGN UP
+        </button>
+      </div>
+    </form>
+    <br>
+    <mat-error>{{ errorMessage }}</mat-error>
 
   </mat-card>
 </div>

@@ -22,6 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.Arrays;
+
 
 @Configuration
 @EnableWebSecurity
@@ -92,6 +94,29 @@ public class SecurityConfig {
                 config.addAllowedOrigin("http://localhost:4200");
                 config.addAllowedHeader("*");
                 config.addAllowedMethod("*");
+                config.setExposedHeaders(
+                        Arrays.asList(
+                                "Origin",
+                                "Content-Type",
+                                "Accept",
+                                "Authorization",
+                                "Access-Control-Allow-Origin",
+                                "Access-Control-Allow-Origin",
+                                "Access-Control-Allow-Credentials"
+                        )
+                );
+                config.setAllowedHeaders(Arrays.asList(
+                        "Origin",
+                        "Access-Control-Allow-Origin",
+                        "Content-Type",
+                        "Accept",
+                        "Authorization",
+                        "Origin, Accept",
+                        "X-Requested-With",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                ));
+                config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                 return config;
             }
         };

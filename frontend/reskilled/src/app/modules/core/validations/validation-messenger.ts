@@ -1,6 +1,6 @@
-import {FormControl} from "@angular/forms";
+import {AbstractControl, FormControl} from "@angular/forms";
 
-export function getErrorMessage(control: FormControl) {
+export function getErrorMessage(control: AbstractControl<any>) {
   if (control.hasError('required')) {
     return 'Value in this field is required';
   }

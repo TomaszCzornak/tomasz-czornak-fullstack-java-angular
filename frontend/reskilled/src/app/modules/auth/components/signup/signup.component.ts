@@ -57,7 +57,9 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.router.navigate(['signin']);
       },
       (error: any) => {
-        this.errorMessage = 'Wystąpił błąd w api';
+        if (error.status === 400 || error.status === 500 || error.status == 403) {
+          this.errorMessage = "Nie udało się wykonać operacji. Spróbuj ponownie.";
+        }
       }
     );
   }
