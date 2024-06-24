@@ -1,0 +1,59 @@
+.form-control {
+  padding: 6.5px;  /* increased by 30% */
+  line-height: 2;
+  place-content: baseline;
+  font-size: 20.8px;  /* increased by 30% */
+  width: 100%;
+}
+
+.form-control::placeholder {
+  text-align: center;
+  font-size: 28.6px;  /* increased by 30% */
+  font-family: Amiri, serif;
+
+}
+
+.mat-card-container {
+  border-radius: 32.5px;  /* increased by 30% */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 1040px;  /* increased by 30% */
+  max-height: 1170px;  /* increased by 30% */
+  flex-direction: column;
+  height: 100vh;  /* increased by 30% */
+  width: 130vh;  /* increased by 30% */
+  margin: 0 auto; /* Additional CSS to centralize */
+}
+
+.example-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 130%;  /* increased by 30% */
+  margin: 65%;  /* increased by 30% */
+  padding: 130px;  /* increased by 30% */
+  width: 130%;  /* increased by 30% */
+  flex-direction: column;
+  background: beige;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group {
+  margin: 13px;  /* increased by 30% */
+  width: 650px;  /* increased by 30% */
+}
+
+.header {
+  font-size: 30px;
+  margin-top:2px;
+}
+
+.mat-error {
+  font-size: 20px;
+}
