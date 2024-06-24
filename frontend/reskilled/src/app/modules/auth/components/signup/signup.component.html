@@ -48,15 +48,18 @@
           *ngIf="controls.repeatPassword.invalid  && (controls.repeatPassword.touched)">{{ getErrorMessage(controls.repeatPassword) }}
         </mat-error>
 
-      </div>
-      <div>
-        <button [disabled]="registerForm.invalid" color="primary" mat-raised-button type="submit"
-                [ngStyle]="{'position':'relative', 'left':'2'}">SIGN UP
-        </button>
-      </div>
-    </form>
+        </div>
+        <div>
+          <button [disabled]="registerForm.invalid" color="primary" mat-raised-button type="submit"
+                  [ngStyle]="{'position':'relative', 'left':'2'}">Send
+          </button>
+        </div>
+      </form>
     <br>
-    <mat-error>{{ errorMessage }}</mat-error>
+    <br>
+    <div *ngIf="errorMessage" class="mat-error">
+      <mat-error>{{errorMessage}}</mat-error>
+    </div>
 
   </mat-card>
 </div>
