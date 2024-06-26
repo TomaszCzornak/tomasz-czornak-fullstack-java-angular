@@ -3,10 +3,11 @@ import {Title} from "@angular/platform-browser";
 import {Router} from "@angular/router";
 import {SigninService} from "../../../core/service/signin.service";
 import {LoginRequest} from "../../../core/models/signin";
-import {HttpErrorResponse} from "@angular/common/http";
 import {Subscription} from "rxjs";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {getErrorMessage} from "../../../core/validations/validation-messenger";
+import {handleErrorStatus} from "../../../core/handlers/errorHandlers";
+import {HttpResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-signin',
@@ -54,15 +55,8 @@ export class SigninComponent implements OnInit, OnDestroy {
         }
         this.router.navigate(['/']);
       },
-      (error: HttpErrorResponse) => {
-        if (error.status === 403) {
-          this.errorMessage = 'Unauthorized';
-        } else if (error.status === 500) {
-          this.errorMessage = 'Something went wrong';
-        } else if (error.status === 400) {
-          this.errorMessage = "Wrong data used";
-        }
-        console.error('Error:', error);
+      (error: HttpResponse<string>) => {
+        this.errorMessage = handleErrorStatus( error);
       }
     );
   }

@@ -7,6 +7,8 @@ import {Router} from "@angular/router";
 import {registerValidation} from "../../../core/validations/register-validations";
 import {merge, Subscription} from "rxjs";
 import {getErrorMessage} from "../../../core/validations/validation-messenger";
+import {HttpResponse} from "@angular/common/http";
+import {handleErrorStatus} from "../../../core/handlers/errorHandlers";
 
 @Component({
   selector: 'app-signup',
@@ -56,10 +58,9 @@ export class SignupComponent implements OnInit, OnDestroy {
       (response: UserOptionalResponse) => {
         this.router.navigate(['signin']);
       },
-      (error: any) => {
-        if (error.status === 400 || error.status === 500 || error.status == 403) {
-          this.errorMessage = "Nie udało się wykonać operacji. Spróbuj ponownie.";
-        }
+      (error: HttpResponse<string>) => {
+        this.errorMessage = handleErrorStatus( error);
+
       }
     );
   }
