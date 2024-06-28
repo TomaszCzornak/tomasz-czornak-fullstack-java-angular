@@ -5,9 +5,10 @@ import {RegistrationOptionalRequest, UserOptionalResponse} from "../../../core/m
 import {RegistrationService} from "../../../core/service/registration.service";
 import {Router} from "@angular/router";
 import {registerValidation} from "../../../core/validations/register-validations";
-import {catchError, merge, Observable, Subscription} from "rxjs";
+import {merge, Subscription} from "rxjs";
 import {getErrorMessage} from "../../../core/validations/validation-messenger";
-import {HttpErrorResponse} from "@angular/common/http";
+import {HttpResponse} from "@angular/common/http";
+import {handleErrorStatus} from "../../../core/handlers/errorHandlers";
 
 @Component({
   selector: 'app-signup',
@@ -53,23 +54,15 @@ export class SignupComponent implements OnInit, OnDestroy {
       password: this.registerForm.controls['password'].value as string
     }
 
-    this.registrationService.postRegistration(RegistrationRequestBody)
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === 400 || error.status === 500 || error.status == 403) {
-            this.errorMessage = "Nie udało się wykonać operacji. Spróbuj ponownie."
-          }
-          return new Observable<UserOptionalResponse>(subscriber => subscriber.error(error));
-        })
-      )
-      .subscribe(
-        (response: UserOptionalResponse) => {
-          this.router.navigate(['signin']);
-        },
-        error => {
+    this.registrationService.postRegistration(RegistrationRequestBody).subscribe(
+      (response: UserOptionalResponse) => {
+        this.router.navigate(['signin']);
+      },
+      (error: HttpResponse<string>) => {
+        this.errorMessage = handleErrorStatus( error);
 
-        }
-      );
+      }
+    );
   }
 
   get controls() {

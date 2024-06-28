@@ -1,1 +1,37 @@
-<p>tutaj logowanie</p>
+<div class="mat-card-container">
+  <mat-card class="example-card">
+    <mat-card-header class="header">
+      <mat-card-title class="title-text"><h1>SIGN-IN</h1></mat-card-title>
+    </mat-card-header>
+      <form class="form" (ngSubmit)="onLoginSubmit()" [formGroup]="signinForm">
+        <div class="input-group">
+          <span class="input-group-text"></span>
+          <input type="text" class="form-control" formControlName="email"
+          placeholder="Email" aria-label="Email">
+          <mat-error
+            *ngIf="controls['email'].invalid && (controls['email'].touched)">{{getErrorMessage(controls['email'])}}</mat-error>
+        </div>
+        <div class="input-group">
+          <span class="input-group-text"></span>
+          <input type="password" class="form-control" formControlName="password"
+                 placeholder="password" aria-label="password">
+          <mat-error
+            *ngIf="controls['password'].invalid  && (controls['password'].touched)">{{getErrorMessage(controls['password'])}}</mat-error>
+        </div>
+        <div class="input-group">
+          <label>
+            <input type="checkbox" formControlName="rememberMe">Remember Me
+          </label>
+        </div>
+        <div>
+          <button [disabled]="signinForm.invalid" color="primary" mat-raised-button type="submit"
+                  [ngStyle]="{'position':'relative', 'left':'2'}">SIGN IN
+          </button>
+        </div>
+      </form>
+    <br>
+    <br>
+    <br>
+    <mat-error>{{errorMessage}}</mat-error>
+  </mat-card>
+</div>

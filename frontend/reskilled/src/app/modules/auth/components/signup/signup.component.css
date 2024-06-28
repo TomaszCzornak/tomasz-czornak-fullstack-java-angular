@@ -1,29 +1,28 @@
 .form-control {
-  padding: 6.5px;  /* increased by 30% */
+  padding: 5.85px;  /* decreased by 10% */
   line-height: 2;
   place-content: baseline;
-  font-size: 20.8px;  /* increased by 30% */
+  font-size: 18.72px;  /* decreased by 10% */
   width: 100%;
 }
 
 .form-control::placeholder {
   text-align: center;
-  font-size: 28.6px;  /* increased by 30% */
+  font-size: 25.74px;  /* decreased by 10% */
   font-family: Amiri, serif;
-
 }
 
 .mat-card-container {
-  border-radius: 32.5px;  /* increased by 30% */
+  border-radius: 29.25px;  /* decreased by 10% */
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  max-width: 1040px;  /* increased by 30% */
-  max-height: 1170px;  /* increased by 30% */
+  max-width: 936px;  /* decreased by 10% */
+  max-height: 1053px;  /* decreased by 10% */
+  height: 90vh;  /* decreased by 10% */
+  width: 117vh;  /* decreased by 10% */
   flex-direction: column;
-  height: 100vh;  /* increased by 30% */
-  width: 130vh;  /* increased by 30% */
   margin: 0 auto; /* Additional CSS to centralize */
 }
 
@@ -31,10 +30,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 130%;  /* increased by 30% */
-  margin: 65%;  /* increased by 30% */
-  padding: 130px;  /* increased by 30% */
-  width: 130%;  /* increased by 30% */
+  height: 117%;  /* decreased by 10% */
+  margin: 58.5%;  /* decreased by 10% */
+  padding: 117px;  /* decreased by 10% */
+  width: 117%;  /* decreased by 10% */
   flex-direction: column;
   background: beige;
 }
@@ -45,15 +44,11 @@
 }
 
 .input-group {
-  margin: 13px;  /* increased by 30% */
-  width: 650px;  /* increased by 30% */
+  margin: 11.7px;  /* decreased by 10% */
+  width: 585px;  /* decreased by 10% */
 }
 
 .header {
   font-size: 30px;
-  margin-top:2px;
-}
-
-.mat-error {
-  font-size: 20px;
+  margin-top: 2px;
 }
