@@ -1,11 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { SigninService } from './signin.service';
+import {LoginRequest} from "../models/signin";
 
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
 
 describe('SigninService', () => {
   let service: SigninService;
