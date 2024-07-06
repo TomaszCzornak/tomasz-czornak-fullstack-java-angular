@@ -2,6 +2,10 @@ package reskilled.mentoring.reskilled.infrastructure;
 
 import com.github.javafaker.Faker;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
@@ -11,6 +15,7 @@ import reskilled.mentoring.reskilled.job.model.entity.Job;
 import reskilled.mentoring.reskilled.job.repository.JobRepository;
 import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
 import reskilled.mentoring.reskilled.recruitment.repository.RecruitmentRepository;
+import reskilled.mentoring.reskilled.security.Role;
 import reskilled.mentoring.reskilled.skills.entity.Skill;
 import reskilled.mentoring.reskilled.skills.logic.SkillRepository;
 import reskilled.mentoring.reskilled.user.model.entity.User;
@@ -20,6 +25,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
@@ -27,11 +33,13 @@ import java.util.stream.Collectors;
 public class Seeds {
 
 
+    private static final Logger log = LoggerFactory.getLogger(Seeds.class);
     private final UserRepository userRepository;
     private final CandidateRepository candidateRepository;
     private final JobRepository jobRepository;
     private final SkillRepository skillRepository;
     private final RecruitmentRepository recruitmentRepository;
+    private static final String specialChars = "@$!%*?&";
 
     Faker faker = new Faker();
     List<Candidate> candidateFake = new ArrayList<>();
@@ -41,20 +49,39 @@ public class Seeds {
     List<Skill> skillList = new ArrayList<>();
 
     public void generateUsers() {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String rawPassword, encodedPassword;
+
         for (int i = 0; i < 500; i++) {
+            do {
+                rawPassword = faker.regexify("[A-Z]{1}")
+                        + faker.regexify("[a-z]{1}")
+                        + faker.regexify("[0-9]{1}")
+                        + faker.regexify("[" + specialChars + "]{1}")
+                        + faker.lorem().characters(7);
+
+                encodedPassword = passwordEncoder.encode(rawPassword);
+
+            } while (!Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@\"$!%*?&'()*+-./]{4,}$", rawPassword));
+
+            log.info(rawPassword + " hasło");
+
             User user = User.builder()
                     .email(faker.internet().emailAddress())
                     .createdAt(String.valueOf(new Timestamp(System.currentTimeMillis())))
                     .updatedAt(String.valueOf(new Timestamp(System.currentTimeMillis())))
                     .firstName(faker.name().firstName())
                     .lastName(faker.name().lastName())
-                    .password(faker.internet().password())
+                    .password(encodedPassword)
                     .isLock(false)
                     .isEnabled(true)
+                    .role(Role.USER)
                     .build();
-            usersFake.add(user);
 
+            usersFake.add(user);
+            log.info(user.getEmail() + " email użytkownika");
         }
+
         usersFake = userRepository.saveAll(usersFake);
     }
 
