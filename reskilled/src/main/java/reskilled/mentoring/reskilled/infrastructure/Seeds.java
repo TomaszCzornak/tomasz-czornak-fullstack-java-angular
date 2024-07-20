@@ -52,7 +52,7 @@ public class Seeds {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String rawPassword, encodedPassword;
 
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 30; i++) {
             do {
                 rawPassword = faker.regexify("[A-Z]{1}")
                         + faker.regexify("[a-z]{1}")
@@ -99,7 +99,7 @@ public class Seeds {
     @Transactional
     public void generateJobs() {
         List<Skill> managedSkills = skillRepository.findAll();
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 30; i++) {
             Collections.shuffle(managedSkills);
             List<Skill> selectedSkills = managedSkills.stream().limit(3).collect(Collectors.toList());
             Job job = Job.builder()
@@ -118,7 +118,7 @@ public class Seeds {
 
     public void generateCandidates() {
         List<User> users = userRepository.findAll();
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 30; i++) {
             Candidate candidate = Candidate.builder()
                     .email(faker.internet().emailAddress())
                     .createdBy(users.get(i))
@@ -132,7 +132,7 @@ public class Seeds {
     public void generateRecruitments() {
         List<Job> jobs = jobRepository.findAll();
         List<Candidate> candidates = candidateRepository.findAll();
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 30; i++) {
             Collections.shuffle(jobs);
             Collections.shuffle(candidates);
             Job selectedJob = jobs.get(i);
