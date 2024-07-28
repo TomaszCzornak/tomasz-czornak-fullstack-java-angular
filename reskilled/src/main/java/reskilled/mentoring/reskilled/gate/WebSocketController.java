@@ -3,28 +3,24 @@ package reskilled.mentoring.reskilled.gate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import reskilled.mentoring.reskilled.user.service.UsersService;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
-@Component
 @Controller
 @RequiredArgsConstructor
 public class WebSocketController {
 
 
     private final UsersService usersService;
+    private final SimpMessageSendingOperations messageTemplate;
 
     @MessageMapping("/read")
     @SendTo("/topic/events")
-    public Event greeting(Event event){
+    public Event entryGate(Event event){
         event.validate();
         boolean ifUserExists = usersService.getActivatedUserByEmail(event.getEmail());
 
-        if (ifUserExists) {
-            return event;
-        } else {
-            return Event.builder().isUserExist(false).build();
-        }
+        return ifUserExists ? event : new Event(false);
     }
 }

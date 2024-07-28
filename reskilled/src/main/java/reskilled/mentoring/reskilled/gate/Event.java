@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.springframework.util.StringUtils;
 
-import javax.ws.rs.DefaultValue;
+import javax.annotation.Nullable;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,10 +15,20 @@ public class Event {
 
     private String email;
     private String eventName;
-    private boolean isUserExist = true;
+    @Nullable
+    private Boolean isUserAvailable = true;
+
+    public Event(boolean isUserAvailable) {
+        this.isUserAvailable = isUserAvailable;
+    }
+
+    public Event(String email, String eventName) {
+        this.email = email;
+        this.eventName = eventName;
+    }
 
     public void validate() {
-        if (StringUtils.isEmpty(email) || StringUtils.isEmpty(eventName)) {
+        if (!StringUtils.hasText(email) || !StringUtils.hasText(eventName)) {
             throw new IllegalArgumentException("All event properties must be set and non-empty");
         }
     }

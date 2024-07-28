@@ -54,7 +54,7 @@ public class UsersService {
     }
 
     public boolean getActivatedUserByEmail(String email) {
-        Optional<User> foundUser =  Optional.ofNullable(userRepository.findUserByEmailAndLockAndEnabled(email).orElse(null));
+        Optional<User> foundUser = userRepository.findUserByEmailAndLockAndEnabled(email);
         return foundUser.isPresent();
     }
 
