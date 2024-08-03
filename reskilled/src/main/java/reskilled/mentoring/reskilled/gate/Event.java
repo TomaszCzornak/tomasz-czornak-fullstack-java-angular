@@ -1,25 +1,33 @@
 package reskilled.mentoring.reskilled.gate;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Nullable;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
-@Builder
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Setter
+@NoArgsConstructor
 public class Event {
-
     private String email;
     private String eventName;
-    @Nullable
-    private Boolean isUserAvailable = true;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean isUserAvailable;
 
-    public Event(boolean isUserAvailable) {
-        this.isUserAvailable = isUserAvailable;
+    @JsonCreator
+    public Event(@JsonProperty("email") String email,
+                 @JsonProperty("eventName") String eventName,
+                 @JsonProperty("isUserAvailable") @Nullable Boolean isUserAvailable) {
+        this.email = email;
+        this.eventName = eventName;
+        this.isUserAvailable = isUserAvailable == null || isUserAvailable;
     }
 
     public Event(String email, String eventName) {
@@ -33,4 +41,13 @@ public class Event {
         }
     }
 
+    @Override
+    public String toString() {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to write Event object to JSON", e);
+        }
+    }
 }
