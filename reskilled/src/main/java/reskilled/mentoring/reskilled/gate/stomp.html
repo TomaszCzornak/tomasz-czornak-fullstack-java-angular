@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<h2>WebSocket Client Form</h2>
+<form id="message-form">
+    <label for="email">Employee Email:</label><br>
+    <input type="text" id="email" name="email" required><br>
+    <label for="eventname">EventSocket Name:</label><br>
+    <input type="text" id="eventname" name="eventname" required><br>
+    <input type="submit" value="Submit">
+</form>
+
+<p><b>Server Response:</b></p>
+<div id="server-response"></div>
+
+<script>
+    document.getElementById('message-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var socket = new SockJS('http://localhost:8080/read');
+        var stompClient = Stomp.over(socket);
+
+        var eventMessage = {
+            "email": document.getElementById('email').value,
+            "eventName": document.getElementById('eventname').value
+        };
+
+        stompClient.connect({}, function(frame) {
+            // Subscribe to the '/topic/events' endpoint
+            stompClient.subscribe('/topic/events', function(event) {
+                document.getElementById('server-response').innerText = 'Received: ' + event.body;
+            });
+
+            // Send the event message to the server
+            stompClient.send("/app/read", {}, JSON.stringify(eventMessage));
+        });
+    });
+</script>
+</body>
+</html>

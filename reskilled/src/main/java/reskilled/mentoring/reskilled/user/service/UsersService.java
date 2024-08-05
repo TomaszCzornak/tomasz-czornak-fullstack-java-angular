@@ -53,4 +53,9 @@ public class UsersService {
         return getUsersByEmail(username).orElseThrow(null);
     }
 
+    public boolean getActivatedUserByEmail(String email) {
+        Optional<User> foundUser = userRepository.findUserByEmailAndLockAndEnabled(email);
+        return foundUser.isPresent();
+    }
+
 }

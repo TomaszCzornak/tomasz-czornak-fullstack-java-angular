@@ -45,7 +45,9 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/webjars/**",
             "/swagger-resources",
-            "/swagger-resources/**"
+            "/swagger-resources/**",
+            "/app/read",
+            "/read/**"
     };
 
     @Bean
@@ -92,6 +94,7 @@ public class SecurityConfig {
                 CorsConfiguration config = new CorsConfiguration();
                 config.setAllowCredentials(true);
                 config.addAllowedOrigin("http://localhost:4200");
+                config.addAllowedOrigin("http://localhost:63342");
                 config.addAllowedHeader("*");
                 config.addAllowedMethod("*");
                 config.setExposedHeaders(
@@ -116,7 +119,7 @@ public class SecurityConfig {
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                 ));
-                config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "WEBSOCKET"));
                 return config;
             }
         };
