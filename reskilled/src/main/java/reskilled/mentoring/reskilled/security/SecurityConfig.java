@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -38,7 +37,7 @@ public class SecurityConfig {
             "/v1/reset-password",
             "/v1/reset-password/***",
             "/v1/login",
-            "/v1/activate",
+            "/v1/activate/**",
             "/h2-console/***",
             "/swagger-ui.html",
             "/swagger-ui/**",
@@ -47,11 +46,11 @@ public class SecurityConfig {
             "/swagger-resources",
             "/swagger-resources/**",
             "/app/read",
-            "/read/**"
+            "/read/**",
     };
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
@@ -88,40 +87,37 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        return new CorsConfigurationSource() {
-            @Override
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                CorsConfiguration config = new CorsConfiguration();
-                config.setAllowCredentials(true);
-                config.addAllowedOrigin("http://localhost:4200");
-                config.addAllowedOrigin("http://localhost:63342");
-                config.addAllowedHeader("*");
-                config.addAllowedMethod("*");
-                config.setExposedHeaders(
-                        Arrays.asList(
-                                "Origin",
-                                "Content-Type",
-                                "Accept",
-                                "Authorization",
-                                "Access-Control-Allow-Origin",
-                                "Access-Control-Allow-Origin",
-                                "Access-Control-Allow-Credentials"
-                        )
-                );
-                config.setAllowedHeaders(Arrays.asList(
-                        "Origin",
-                        "Access-Control-Allow-Origin",
-                        "Content-Type",
-                        "Accept",
-                        "Authorization",
-                        "Origin, Accept",
-                        "X-Requested-With",
-                        "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers"
-                ));
-                config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "WEBSOCKET"));
-                return config;
-            }
+        return request -> {
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowCredentials(true);
+            config.addAllowedOrigin("http://localhost:4200");
+            config.addAllowedOrigin("http://localhost:63342");
+            config.addAllowedHeader("*");
+            config.addAllowedMethod("*");
+            config.setExposedHeaders(
+                    Arrays.asList(
+                            "Origin",
+                            "Content-Type",
+                            "Accept",
+                            "Authorization",
+                            "Access-Control-Allow-Origin",
+                            "Access-Control-Allow-Origin",
+                            "Access-Control-Allow-Credentials"
+                    )
+            );
+            config.setAllowedHeaders(Arrays.asList(
+                    "Origin",
+                    "Access-Control-Allow-Origin",
+                    "Content-Type",
+                    "Accept",
+                    "Authorization",
+                    "Origin, Accept",
+                    "X-Requested-With",
+                    "Access-Control-Request-Method",
+                    "Access-Control-Request-Headers"
+            ));
+            config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "WEBSOCKET"));
+            return config;
         };
     }
 

@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 @Setter
 public class EmailService {
 
-    public static final String ACTIVATION_URL = "/v1/activate?uuid=";
+    public static final String ACTIVATION_URL = "/v1/aktywuj/";
     public static final String RESET_PASSWORD = "/v1/reset-password/{uuid}";
     public static final String GOOGLE_URL = "https://google.com";
 

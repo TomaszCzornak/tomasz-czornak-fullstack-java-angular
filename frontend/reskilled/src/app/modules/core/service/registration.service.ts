@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../../../../environments/environment.development";
-import {HttpClient} from "@angular/common/http";
-import {RegistrationOptionalRequest, UserOptionalResponse} from "../models/registration";
+import {HttpClient, HttpParams} from "@angular/common/http";
+import {ActivationResponse, RegistrationOptionalRequest, UserOptionalResponse} from "../models/registration";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -13,5 +13,13 @@ export class RegistrationService {
 
   postRegistration(registration: RegistrationOptionalRequest): Observable<UserOptionalResponse> {
     return this.httpClient.post<UserOptionalResponse>(`${this.apiUrl}/register`, registration);
+  }
+
+  activateAccount(uid: string): Observable<ActivationResponse> {
+    const params = new HttpParams().append('uid', uid);
+
+    return this.httpClient.get<ActivationResponse>(`${this.apiUrl}/activate`, {
+      params,
+    });
   }
 }

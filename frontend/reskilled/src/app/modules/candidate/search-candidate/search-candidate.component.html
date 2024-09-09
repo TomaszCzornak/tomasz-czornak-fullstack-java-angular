@@ -1,0 +1,38 @@
+<form (ngSubmit)="findCandidate()">
+<section class="center-content">
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Search Candidate by Creator's Email</mat-label>
+    <input #input [formControl]="filterValue" matInput placeholder="Search Your Candidate">
+  </mat-form-field>
+</section>
+<button mat-raised-button color="primary">Submit</button>
+</form>
+<section class="mat-error">
+  <mat-error *ngIf="errorMessage">
+    {{errorMessage}}
+  </mat-error>
+</section>
+<ng-container *ngIf="searchCompleted; else searchNotStarted">
+  <ng-container *ngIf="dataSource && dataSource.length; else noData">
+    <mat-card class="card-class" *ngFor="let candidate of dataSource;">
+      <mat-card-header>
+        <mat-card-title>{{ candidate.email }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ candidate.createdBy.firstName }}</p>
+        <p>{{ candidate.createdBy.lastName }}</p>
+        <p>{{ candidate.createdBy.email }}</p>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+  <ng-template #noData>
+    <div class="noData">
+      <h1>Nothing Found</h1>
+    </div>
+  </ng-template>
+</ng-container>
+<ng-template #searchNotStarted>
+  <div class="startSearch">
+    <p>Start searching candidate.</p>
+    </div>
+</ng-template>

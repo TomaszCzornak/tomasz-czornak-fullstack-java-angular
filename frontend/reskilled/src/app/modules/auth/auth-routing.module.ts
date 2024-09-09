@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {SignupComponent} from "./components/signup/signup.component";
 import {SigninComponent} from "./components/signin/signin.component";
+import {AccountActivationComponent} from "./account-activation/account-activation.component";
 
 const routes: Routes = [{
   path: 'signup',
@@ -11,6 +12,7 @@ const routes: Routes = [{
     path: 'signin',
     component: SigninComponent
   },
+  {path: 'v1/aktywuj/:uid', component: AccountActivationComponent }
 ];
 
 @NgModule({

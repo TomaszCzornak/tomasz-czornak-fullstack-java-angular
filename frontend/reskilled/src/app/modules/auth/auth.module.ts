@@ -8,12 +8,14 @@ import {MatInputModule} from "@angular/material/input";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import { SigninComponent } from './components/signin/signin.component';
+import { AccountActivationComponent } from './account-activation/account-activation.component';
 
 
 @NgModule({
   declarations: [
     SignupComponent,
-    SigninComponent
+    SigninComponent,
+    AccountActivationComponent
   ],
     imports: [
         CommonModule,

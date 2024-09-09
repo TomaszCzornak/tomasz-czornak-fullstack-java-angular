@@ -46,12 +46,12 @@ public class RegistrationController {
     }
 
     @RequestMapping(path = "/activate", method = RequestMethod.GET)
-    public ResponseEntity<ActivationResponse> activateUser(@RequestParam String uuid) {
+    public ResponseEntity<ActivationResponse> activateUser(@RequestParam String uid) {
         try {
             log.info("--START activateUser");
-            registrationService.activateUser(uuid);
+            registrationService.activateUser(uid);
             log.info("--STOP activateUser");
-            return ResponseEntity.ok(new ActivationResponse(uuid, new Timestamp(System.currentTimeMillis()), "Konto zostało aktywowane"));
+            return ResponseEntity.ok(new ActivationResponse(uid, new Timestamp(System.currentTimeMillis()), "Konto zostało aktywowane"));
         } catch (UserNotFoundException e) {
             String errorMessage = e.getMessage();
             return ResponseEntity.status(400).body(new ActivationResponse(errorMessage));
