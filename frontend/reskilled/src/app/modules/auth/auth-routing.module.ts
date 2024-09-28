@@ -12,7 +12,7 @@ const routes: Routes = [{
     path: 'signin',
     component: SigninComponent
   },
-  {path: 'v1/aktywuj/:uid', component: AccountActivationComponent }
+  {path: 'v1/activate/:uid', component: AccountActivationComponent }
 ];
 
 @NgModule({

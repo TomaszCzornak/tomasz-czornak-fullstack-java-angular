@@ -1,6 +1,5 @@
 package reskilled.mentoring.reskilled.security;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +45,7 @@ public class SecurityConfig {
             "/swagger-resources",
             "/swagger-resources/**",
             "/app/read",
-            "/read/**",
+            "/read/**"
     };
 
     @Bean

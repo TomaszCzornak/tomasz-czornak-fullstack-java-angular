@@ -69,6 +69,6 @@ public class CandidateService {
     }
 
     public List<Candidate> searchCandidates(String userEmail) {
-        return candidateRepository.findCandidateByCreatedBy_Email(userEmail);
+        return candidateRepository.findCandidateByCreatedByEmail(userEmail);
     }
 }
