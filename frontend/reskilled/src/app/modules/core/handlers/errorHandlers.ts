@@ -5,7 +5,7 @@ export function handleErrorStatus(error: HttpResponse<string>) {
 
   switch (error.status) {
     case 403:
-      errorMessage = 'Unauthorized';
+      errorMessage = 'Your credentials are incorrect';
       break;
     case 500:
       errorMessage = 'Something went wrong';

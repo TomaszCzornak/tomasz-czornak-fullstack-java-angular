@@ -15,3 +15,9 @@ export interface UserResponse extends Omit<RegistrationRequest, 'password' | 're
 export type UserOptionalResponse = Partial<Omit<UserResponse, 'createdAt' | 'updatedAt'>>;
 
 export type RegistrationOptionalRequest = Partial<Omit<RegistrationRequest, 'repeatPassword'>>;
+
+export interface ActivationResponse {
+  timestamp: string;
+  message: string;
+  code: string;
+}

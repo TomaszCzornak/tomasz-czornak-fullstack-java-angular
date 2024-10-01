@@ -52,8 +52,12 @@ export class SigninComponent implements OnInit, OnDestroy {
         const token = response.headers.get('Authorization');
         if (this.signinForm.get('rememberMe')?.value) {
           localStorage.setItem('accessToken', token || '');
+        } else {
+          if (typeof token === "string") {
+            sessionStorage.setItem('accessToken', token);
+          }
         }
-        this.router.navigate(['/']);
+        this.router.navigate(['/search']);
       },
       (error: HttpResponse<string>) => {
         this.errorMessage = handleErrorStatus( error);

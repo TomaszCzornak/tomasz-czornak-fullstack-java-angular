@@ -12,16 +12,12 @@ export class AuthorizationInterceptor implements HttpInterceptor {
 
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const jwt = localStorage.getItem('Authorization') ? `Bearer ${localStorage.getItem('Authorization')}` : '';
-    debugger;
-    if (localStorage.getItem('Authorization')) {
-      const cloneReq = request.clone({
-        setHeaders: {
-          Authorization: 'Bearer ' + jwt,
-        }
-      });
-      return next.handle(cloneReq);
-    }
-    return next.handle(request);
+    const jwt = localStorage.getItem('accessToken') ?
+      localStorage.getItem('accessToken') :
+      (sessionStorage.getItem('accessToken') || '');
+
+    return jwt
+      ? next.handle(request.clone({ setHeaders: { Authorization: jwt } }))
+      : next.handle(request);
   }
 }

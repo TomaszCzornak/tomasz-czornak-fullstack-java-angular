@@ -67,4 +67,8 @@ public class CandidateService {
     public Candidate getCandidateByEmail(String email) {
         return candidateRepository.findCandidateByEmail(email);
     }
+
+    public List<Candidate> searchCandidates(String userEmail) {
+        return candidateRepository.findCandidateByCreatedByEmail(userEmail);
+    }
 }

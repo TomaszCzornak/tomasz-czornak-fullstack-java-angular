@@ -7,10 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reskilled.mentoring.reskilled.candidate.exceptions.CandidateNotFoundException;
 import reskilled.mentoring.reskilled.candidate.exceptions.EmptyCandidateListException;
+import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
 import reskilled.mentoring.reskilled.candidate.model.request.CandidateRequest;
 import reskilled.mentoring.reskilled.candidate.model.response.CandidateResponse;
 import reskilled.mentoring.reskilled.candidate.service.CandidateService;
+import reskilled.mentoring.reskilled.utils.CandidateMapper;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,8 +58,8 @@ public class CandidateController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Candidate updated successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request due to validation failure")})
     @PutMapping("/{id}")
-    public ResponseEntity<CandidateResponse> updateCandidate(@PathVariable Long id,@RequestBody CandidateRequest candidateRequest) {
-            return ResponseEntity.ok(candidateService.updateCandidate(id, candidateRequest));
+    public ResponseEntity<CandidateResponse> updateCandidate(@PathVariable Long id, @RequestBody CandidateRequest candidateRequest) {
+        return ResponseEntity.ok(candidateService.updateCandidate(id, candidateRequest));
     }
 
     @Operation(summary = "delete a Candidate", description = "This endpoint is for deleting a Candidate", responses = {
@@ -66,5 +69,20 @@ public class CandidateController {
     public ResponseEntity<Void> deleteCandidate(@PathVariable Long id) {
         candidateService.deleteCandidate(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Returns Searched Candidate by Email", description = "This endpoint is for displaying searched candidates")
+    @GetMapping("/find")
+    public List<CandidateResponse> searchCandidates(@RequestParam(name = "search") String searchTerm) {
+        if (searchTerm != null) {
+            List<Candidate> candidatesFound = candidateService.searchCandidates(searchTerm);
+            if (!candidatesFound.isEmpty()) {
+                return CandidateMapper.toCandidateResponseList(candidatesFound);
+            } else {
+                return Collections.emptyList();
+            }
+        } else {
+            throw new IllegalArgumentException("Search term cannot be null");
+        }
     }
 }

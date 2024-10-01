@@ -1,0 +1,61 @@
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  margin-top: 25vh;
+}
+
+.form-field {
+  width: 50%;
+}
+
+button {
+  position: absolute;
+  margin-left: 50%;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.card-class {
+  width: 30%;
+  margin: 3% auto;
+  background-color: beige;
+}
+
+.mat-card:not(:last-child) {
+  margin-bottom: 5%;
+}
+
+.noData {
+  font-size: 80px;
+  width: 30%;
+  margin: 10% auto;
+  background-color: black;
+  color: white;
+  opacity: 50%;
+}
+
+.startSearch {
+ font-size: 25px;
+  width: 30%;
+  margin: 3% auto;
+}
+
+.startSearch p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+.mat-error {
+  font-size: 18px;
+  width: 30%;
+  margin: 10% auto;
+  color: red;
+}
