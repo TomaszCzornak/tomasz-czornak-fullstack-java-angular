@@ -6,16 +6,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import reskilled.mentoring.reskilled.job.exceptions.EmptyJobsListException;
 import reskilled.mentoring.reskilled.job.model.entity.Job;
 import reskilled.mentoring.reskilled.job.model.request.JobRequest;
 import reskilled.mentoring.reskilled.job.model.response.JobResponse;
 import reskilled.mentoring.reskilled.job.service.JobService;
-import reskilled.mentoring.reskilled.utils.JobMapper;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,17 +24,24 @@ public class JobsController {
     private final JobService jobService;
 
 
-    @RequestMapping()
-    public List<JobResponse> getAllJobs() {
-        List<JobResponse> jobResponses = jobService.getAllJobs()
-                .stream()
-                .map(JobMapper::toJobResponse)
-                .toList();
+    @Operation(summary = "Returns All Jobs", description = "This endpoint is for displaying all jobs")
+    @GetMapping()
+    public List<JobResponse> getAllJobs(
+            @RequestParam(defaultValue = "createdBy") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortOrder) {
 
-        return Optional.of(jobResponses)
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(EmptyJobsListException::new);
+        Sort.Direction direction = Sort.Direction.fromString(sortOrder);
+        Sort sort = Sort.by(direction, sortBy);
+
+        List<JobResponse> jobResponses = jobService.getJobs(sort);
+
+
+        if (jobResponses.isEmpty()) {
+            throw new EmptyJobsListException();
+        }
+        return jobResponses;
     }
+
 
 
     @PostMapping(consumes = "application/json", produces = "application/json")
