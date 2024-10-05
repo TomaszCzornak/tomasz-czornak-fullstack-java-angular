@@ -12,6 +12,7 @@ import reskilled.mentoring.reskilled.candidate.model.request.CandidateRequest;
 import reskilled.mentoring.reskilled.candidate.model.response.CandidateResponse;
 import reskilled.mentoring.reskilled.candidate.service.CandidateService;
 import reskilled.mentoring.reskilled.utils.CandidateMapper;
+import org.springframework.data.domain.Sort;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,8 +28,14 @@ public class CandidateController {
 
     @Operation(summary = "Returns All Candidates", description = "This endpoint is for displaying all candidates")
     @GetMapping()
-    public List<CandidateResponse> getAll() {
-        List<CandidateResponse> candidates = candidateService.getAllCandidates();
+    public List<CandidateResponse> getAll(
+            @RequestParam(defaultValue = "createdBy") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortOrder) {
+
+        Sort.Direction direction = Sort.Direction.fromString(sortOrder);
+        Sort sort = Sort.by(direction, sortBy);
+
+        List<CandidateResponse> candidates = candidateService.getAllCandidates(sort);
         if (candidates.isEmpty()) {
             throw new EmptyCandidateListException();
         }

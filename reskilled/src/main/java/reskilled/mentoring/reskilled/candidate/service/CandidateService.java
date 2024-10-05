@@ -1,6 +1,7 @@
 package reskilled.mentoring.reskilled.candidate.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import reskilled.mentoring.reskilled.candidate.exceptions.CandidateNotFoundException;
 import reskilled.mentoring.reskilled.candidate.model.dto.CandidateDto;
@@ -11,6 +12,7 @@ import reskilled.mentoring.reskilled.candidate.repository.CandidateRepository;
 import reskilled.mentoring.reskilled.user.model.entity.User;
 import reskilled.mentoring.reskilled.user.service.UsersService;
 import reskilled.mentoring.reskilled.utils.CandidateMapper;
+import reskilled.mentoring.reskilled.utils.UserMapper;
 
 import javax.ws.rs.NotFoundException;
 import java.util.List;
@@ -24,6 +26,16 @@ public class CandidateService {
 
     public List<CandidateResponse> getAllCandidates() {
         return CandidateMapper.toCandidateResponseList(candidateRepository.findAll());
+    }
+
+    public List<CandidateResponse> getAllCandidates(Sort sort) {
+        return candidateRepository.findAll(sort).stream()
+                .map(candidate -> CandidateResponse.builder()
+                        .id(candidate.getId())
+                        .email(candidate.getEmail())
+                        .createdBy(UserMapper.toUserDtoRecruitment(candidate.getCreatedBy()))
+                        .build())
+                .toList();
     }
 
     public CandidateResponse getCandidateById(Long id) {
