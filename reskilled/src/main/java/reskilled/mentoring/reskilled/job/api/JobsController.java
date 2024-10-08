@@ -23,7 +23,6 @@ public class JobsController {
 
     private final JobService jobService;
 
-
     @Operation(summary = "Returns All Jobs", description = "This endpoint is for displaying all jobs")
     @GetMapping()
     public List<JobResponse> getAllJobs(
