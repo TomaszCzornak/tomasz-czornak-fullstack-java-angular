@@ -34,18 +34,15 @@ public class JobsController {
 
         List<JobResponse> jobResponses = jobService.getJobs(sort);
 
-
         if (jobResponses.isEmpty()) {
             throw new EmptyJobsListException();
         }
         return jobResponses;
     }
 
-
-
     @PostMapping(consumes = "application/json", produces = "application/json")
     @Operation(summary = "Add a Job", description = "This endpoint is for adding a new Job", responses = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Job added succesfully"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Job added successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request due to validation failure")})
     public void addJobSubmit(@RequestBody @Valid JobRequest jobRequest) {
         jobService.addJob(jobRequest);
@@ -61,7 +58,6 @@ public class JobsController {
         return jobService.getJobById(id);
     }
 
-
     @PutMapping(consumes = "application/json", produces = "application/json")
     @Operation(summary = "Update a Job", description = "This endpoint is for updating a Job")
     @ApiResponses(value = {
@@ -71,9 +67,7 @@ public class JobsController {
     public Job updateJob(@RequestBody
                          @Parameter(description = "The Job to be updated. Validated with standard job validations.")
                          @Valid Job job) {
-
         return jobService.updateJob(job);
-
     }
 
     @DeleteMapping("/{id}")
@@ -86,5 +80,4 @@ public class JobsController {
                           @Parameter(description = "ID of the job to be deleted") Long id) {
         jobService.deleteJobById(id);
     }
-
 }
