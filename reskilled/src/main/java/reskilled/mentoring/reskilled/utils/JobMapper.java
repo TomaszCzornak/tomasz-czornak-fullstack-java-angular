@@ -90,4 +90,21 @@ public class JobMapper {
                 .toList();
     }
 
+    public static List<JobResponse> toResponseNoRecruitmentList(List<Job> jobList) {
+        return jobList.stream()
+                .map(JobMapper::toJobResponseNoRecruitment)
+                .toList();
+    }
+
+    private static JobResponse toJobResponseNoRecruitment(Job job) {
+        return JobResponse.builder()
+                .id(job.getId())
+                .title(job.getTitle())
+                .city(job.getCity())
+                .currency(job.getCurrency())
+                .salary(job.getSalary())
+                .skills(job.getSkills())
+                .build();
+    }
+
 }

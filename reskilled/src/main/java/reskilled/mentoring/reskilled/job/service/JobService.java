@@ -2,6 +2,7 @@ package reskilled.mentoring.reskilled.job.service;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import reskilled.mentoring.reskilled.job.exceptions.JobNotFoundException;
 import reskilled.mentoring.reskilled.job.model.request.JobRequest;
@@ -22,6 +23,10 @@ public class JobService {
 
     public List<Job> getAllJobs() {
         return jobRepository.findAll();
+    }
+
+    public List<JobResponse> getJobs(Sort sort) {
+        return JobMapper.toResponseNoRecruitmentList(jobRepository.findAll(sort));
     }
 
     public JobResponse getJobById(Long id) {

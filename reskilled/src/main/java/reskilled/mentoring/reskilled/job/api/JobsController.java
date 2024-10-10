@@ -6,16 +6,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import reskilled.mentoring.reskilled.job.exceptions.EmptyJobsListException;
 import reskilled.mentoring.reskilled.job.model.entity.Job;
 import reskilled.mentoring.reskilled.job.model.request.JobRequest;
 import reskilled.mentoring.reskilled.job.model.response.JobResponse;
 import reskilled.mentoring.reskilled.job.service.JobService;
-import reskilled.mentoring.reskilled.utils.JobMapper;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,23 +23,26 @@ public class JobsController {
 
     private final JobService jobService;
 
+    @Operation(summary = "Returns All Jobs", description = "This endpoint is for displaying all jobs")
+    @GetMapping()
+    public List<JobResponse> getAllJobs(
+            @RequestParam(defaultValue = "createdBy") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortOrder) {
 
-    @RequestMapping()
-    public List<JobResponse> getAllJobs() {
-        List<JobResponse> jobResponses = jobService.getAllJobs()
-                .stream()
-                .map(JobMapper::toJobResponse)
-                .toList();
+        Sort.Direction direction = Sort.Direction.fromString(sortOrder);
+        Sort sort = Sort.by(direction, sortBy);
 
-        return Optional.of(jobResponses)
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(EmptyJobsListException::new);
+        List<JobResponse> jobResponses = jobService.getJobs(sort);
+
+        if (jobResponses.isEmpty()) {
+            throw new EmptyJobsListException();
+        }
+        return jobResponses;
     }
-
 
     @PostMapping(consumes = "application/json", produces = "application/json")
     @Operation(summary = "Add a Job", description = "This endpoint is for adding a new Job", responses = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Job added succesfully"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Job added successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request due to validation failure")})
     public void addJobSubmit(@RequestBody @Valid JobRequest jobRequest) {
         jobService.addJob(jobRequest);
@@ -56,7 +58,6 @@ public class JobsController {
         return jobService.getJobById(id);
     }
 
-
     @PutMapping(consumes = "application/json", produces = "application/json")
     @Operation(summary = "Update a Job", description = "This endpoint is for updating a Job")
     @ApiResponses(value = {
@@ -66,9 +67,7 @@ public class JobsController {
     public Job updateJob(@RequestBody
                          @Parameter(description = "The Job to be updated. Validated with standard job validations.")
                          @Valid Job job) {
-
         return jobService.updateJob(job);
-
     }
 
     @DeleteMapping("/{id}")
@@ -81,5 +80,4 @@ public class JobsController {
                           @Parameter(description = "ID of the job to be deleted") Long id) {
         jobService.deleteJobById(id);
     }
-
 }
