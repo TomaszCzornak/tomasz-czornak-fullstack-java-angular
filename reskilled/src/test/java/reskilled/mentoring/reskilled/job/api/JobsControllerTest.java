@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -49,17 +50,20 @@ class JobsControllerTest {
 
     @Test
     void getAllJobs() throws Exception {
-        //given
+        // given
         List<Job> jobs = JobStub.createJobs();
         List<JobResponse> jobResponses = JobMapper.toJobResponseList(jobs);
-        //when
-        given(jobService.getAllJobs()).willReturn(jobs);
-        //then
-        mockMvc.perform(MockMvcRequestBuilders.get("/v1/jobs"))
+        // when
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdBy");
+        given(jobService.getJobs(sort)).willReturn(jobResponses);
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/jobs")
+                        .param("sortBy", "createdBy")
+                        .param("sortOrder", "desc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.size()", Matchers.equalTo(jobResponses.size())))
-                .andExpect(jsonPath("$[0].title", Matchers.equalTo(jobResponses.getFirst().getTitle())))
+                .andExpect(jsonPath("$[0].title", Matchers.equalTo(jobResponses.get(0).getTitle())))
                 .andDo(print());
     }
 

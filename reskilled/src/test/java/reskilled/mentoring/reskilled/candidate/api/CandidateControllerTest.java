@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -54,20 +55,23 @@ class CandidateControllerTest {
 
     @Test
     void getAll_shouldReturnAllCandidates() throws Exception {
-        //given
+        // given
         CandidateResponse candidateResponse = CandidateStub.createCandidateResponse();
         List<Candidate> candidates = CandidateStub.createCandidates();
-        //when
-        given(candidateService.getAllCandidates()).willReturn(CandidateMapper.toCandidateResponseList(candidates));
 
-        //then
-        mockMvc.perform(MockMvcRequestBuilders.get("/v1/candidates"))
+        // when
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdBy");
+        given(candidateService.getAllCandidates(sort)).willReturn(CandidateMapper.toCandidateResponseList(candidates));
+
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/candidates")
+                        .param("sortBy", "createdBy")
+                        .param("sortOrder", "desc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.size()", Matchers.equalTo(CandidateMapper.toCandidateResponseList(candidates).size())))
-                .andExpect(jsonPath("$[0].email", Matchers.equalTo(List.of(candidateResponse).getFirst().getEmail())))
+                .andExpect(jsonPath("$[0].email", Matchers.equalTo(candidateResponse.getEmail())))
                 .andDo(print());
-
     }
 
     @Test

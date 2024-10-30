@@ -92,7 +92,7 @@ class RegistrationControllerTest {
         //when
         doNothing().when(registrationService).activateUser(uuid);
         //then
-        mockMvc.perform(MockMvcRequestBuilders.get("/v1/activate?uuid=" + uuid) // Use the correct path
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/activate?uid=" + uuid) // Use the correct path
                         ) // Use the expected query parameter name
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.uuid").value(activationResponse.getUuid()))
