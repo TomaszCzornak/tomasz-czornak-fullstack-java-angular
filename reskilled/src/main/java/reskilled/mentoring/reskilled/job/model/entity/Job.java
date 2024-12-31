@@ -14,6 +14,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
 import reskilled.mentoring.reskilled.skills.entity.Skill;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -21,7 +23,10 @@ import java.util.List;
 @Builder
 @Entity
 @AllArgsConstructor
-public class Job {
+public class Job implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

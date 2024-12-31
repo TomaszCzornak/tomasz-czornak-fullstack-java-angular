@@ -1,6 +1,8 @@
 package reskilled.mentoring.reskilled.candidate.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import reskilled.mentoring.reskilled.candidate.exceptions.CandidateNotFoundException;
@@ -28,6 +30,7 @@ public class CandidateService {
         return CandidateMapper.toCandidateResponseList(candidateRepository.findAll());
     }
 
+    @Cacheable(value = "candidates", key = "#sort.toString()")
     public List<CandidateResponse> getAllCandidates(Sort sort) {
         return candidateRepository.findAll(sort).stream()
                 .map(candidate -> CandidateResponse.builder()
@@ -44,6 +47,7 @@ public class CandidateService {
         return CandidateMapper.toCandidateResponse(candidate);
     }
 
+    @CacheEvict(value = "candidates", allEntries = true)
     public CandidateResponse addCandidate(CandidateRequest candidateRequest) {
 
         User userLogged = usersService.getLoggedUser();
@@ -58,6 +62,7 @@ public class CandidateService {
         }
     }
 
+    @CacheEvict(value = "candidates", allEntries = true)
     public CandidateResponse updateCandidate(Long id, CandidateRequest candidateRequest) {
         Candidate candidate = CandidateMapper.toCandidateEntity(candidateRequest);
 
@@ -72,6 +77,7 @@ public class CandidateService {
                 .orElseThrow(CandidateNotFoundException::new);
     }
 
+    @CacheEvict(value = "candidates", allEntries = true)
     public void deleteCandidate(Long id) {
         candidateRepository.deleteById(id);
     }

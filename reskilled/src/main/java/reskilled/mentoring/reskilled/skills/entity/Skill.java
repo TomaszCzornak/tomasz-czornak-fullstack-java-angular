@@ -9,12 +9,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Data
 @Entity
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class Skill {
+public class Skill implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
