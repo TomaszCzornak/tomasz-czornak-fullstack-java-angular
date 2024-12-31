@@ -26,7 +26,7 @@ public class JobsController {
     @Operation(summary = "Returns All Jobs", description = "This endpoint is for displaying all jobs")
     @GetMapping()
     public List<JobResponse> getAllJobs(
-            @RequestParam(defaultValue = "createdBy") String sortBy,
+            @RequestParam(defaultValue = "title") String sortBy,
             @RequestParam(defaultValue = "desc") String sortOrder) {
 
         Sort.Direction direction = Sort.Direction.fromString(sortOrder);

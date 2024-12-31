@@ -3,12 +3,14 @@ package reskilled.mentoring.reskilled;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
 import reskilled.mentoring.reskilled.gate.WebSocketConfig;
 import reskilled.mentoring.reskilled.infrastructure.Seeds;
 
 @SpringBootApplication
 @Import(WebSocketConfig.class)
+@EnableCaching
 public class ReskilledApplication implements CommandLineRunner {
 
     private final Seeds seeds;
@@ -22,7 +24,7 @@ public class ReskilledApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         seeds.generateUsers();
         seeds.generateSkills();
         seeds.generateJobs();
