@@ -1,17 +1,19 @@
 package reskilled.mentoring.reskilled.job.service;
 
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reskilled.mentoring.reskilled.job.exceptions.JobNotFoundException;
 import reskilled.mentoring.reskilled.job.model.entity.Job;
+import reskilled.mentoring.reskilled.job.model.entity.JobEntityStatus;
 import reskilled.mentoring.reskilled.job.model.request.JobRequest;
 import reskilled.mentoring.reskilled.job.model.response.JobResponse;
 import reskilled.mentoring.reskilled.job.repository.JobRepository;
+import reskilled.mentoring.reskilled.notifcations.event_driven.JobClosedEvent;
 import reskilled.mentoring.reskilled.utils.JobMapper;
 
 import java.util.List;
@@ -23,19 +25,27 @@ import java.util.Optional;
 public class JobService {
 
     private final JobRepository jobRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public List<Job> getAllJobs() {
-        return jobRepository.findAll();
+        return jobRepository.findAllActive(JobEntityStatus.ACTIVE);
     }
 
-    @Cacheable(cacheNames = "jobs", key = "#sort.toString()")
-    @Transactional(readOnly = true)
-    public List<JobResponse> getJobs(Sort sort) {
-        return JobMapper.toResponseNoRecruitmentList(jobRepository.findAllWithSkills(sort));
+    public List<JobResponse> getSortedJobs(Sort sort) {
+        List<Job> activeJobs = jobRepository.findAll(sort).stream()
+                .filter(job -> job.getJobEntityStatus() == JobEntityStatus.ACTIVE)
+                .toList();
+        return JobMapper.toResponseNoRecruitmentList(activeJobs);
     }
 
     public JobResponse getJobById(Long id) {
-        return jobRepository.findById(id).map(JobMapper::toJobResponse)
+        return jobRepository.findById(id)
+                .map(job -> {
+                    if (job.getJobEntityStatus() != JobEntityStatus.ACTIVE) {
+                        throw new JobNotFoundException();
+                    }
+                    return JobMapper.toJobResponseNoRecruitment(job);
+                })
                 .orElseThrow(JobNotFoundException::new);
     }
 
@@ -57,7 +67,16 @@ public class JobService {
     }
 
     public Optional<Job> getJobByTitle(String title) {
-    return jobRepository.findByTitle(title);
+    return jobRepository.findByTitle(title).filter(job -> job.getJobEntityStatus() == JobEntityStatus.ACTIVE);
     }
 
+    @Transactional
+    public void closeJob(Long jobId) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new RuntimeException("Job not found with ID " + jobId));
+        job.setJobEntityStatus(JobEntityStatus.DELETED);
+        eventPublisher.publishEvent(new JobClosedEvent(this, job.getId(), job.getTitle()));
+
+        jobRepository.save(job);
+    }
 }

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Notification Demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<h2>Live Notifications</h2>
+<p>Listening for notifications...</p>
+
+<ul id="notification-list"></ul>
+
+<script>
+    let stompClient = null;
+    document.addEventListener('DOMContentLoaded', function() {
+        const socket = new SockJS('http://localhost:8080/ws');
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function(frame) {
+            console.log('Connected: ' + frame);
+
+            stompClient.subscribe(`/topic/notifications`, function(response) {
+                console.log('Notification received:', response.body);
+                const notification = JSON.parse(response.body);
+                const notificationList = document.getElementById('notification-list');
+
+                const li = document.createElement('li');
+                li.textContent = notification.message + ' (Created At: ' + notification.createdAt + ')';
+                notificationList.appendChild(li);
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

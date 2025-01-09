@@ -48,7 +48,13 @@ public class WebSocketTest {
         blockingQueue = new LinkedBlockingDeque<>();
 
         StompSession session = stompClient
-                .connectAsync("ws://localhost:"+port+"/read/websocket", headers, new StompSessionHandlerAdapter() {})
+                .connectAsync("ws://localhost:" + port + "/ws/websocket", headers, new StompSessionHandlerAdapter() {
+                    @Override
+                    public void handleFrame(StompHeaders headers, Object payload) {
+                        System.out.println("Received frame: " + payload);
+                        super.handleFrame(headers, payload);
+                    }
+                })
                 .get(5, TimeUnit.SECONDS);
 
         session.subscribe("/topic/events", new StompFrameHandler() {
@@ -67,7 +73,7 @@ public class WebSocketTest {
 
         Event event = new Event("test@mail.com", "ENTRY");
 
-        session.send("/app/read", event);
+        session.send("/app/ws", event);
 
         String message = blockingQueue.poll(10, TimeUnit.SECONDS);
         ObjectMapper objectMapper = new ObjectMapper();

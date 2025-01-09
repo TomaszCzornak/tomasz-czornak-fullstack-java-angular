@@ -22,7 +22,7 @@
     document.getElementById('message-form').addEventListener('submit', function(event) {
         event.preventDefault();
 
-        var socket = new SockJS('http://localhost:8080/read');
+        var socket = new SockJS('http://localhost:8080/ws');
         var stompClient = Stomp.over(socket);
 
         var eventMessage = {
@@ -37,7 +37,7 @@
             });
 
             // Send the event message to the server
-            stompClient.send("/app/read", {}, JSON.stringify(eventMessage));
+            stompClient.send("/app/ws", {}, JSON.stringify(eventMessage));
         });
     });
 </script>

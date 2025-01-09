@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import reskilled.mentoring.reskilled.job.model.dto.JobDto;
 import reskilled.mentoring.reskilled.job.model.entity.Job;
+import reskilled.mentoring.reskilled.job.model.entity.JobEntityStatus;
 import reskilled.mentoring.reskilled.job.model.request.JobRequest;
 import reskilled.mentoring.reskilled.job.model.response.JobResponse;
 import reskilled.mentoring.reskilled.skills.entity.Skill;
@@ -21,6 +22,7 @@ public class JobMapper {
                 .salary(jobDto.getSalary())
                 .currency(jobDto.getCurrency())
                 .skills(toSkillsEntity(jobDto.getSkills()))
+                .jobEntityStatus(jobDto.getJobEntityStatus())
                 .build();
 
     }
@@ -32,6 +34,7 @@ public class JobMapper {
                 .salary(job.getSalary())
                 .currency(job.getCurrency())
                 .skills(job.getSkills())
+                .jobEntityStatus(job.getJobEntityStatus())
                 .build();
     }
 
@@ -69,6 +72,7 @@ public class JobMapper {
                 .salary(jobRequest.getSalary())
                 .currency(jobRequest.getCurrency())
                 .skills(toSkillsEntity(jobRequest.getSkills()))
+                .jobEntityStatus(JobEntityStatus.ACTIVE)
                 .build();
     }
 
@@ -96,7 +100,7 @@ public class JobMapper {
                 .toList();
     }
 
-    private static JobResponse toJobResponseNoRecruitment(Job job) {
+    public static JobResponse toJobResponseNoRecruitment(Job job) {
         return JobResponse.builder()
                 .id(job.getId())
                 .title(job.getTitle())
