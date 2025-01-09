@@ -44,8 +44,10 @@ public class SecurityConfig {
             "/webjars/**",
             "/swagger-resources",
             "/swagger-resources/**",
-            "/app/read",
-            "/read/**"
+            "/app/ws",
+            "/ws/**",
+            "/app/notify",
+            "/notify/**"
     };
 
     @Bean

@@ -55,7 +55,7 @@ class JobsControllerTest {
         List<JobResponse> jobResponses = JobMapper.toJobResponseList(jobs);
         // when
         Sort sort = Sort.by(Sort.Direction.DESC, "createdBy");
-        given(jobService.getJobs(sort)).willReturn(jobResponses);
+        given(jobService.getSortedJobs(sort)).willReturn(jobResponses);
         // then
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/jobs")
                         .param("sortBy", "createdBy")

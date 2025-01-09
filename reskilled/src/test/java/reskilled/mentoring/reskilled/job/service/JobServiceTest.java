@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reskilled.mentoring.reskilled.Utils.JobStub;
 import reskilled.mentoring.reskilled.job.model.entity.Job;
+import reskilled.mentoring.reskilled.job.model.entity.JobEntityStatus;
 import reskilled.mentoring.reskilled.job.model.request.JobRequest;
 import reskilled.mentoring.reskilled.job.model.response.JobResponse;
 import reskilled.mentoring.reskilled.job.repository.JobRepository;
@@ -29,7 +30,7 @@ class JobServiceTest {
     void getAllJobs_shouldReturnAllJobs() {
         //given
         List<Job> jobList = JobStub.createJobs();
-        given(jobRepositoryMock.findAll()).willReturn(jobList);
+        given(jobRepositoryMock.findAllActive(JobEntityStatus.ACTIVE)).willReturn(jobList);
         //when
         List<Job> result = jobService.getAllJobs();
         //then

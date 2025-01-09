@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reskilled.mentoring.reskilled.job.exceptions.EmptyJobsListException;
 import reskilled.mentoring.reskilled.job.model.entity.Job;
@@ -32,7 +33,7 @@ public class JobsController {
         Sort.Direction direction = Sort.Direction.fromString(sortOrder);
         Sort sort = Sort.by(direction, sortBy);
 
-        List<JobResponse> jobResponses = jobService.getJobs(sort);
+        List<JobResponse> jobResponses = jobService.getSortedJobs(sort);
 
         if (jobResponses.isEmpty()) {
             throw new EmptyJobsListException();
@@ -79,5 +80,16 @@ public class JobsController {
     public void deleteJob(@PathVariable("id")
                           @Parameter(description = "ID of the job to be deleted") Long id) {
         jobService.deleteJobById(id);
+    }
+
+    @DeleteMapping("/{jobId}/close")
+    @Operation(summary = "Delete a recruitment", description = "This endpoint is for deleting a recruitment with a specific id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully deleted the recruitment"),
+            @ApiResponse(responseCode = "404", description = "recruitment with provided id not found"),
+    })
+    public ResponseEntity<Void> closeJob(@PathVariable Long jobId) {
+        jobService.closeJob(jobId);
+        return ResponseEntity.noContent().build();
     }
 }

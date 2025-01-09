@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String requestTokenHeader = request.getHeader(AUTHORIZATION);
 
         String path = request.getRequestURI();
-        if (path.startsWith("/app/read") || path.startsWith("/read")) {
+        if (path.startsWith("/app/ws") || path.startsWith("/ws")) {
             chain.doFilter(request, response);
             return;
         }

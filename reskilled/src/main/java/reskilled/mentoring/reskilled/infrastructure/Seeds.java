@@ -12,6 +12,7 @@ import reskilled.mentoring.reskilled.candidate.model.entity.Candidate;
 import reskilled.mentoring.reskilled.candidate.repository.CandidateRepository;
 import reskilled.mentoring.reskilled.job.model.entity.Currency;
 import reskilled.mentoring.reskilled.job.model.entity.Job;
+import reskilled.mentoring.reskilled.job.model.entity.JobEntityStatus;
 import reskilled.mentoring.reskilled.job.repository.JobRepository;
 import reskilled.mentoring.reskilled.recruitment.entity.Recruitment;
 import reskilled.mentoring.reskilled.recruitment.repository.RecruitmentRepository;
@@ -108,6 +109,7 @@ public class Seeds {
                     .currency(Currency.PLN)
                     .skills(selectedSkills)
                     .city(faker.address().city())
+                    .jobEntityStatus(JobEntityStatus.ACTIVE)
                     .build();
 
             jobsFake.add(job);

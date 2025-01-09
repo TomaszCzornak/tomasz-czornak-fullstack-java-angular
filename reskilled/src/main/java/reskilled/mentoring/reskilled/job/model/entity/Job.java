@@ -49,5 +49,7 @@ public class Job implements Serializable {
     private List<Skill> skills;
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY, mappedBy = "job")
     private List<Recruitment> recruitmentList;
+    @Enumerated(EnumType.ORDINAL)
+    private JobEntityStatus jobEntityStatus = JobEntityStatus.ACTIVE;
 
 }

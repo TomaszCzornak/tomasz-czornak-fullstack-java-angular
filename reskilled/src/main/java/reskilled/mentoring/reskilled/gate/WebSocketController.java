@@ -14,11 +14,10 @@ public class WebSocketController {
 
 
     private final UsersService usersService;
-    private final SimpMessageSendingOperations messageTemplate;
 
-    @MessageMapping("/read")
+    @MessageMapping("/ws")
     @SendTo("/topic/events")
-    public Event entryGate(@Payload Event event){
+    public Event entryGate(@Payload Event event) {
         event.validate();
         boolean ifUserExists = usersService.getActivatedUserByEmail(event.getEmail());
 
