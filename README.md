@@ -6,9 +6,9 @@ Spring Boot: Application framework
 Hibernate ORM: Object-relational mapping
 PostgreSQL: Primary database
 Redis: Caching and session management
-WebSockets: Real-time communication
+Sockets for gating employee entrance and exit
 JUnit & Mockito: Testing frameworks
-Maven/Gradle: Dependency management
+Maven: Dependency management
 
 Frontend
 
@@ -17,4 +17,3 @@ TypeScript: Programming language
 RxJS: Reactive programming
 NgRx: State management
 Angular Material: UI component library
-Chart.js: Data visualization
